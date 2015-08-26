@@ -4,8 +4,8 @@ import com.appoxee.Appoxee;
 
 import junit.framework.TestCase;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.Before;
 
 /**
  * Created by yotam on 8/26/15.
