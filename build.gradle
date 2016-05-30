@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.appoxee.testapp"
+        applicationId "com.appoxee.example"
         minSdkVersion 10
         targetSdkVersion 23
         versionCode 1
@@ -35,6 +36,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(":sdk")
+  
     //    androidTestCompile 'com.android.support.test:runner:0.3'
     // Set this dependency to use JUnit 4 rules
     //    androidTestCompile 'com.android.support.test:rules:0.3'
