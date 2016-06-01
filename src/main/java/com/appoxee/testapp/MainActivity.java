@@ -20,7 +20,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
-
+                Appoxee.instance().setAlias("sdk4.alias@test.appoxee.com");
+                Appoxee.instance().setAttribute("custom1", "value1");
             }
         });
     }
