@@ -34,7 +34,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(":sdk")
+
+    debugCompile project(path: ":sdk", configuration: "debug")
+//    debugCompile project(path: ":sdk", configuration: "release")
+    releaseCompile project(path: ":sdk", configuration: "release")
+
     //    androidTestCompile 'com.android.support.test:runner:0.3'
     // Set this dependency to use JUnit 4 rules
     //    androidTestCompile 'com.android.support.test:rules:0.3'

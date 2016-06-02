@@ -11,6 +11,7 @@ public class AppoxeeTestApp extends Application {
         super.onCreate();
         AppoxeeOptions opt = new AppoxeeOptions();
         opt.sdkKey = "574597825dcf97.14767101";
+//        opt.logLevel = AppoxeeOptions.LogLevel.CLIENT_DEBUG;
         Appoxee.engage(this, opt);
     }
 }
