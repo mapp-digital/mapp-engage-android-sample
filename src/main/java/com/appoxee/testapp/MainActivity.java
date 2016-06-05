@@ -10,6 +10,8 @@ import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
 import com.google.gson.Gson;
 
+import java.util.Calendar;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -25,7 +27,13 @@ public class MainActivity extends Activity {
                 sp.edit().putInt("aliasCounter", aliasCounter).apply();
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
-                Appoxee.instance().setAlias("sdk4.alias-" + aliasCounter);
+                Appoxee appoxee = Appoxee.instance();
+                appoxee.setAlias("sdk4.alias-" + aliasCounter);
+                appoxee.removeTag("tag"+aliasCounter);
+                appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
+                appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
+                appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
+
 //                Appoxee.instance().setAttribute("custom1", "value1");
             }
         });
