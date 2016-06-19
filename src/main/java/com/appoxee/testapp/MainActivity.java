@@ -1,6 +1,7 @@
 package com.appoxee.testapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +48,14 @@ public class MainActivity extends Activity {
                 Set<String> tags = appoxee.getTags();
                 Log.d("APX", "tags: " + new Gson().toJson(tags));
 
+            }
+        });
+
+        findViewById(R.id.second_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(intent);
             }
         });
     }
