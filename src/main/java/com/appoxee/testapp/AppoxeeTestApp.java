@@ -6,10 +6,6 @@ import android.util.Log;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
-
-import java.io.IOException;
 
 public class AppoxeeTestApp extends Application {
 
@@ -18,7 +14,12 @@ public class AppoxeeTestApp extends Application {
         super.onCreate();
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
-        opt.sdkKey = "56c42a1c2b76c0.63627710";
+
+        opt.sdkKey = "5725ceaec41069.29878975";
+//        opt.sdkKey = "576fc13f3d23e3.06780385";
+
+        opt.googleProjectId = "94866074595";
+
         Appoxee.engage(this, opt);
         long end = System.currentTimeMillis();
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
@@ -26,20 +27,20 @@ public class AppoxeeTestApp extends Application {
         Log.i("APX", "Start Service took " + total + " ms on main thread");
         Log.d("APX", "info (before init finished): " + info);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String token = null;
-                try {
-                    InstanceID instanceID = InstanceID.getInstance(AppoxeeTestApp.this);//.getToken("firebasetest1", "GCM");
-                    token = instanceID.getToken("fir-test1-e10ee",
-                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.i("APX", "token: " + token);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String token = null;
+//                try {
+//                    InstanceID instanceID = InstanceID.getInstance(AppoxeeTestApp.this);//.getToken("firebasetest1", "GCM");
+//                    token = instanceID.getToken("fir-test1-e10ee",
+//                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.i("APX", "token: " + token);
+//            }
+//        }).start();
 
 
     }
