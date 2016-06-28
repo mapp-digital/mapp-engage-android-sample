@@ -18,7 +18,7 @@ public class AppoxeeTestApp extends Application {
         super.onCreate();
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
-        opt.sdkKey = "5725ceaec41069.29878975";
+        opt.sdkKey = "56c42a1c2b76c0.63627710";
         Appoxee.engage(this, opt);
         long end = System.currentTimeMillis();
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
