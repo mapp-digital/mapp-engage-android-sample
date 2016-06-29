@@ -1,3 +1,4 @@
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'com.google.gms.google-services'
