@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
@@ -56,6 +58,16 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        Switch pushEnabledSwitch = (Switch)findViewById(R.id.push_enabled);
+        //todo check push enabled in Appoxee init callback
+//        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+        pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Appoxee.instance().setPushEnabled(isChecked);
             }
         });
     }

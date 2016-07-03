@@ -16,4 +16,10 @@
         android:text="2nd activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Push enabled"
+        android:id="@+id/push_enabled"
+        android:checked="false" />
 </LinearLayout>
