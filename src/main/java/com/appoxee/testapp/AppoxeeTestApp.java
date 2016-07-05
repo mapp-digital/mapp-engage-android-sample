@@ -27,22 +27,6 @@ public class AppoxeeTestApp extends Application {
         Log.i("APX", "Start Service took " + total + " ms on main thread");
         Log.d("APX", "info (before init finished): " + info);
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String token = null;
-//                try {
-//                    InstanceID instanceID = InstanceID.getInstance(AppoxeeTestApp.this);//.getToken("firebasetest1", "GCM");
-//                    token = instanceID.getToken("fir-test1-e10ee",
-//                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                Log.i("APX", "token: " + token);
-//            }
-//        }).start();
-
-
     }
 
 }
