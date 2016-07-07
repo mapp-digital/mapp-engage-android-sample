@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appoxee_default_push_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentTop="true"
+    android:background="#fff3f3f3"
+    android:orientation="vertical"
+     >
+   
+     <ImageView
+         android:id="@+id/appoxee_default_push_image"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:layout_centerVertical="true"
+         android:adjustViewBounds="true"
+         android:background="@android:color/white"
+         android:contentDescription="push image" />
+    
+    <ImageView android:id="@+id/appoxee_default_push_icon"
+      android:contentDescription="icon"
+      android:layout_margin="8dip"
+      android:adjustViewBounds="true"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:background="#FFD3D3D3"
+       />
+    
+    <TextView android:id="@+id/appoxee_default_push_subject"
+      android:layout_alignParentTop="true"
+      android:layout_marginTop="4dip"
+      android:layout_toEndOf="@+id/appoxee_default_push_icon"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:textColor="#FF000000"
+      android:maxLines="1"
+      android:textSize="15sp"
+      android:text="Headline"
+       />
+    
+    
+    <TextView android:id="@+id/appoxee_default_push_message"
+      android:textColor="#696969"
+      android:maxLines="6"
+      android:layout_marginTop="0dip"
+      android:layout_marginRight="2dip"
+      android:layout_marginLeft="0dip"
+      android:layout_height="wrap_content"
+      android:layout_toEndOf="@+id/appoxee_default_push_icon"
+      android:layout_below="@+id/appoxee_default_push_subject"
+      android:layout_width="wrap_content"
+      android:textSize="15sp"
+      android:text="Yesterday we sent 2 messages (see below) and g of them were actually sent."
+       />
+    
+
+    
+    <TextView android:id="@+id/appoxee_default_push_hour"
+      android:layout_alignBottom="@+id/appoxee_default_push_subject"
+      android:layout_alignParentEnd="true"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:textColor="#696969"
+      android:maxLines="1"
+      android:textSize="12sp"
+      android:gravity="end"
+      android:text="00:00"
+      android:layout_marginEnd="8dp"
+       />
+    </RelativeLayout>

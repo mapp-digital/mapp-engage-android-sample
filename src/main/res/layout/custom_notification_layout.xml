@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appoxee_default_push_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentTop="true"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    android:paddingTop="2dip" >
+    <ImageView
+        android:id="@+id/appoxee_default_push_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
+        android:contentDescription="push image" />
+
+    <ImageView android:id="@+id/appoxee_default_push_icon"
+        android:contentDescription="icon"
+        android:layout_marginRight="4dip"
+        android:layout_marginLeft="4dip"
+        android:adjustViewBounds="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView android:id="@+id/appoxee_default_push_subject"
+        android:layout_alignTop="@+id/appoxee_default_push_icon"
+        android:layout_toRightOf="@+id/appoxee_default_push_icon"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:maxLines="1"
+        android:textSize="15sp" />
+
+
+    <TextView android:id="@+id/appoxee_default_push_message"
+        android:textColor="#FFFFFFFF"
+        android:maxLines="6"
+        android:layout_marginTop="0dip"
+        android:layout_marginRight="2dip"
+        android:layout_marginLeft="0dip"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/appoxee_default_push_icon"
+        android:layout_below="@+id/appoxee_default_push_subject"
+        android:layout_width="wrap_content"
+        android:textSize="15sp"
+        android:text="Yesterday we sent 2 messages (see below) and none of them were actually sent." />
+
+    <TextView android:id="@+id/appoxee_default_push_hour"
+        android:layout_alignBottom="@+id/appoxee_default_push_subject"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:gravity="right"
+        android:text="00:00PM"
+        android:layout_marginRight="8dp"
+
+        />
+</RelativeLayout>
