@@ -32,9 +32,9 @@ public class AppoxeeTestApp extends Application {
 
         Appoxee.engage(this, opt);
         long end = System.currentTimeMillis();
+        Log.i("APX", "Start Service took " + (end-start) + " ms on main thread");
+        Appoxee.instance().setAlias("alias0");
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
-        long total = end - start;
-        Log.i("APX", "Start Service took " + total + " ms on main thread");
         Log.d("APX", "info (before init finished): " + info);
     }
 }
