@@ -18,6 +18,8 @@ import java.util.Set;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
 
+    private Switch pushEnabledSwitch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +64,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        Switch pushEnabledSwitch = (Switch)findViewById(R.id.push_enabled);
-        //todo check push enabled in Appoxee init callback
-//        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+        pushEnabledSwitch = (Switch)findViewById(R.id.push_enabled);
         pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -77,5 +77,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     @Override
     public void onInitCompleted(boolean successful, Exception failReason) {
         Log.i("APX", "init completed listener - MainActivity");
+        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
     }
 }
