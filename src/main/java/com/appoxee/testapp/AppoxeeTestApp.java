@@ -10,6 +10,13 @@ import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 
 public class AppoxeeTestApp extends Application {
 
+    private Appoxee.OnInitCompletedListener initFinishedListener = new Appoxee.OnInitCompletedListener() {
+        @Override
+        public void onInitCompleted(boolean successful, Exception failReason) {
+            Log.i("APX", "init completed listener - Application class");
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,6 +38,7 @@ public class AppoxeeTestApp extends Application {
         opt.customNotificationCreator = new CustomXmlLayoutNotificationCreator(builder);
 
         Appoxee.engage(this, opt);
+        Appoxee.instance().addInithListener(initFinishedListener);
         long end = System.currentTimeMillis();
         Log.i("APX", "Start Service took " + (end-start) + " ms on main thread");
         Appoxee.instance().setAlias("alias0");

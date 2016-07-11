@@ -16,13 +16,13 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 import java.util.Set;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Log.d("APX", "activity started");
+        Appoxee.instance().addInithListener(this);
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,4 +74,8 @@ public class MainActivity extends Activity {
     }
 
 
+    @Override
+    public void onInitCompleted(boolean successful, Exception failReason) {
+        Log.i("APX", "init completed listener - MainActivity");
+    }
 }
