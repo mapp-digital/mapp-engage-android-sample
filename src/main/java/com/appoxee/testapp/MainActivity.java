@@ -77,6 +77,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     @Override
     public void onInitCompleted(boolean successful, Exception failReason) {
         Log.i("APX", "init completed listener - MainActivity");
-        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+            }
+        });
     }
 }
