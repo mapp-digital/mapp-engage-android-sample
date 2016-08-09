@@ -38,7 +38,7 @@ public class AppoxeeTestApp extends Application {
         opt.customNotificationCreator = new CustomXmlLayoutNotificationCreator(builder);
 
         Appoxee.engage(this, opt);
-        Appoxee.instance().addInithListener(initFinishedListener);
+        Appoxee.instance().addInitListener(initFinishedListener);
         long end = System.currentTimeMillis();
         Log.i("APX", "Start Service took " + (end-start) + " ms on main thread");
         Appoxee.instance().setAlias("alias0");

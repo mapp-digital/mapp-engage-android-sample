@@ -24,7 +24,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Appoxee.instance().addInithListener(this);
+        Appoxee.instance().addInitListener(this);
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
