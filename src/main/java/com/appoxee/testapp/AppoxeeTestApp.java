@@ -23,10 +23,12 @@ public class AppoxeeTestApp extends Application {
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
 
-        opt.sdkKey = "5725ceaec41069.29878975";
-//        opt.sdkKey = "576fc13f3d23e3.06780385";
+//        opt.sdkKey = "5725ceaec41069.29878975";
+/*Varun Live TestAppV */       opt.sdkKey = "58aac06c9b0c21.67718432";
 
-        opt.googleProjectId = "94866074595";
+//        opt.googleProjectId = "94866074595";
+
+     /*Varun Live TestAppV */   opt.googleProjectId = "182774534911";
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
