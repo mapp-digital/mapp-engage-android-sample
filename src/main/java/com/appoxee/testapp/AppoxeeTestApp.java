@@ -23,8 +23,8 @@ public class AppoxeeTestApp extends Application {
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
 
-//        opt.sdkKey = "5725ceaec41069.29878975";
-/*Varun Live TestAppV */       opt.sdkKey = "58aac06c9b0c21.67718432";
+//        opt.sdkKey = "58aac06c9b0c21.67718432";
+/*Varun Live TestAppV dev :58aae46cc20680.44525551 */       opt.sdkKey = "58aae46cc20680.44525551";
 
 //        opt.googleProjectId = "94866074595";
 
