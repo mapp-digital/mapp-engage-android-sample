@@ -49,5 +49,8 @@ dependencies {
 
     debugCompile project(path: ":sdk", configuration: "debug")
     releaseCompile project(path: ":sdk", configuration: "release")
+    releaseCompile project(path: ":sdk", configuration: "virginia")
+    releaseCompile project(path: ":sdk", configuration: "frankfart")
+
 
 }
