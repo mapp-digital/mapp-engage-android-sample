@@ -23,7 +23,7 @@ public class AppoxeeTestApp extends Application {
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
 
-        opt.sdkKey = "59255ce874f4f4.89147994";
+        opt.sdkKey = BuildConfig.SDK_KEY;
 //        opt.sdkKey = "576fc13f3d23e3.06780385";
 
         opt.googleProjectId = "651820799870";
