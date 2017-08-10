@@ -31,7 +31,7 @@ android {
         }
         debug {
             initWith(debug)
-            buildConfigField "String", "SDK_KEY", "\"58b7de69c8e519.85700893\""
+            buildConfigField "String", "SDK_KEY", "\"58884973256a51.52095928\""
 
         }
 
