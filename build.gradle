@@ -29,11 +29,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
-        debug {
+       /* debug {
             initWith(debug)
             buildConfigField "String", "SDK_KEY", "\"58884973256a51.52095928\""
 
-        }
+        }*/
 
         frankfart {
             initWith(debug)
@@ -66,7 +66,7 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.android.support:appcompat-v7:24.0.0'
-    debugCompile project(path: ":sdk", configuration: "debug")
+   // debugCompile project(path: ":sdk", configuration: "debug")
 
     frankfartCompile project(path: ":sdk", configuration: "frankfart")
     virginiaCompile project(path: ":sdk", configuration: "virginia")
