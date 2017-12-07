@@ -16,6 +16,11 @@
         android:text="2nd activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/geo_fencing"
+        android:text="Start Geo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

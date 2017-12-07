@@ -1,9 +1,15 @@
 package com.appoxee.testapp;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -11,6 +17,7 @@ import android.widget.Switch;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
+import com.appoxee.internal.service.AppoxeeService;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
@@ -19,7 +26,7 @@ import java.util.Set;
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
 
     private Switch pushEnabledSwitch;
-
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +66,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.second_activity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+
+               Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
+            }
+        });
+        findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              startGeo();
             }
         });
 
@@ -83,5 +97,42 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
             }
         });
+    }
+
+    private void startGeo() {
+        if (geoPermissionNotGranted()){
+           Appoxee.instance().startGeoFencing();
+        } else {
+            askForGeoPermission();
+        }
+    }
+    private boolean geoPermissionNotGranted() {
+        return ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+    private void askForGeoPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (MY_PERMISSIONS_ACCESS_FINE_LOCATION == requestCode) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Appoxee.instance().startGeoFencing();
+            } else {
+
+                Log.w("MianActivity", "Geo permission not granted");
+            }
+        } else {
+            Log.w("Main Activity", "some other permission requested? (not geo)");
+        }
     }
 }
