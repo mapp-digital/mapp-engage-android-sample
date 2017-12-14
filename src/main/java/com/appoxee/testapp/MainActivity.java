@@ -77,6 +77,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
               startGeo();
             }
         });
+        findViewById(R.id.stop_geo_fencing).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopGeoFencing();
+            }
+        });
 
         pushEnabledSwitch = (Switch)findViewById(R.id.push_enabled);
         pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -134,5 +140,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         } else {
             Log.w("Main Activity", "some other permission requested? (not geo)");
         }
+    }
+
+    private void stopGeoFencing(){
+        Appoxee.instance().stopGeoFencing();
     }
 }

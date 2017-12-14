@@ -26,7 +26,7 @@ public class AppoxeeTestApp extends Application {
         opt.sdkKey = BuildConfig.SDK_KEY;
 //        opt.sdkKey = "576fc13f3d23e3.06780385";
 
-        opt.googleProjectId = "651820799870";
+        opt.googleProjectId = "285074346790";
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
