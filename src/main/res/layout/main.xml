@@ -32,4 +32,18 @@
         android:text="Push enabled"
         android:id="@+id/push_enabled"
         android:checked="false" />
+
+    <Button
+        android:id="@+id/buttonDeviceInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Device Info" />
+
+    <Button
+        android:id="@+id/dmcCallInApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trigger DMC call" />
+
+
 </LinearLayout>

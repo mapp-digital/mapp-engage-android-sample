@@ -28,6 +28,8 @@ public class AppoxeeTestApp extends Application {
 
         opt.googleProjectId = "651820799870";
 
+        opt.cepURL = BuildConfig.CEP_URL;
+
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
                 .setIconResourceId(R.id.appoxee_default_push_icon)

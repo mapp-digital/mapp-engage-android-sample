@@ -91,6 +91,20 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Appoxee.instance().setPushEnabled(isChecked);
             }
         });
+
+        findViewById(R.id.buttonDeviceInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().getDeviceInfoDMC();
+            }
+        });
+
+        findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp("app_open");
+            }
+        });
     }
 
 
