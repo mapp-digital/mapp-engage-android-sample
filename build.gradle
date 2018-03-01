@@ -29,10 +29,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
+
         debug {
             initWith(debug)
             buildConfigField "String", "SDK_KEY", "\"5a603f3e070584.57072624\""
+            buildConfigField "String", "APP_ID", "\"123456\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
+            buildConfigField "String", "TENANT_ID", "\"42\""
 
         }
 

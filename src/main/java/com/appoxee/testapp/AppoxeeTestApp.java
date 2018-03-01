@@ -29,6 +29,8 @@ public class AppoxeeTestApp extends Application {
         opt.googleProjectId = "651820799870";
 
         opt.cepURL = BuildConfig.CEP_URL;
+        opt.tenantID = BuildConfig.TENANT_ID;
+        opt.appID = BuildConfig.APP_ID;
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
