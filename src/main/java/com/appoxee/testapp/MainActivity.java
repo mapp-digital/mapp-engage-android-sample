@@ -1,6 +1,5 @@
 package com.appoxee.testapp;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.widget.Switch;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
-import com.appoxee.internal.service.AppoxeeService;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
