@@ -12,7 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
@@ -25,11 +27,19 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
+    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        mTenantIdTV = (EditText) findViewById(R.id.tenantId);
+        mAppIdTV = (EditText) findViewById(R.id.appId);
+        mUserIdTV = (EditText) findViewById(R.id.userId);
+        mDeviceIdTV = (EditText) findViewById(R.id.deviceid);
+        setDefaultText();
         Appoxee.instance().addInitListener(this);
+
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,9 +110,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp("app_open");
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this,
+                        mTenantIdTV.getText().toString().trim(),
+                        mUserIdTV.getText().toString().trim(),
+                        mDeviceIdTV.getText().toString().trim(),
+                        mAppIdTV.getText().toString().trim(),"app_open");
             }
         });
+
+
     }
 
 
@@ -113,6 +129,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+                //Test Call only for the Testing
+                Appoxee.instance().getDeviceInfoDMC();
+
             }
         });
     }
@@ -156,5 +175,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private void stopGeoFencing(){
         Appoxee.instance().stopGeoFencing();
+    }
+
+    private void setDefaultText() {
+        mTenantIdTV.setText("42");
+        mDeviceIdTV.setText("02AC264E264EE92B248781008B7571CE979E2AB0724020F59E63336ECCD97B2D");
+        mUserIdTV.setText("8900000003");
+        mAppIdTV.setText("123456");
     }
 }

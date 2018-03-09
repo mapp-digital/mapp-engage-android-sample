@@ -1,49 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button android:id="@+id/device_info"
-        android:text="info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button android:id="@+id/get_alias"
-        android:text="getAlias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/second_activity"
-        android:text="2nd activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/geo_fencing"
-        android:text="Start Geo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/stop_geo_fencing"
-        android:text="Stop Geo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Push enabled"
-        android:id="@+id/push_enabled"
-        android:checked="false" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/buttonDeviceInfo"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Get Device Info" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/dmcCallInApp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Trigger In App Call" />
+        <Button
+            android:id="@+id/device_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="info" />
+
+        <Button
+            android:id="@+id/get_alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/device_info"
+            android:text="getAlias" />
+
+        <Button
+            android:id="@+id/second_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/get_alias"
+            android:text="2nd activity" />
+
+        <Button
+            android:id="@+id/geo_fencing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/second_activity"
+            android:text="Start Geo" />
+
+        <Button
+            android:id="@+id/stop_geo_fencing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/second_activity"
+            android:layout_toRightOf="@+id/geo_fencing"
+            android:text="Stop Geo" />
+
+        <Switch
+            android:id="@+id/push_enabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/second_activity"
+            android:layout_toRightOf="@+id/stop_geo_fencing"
+
+            android:checked="false"
+            android:padding="10dp"
+            android:text="Push enabled     " />
 
 
-</LinearLayout>
+        <Button
+            android:id="@+id/buttonDeviceInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/push_enabled"
+            android:text="Get Device Info"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/app_idtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/push_enabled"
+            android:text="App id :"/>
+
+
+        <EditText
+            android:id="@+id/appId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/app_idtv"
+            android:layout_margin="10dp"
+            android:hint="Enter App Id"
+            android:maxLines="2"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/tenant_idtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/appId"
+            android:text="Tenant id :"/>
+
+        <EditText
+            android:id="@+id/tenantId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tenant_idtv"
+            android:layout_margin="10dp"
+            android:hint="Enter Tenant Id"
+            android:maxLines="2"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/user_idtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/tenantId"
+            android:text="User id :"/>
+
+        <EditText
+            android:id="@+id/userId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_idtv"
+            android:layout_margin="10dp"
+            android:hint="Enter User Id"
+            android:maxLines="2"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/deviceidTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/userId"
+            android:text="Device id :"/>
+
+        <EditText
+            android:id="@+id/deviceid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deviceidTv"
+            android:layout_margin="10dp"
+            android:hint="Enter Device Id"
+            android:maxLines="2"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/dmcCallInApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deviceid"
+            android:text="Trigger In App Call" />
+
+    </RelativeLayout>
+</ScrollView>
