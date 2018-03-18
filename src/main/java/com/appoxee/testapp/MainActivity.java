@@ -3,15 +3,23 @@ package com.appoxee.testapp;
 import android.*;
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -110,6 +118,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_feedback");
+            }
+        });
+
+        findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_discount");
             }
         });
     }

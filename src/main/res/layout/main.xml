@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <Button android:id="@+id/device_info"
         android:text="info"
         android:layout_width="wrap_content"
@@ -43,16 +47,21 @@
         android:id="@+id/dmcCallInApp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Trigger In App Call" />
+        android:text="FullScreen: App Open" />
 
 
     <Button
         android:id="@+id/inappModalType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Modal: App Feedback Event" />
+        android:text="Modal: App Feedback" />
+
+    <Button
+        android:id="@+id/inappBannerType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Banner: App Discount"/>
+    </LinearLayout>
 
 
-
-
-</LinearLayout>
+</ScrollView>
