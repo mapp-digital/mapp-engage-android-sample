@@ -61,6 +61,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Banner: App Discount"/>
+
+        <Button
+            android:id="@+id/inappAppPromo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PROMO: App Promo"/>
     </LinearLayout>
 
 

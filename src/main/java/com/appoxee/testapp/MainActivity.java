@@ -22,9 +22,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
+import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.service.AppoxeeService;
 import com.google.gson.Gson;
 
@@ -40,6 +42,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Appoxee.instance().addInitListener(this);
+        InAppCallback inAppCallback =  new InAppCallback();
+        inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
+            @Override
+            public void onInAppEvent(String eventName, String eventValue) {
+                Log.d("VARUN eventName = ", eventName);
+                Log.d("VARUN eventValue = ", eventValue);
+                Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
+            }
+        });
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +136,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_discount");
+            }
+        });
+
+        findViewById(R.id.inappAppPromo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_promo");
             }
         });
     }
