@@ -24,6 +24,13 @@
                 <action android:name="com.appoxee.PUSH_RECEIVED" />
                 <action android:name="com.appoxee.PUSH_DISMISSED" />
                 <category android:name="${applicationId}" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data android:scheme="http"
+                    android:host="www.example.com"
+                    android:pathPrefix="/gizmos" />
             </intent-filter>
         </receiver>
     </application>

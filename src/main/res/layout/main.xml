@@ -67,6 +67,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PROMO: App Promo"/>
+
+        <Button
+            android:id="@+id/inappInbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fetch Inbox Messages"/>
     </LinearLayout>
 
 

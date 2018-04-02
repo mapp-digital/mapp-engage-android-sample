@@ -145,6 +145,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_promo");
             }
         });
+
+
+        findViewById(R.id.inappInbox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().fetchInboxMessages(MainActivity.this, "app_inbox");
+            }
+        });
     }
 
 
