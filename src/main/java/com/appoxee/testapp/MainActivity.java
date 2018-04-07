@@ -1,36 +1,32 @@
 package com.appoxee.testapp;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Point;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Display;
-import android.view.Surface;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
+import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
-import com.appoxee.internal.service.AppoxeeService;
+import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
@@ -51,6 +47,20 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
             }
         });
+
+        InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
+        inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
+            @Override
+            public void onInAppInboxMessages(String eventId, List<InAppMessage> messages) {
+                Log.d("messages","messages = " +messages.get(0).getContent());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("inboxMessages", (ArrayList<InAppMessage>)messages);
+                Intent intent = new Intent(MainActivity.this, InboxActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +160,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.inappInbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().fetchInboxMessages(MainActivity.this, "app_inbox");
+                Appoxee.instance().fetchInboxMessages(MainActivity.this);
             }
         });
     }
@@ -206,5 +216,18 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private void stopGeoFencing(){
         Appoxee.instance().stopGeoFencing();
+    }
+
+    private String getJsonString(List<InAppMessage> inbox) {
+        // Before converting to GSON check value of id
+        Gson gson = null;
+        if (inbox != null && !inbox.isEmpty()) {
+            gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create();
+        } else {
+            gson = new Gson();
+        }
+        return gson.toJson(inbox);
     }
 }

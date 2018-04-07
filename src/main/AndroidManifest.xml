@@ -17,7 +17,57 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity"></activity>
+
+
+        <activity android:name=".SecondActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="deeplink"/>
+                <action android:name="com.appoxee.test"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+
+        <!--Deeplinking Start-->
+        <activity android:name=".DeepLinkActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="deeplink"/>
+                <action android:name="com.appoxee.VIEW_DEEPLINK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name=".CustomDeeplinkActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="custom"/>
+                <action android:name="com.appoxee.VIEW_CUSTOM_LINKS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".InboxActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="inbox"/>
+                <action android:name="com.appoxee.VIEW_INBOX"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+       <!-- Deeplinking End-->
+
         <receiver android:name=".MyPushBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="com.appoxee.PUSH_OPENED" />
