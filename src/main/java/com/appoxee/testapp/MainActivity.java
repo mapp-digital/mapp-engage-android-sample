@@ -52,10 +52,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
         inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
             @Override
-            public void onInAppInboxMessages(List<APXInboxMessage> messages) {
-                Log.d("messages","messages = " +messages.get(0).getContent());
+            public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
+                Log.d("messages","messages = " +richMessages.get(0).getContent());
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)messages);
+                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
                 Intent intent = new Intent(MainActivity.this, InboxActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
