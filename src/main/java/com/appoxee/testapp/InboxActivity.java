@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appoxee.internal.inapp.CustomWebViewClient;
+import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppMessage;
 
@@ -41,7 +42,7 @@ public class InboxActivity extends Activity {
 
     RecyclerView recyclerView;
     InboxAdapter mAdapter;
-    List<InAppMessage> inboxList;
+    List<APXInboxMessage> inboxList;
     public static final String ABOUT_BLANK = "about:blank";
     AlertDialog modalDialog;
 
@@ -71,13 +72,13 @@ public class InboxActivity extends Activity {
                 String foo = uri.getQueryParameter("foo");
             }*/
             if (bundle != null) {
-                inboxList = (List<InAppMessage>) bundle.getSerializable("inboxMessages");
+                inboxList = (List<APXInboxMessage>) bundle.getSerializable("inboxMessages");
             }
 
             recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    InAppMessage inboxMessage = inboxList.get(position);
+                    APXInboxMessage inboxMessage = inboxList.get(position);
 //                    Toast.makeText(getApplicationContext(), inboxMessage.getSummary() + " is selected!", Toast.LENGTH_SHORT).show();
                     showDialogForInboxMessageContent(inboxList.get(position).getContent());
                 }

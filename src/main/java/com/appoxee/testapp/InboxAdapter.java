@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppMessage;
 
 import java.io.InputStream;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
 
-    private List<InAppMessage> inboxList;
+    private List<APXInboxMessage> inboxList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView subject, summary, time;
@@ -39,7 +40,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
     }
 
 
-    public InboxAdapter(List<InAppMessage> inboxList) {
+    public InboxAdapter(List<APXInboxMessage> inboxList) {
         this.inboxList = inboxList;
     }
 
@@ -53,11 +54,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        InAppMessage inboxMessage = inboxList.get(position);
+        APXInboxMessage inboxMessage = inboxList.get(position);
         holder.subject.setText(inboxMessage.getSubject());
         holder.summary.setText(inboxMessage.getSummary());
         holder.time.setText(inboxMessage.getSentDate().toString());
-        new DownLoadImageTask(holder.icon).execute(inboxMessage.getIcon_url());
+        new DownLoadImageTask(holder.icon).execute(inboxMessage.getIconUrl());
     }
 
     @Override
