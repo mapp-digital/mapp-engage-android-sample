@@ -68,6 +68,7 @@ public class DeepLinkActivity extends Activity {
         String path = uri.getPath();
         String query = uri.getQuery();
         String link = uri.getQueryParameter("link");
+        String messageId = uri.getQueryParameter("message_id");
 
         Log.d("Varun","protocol = " +protocol);
         Log.d("Varun","server = " +server);
@@ -75,7 +76,7 @@ public class DeepLinkActivity extends Activity {
         Log.d("Varun","query = " +query);
         Log.d("Varun","link = " +link);
         if(uri != null && uri.toString() != null) {
-            tv.setText("DEEPLINK ACTIVITY URI  = " + link);
+            tv.setText("DEEPLINK ACTIVITY URI  = " + link + "\n MessageId = " + messageId );
         } else {
             tv.setText("DEEPLINK ACTIVITY URI is Null" );
         }

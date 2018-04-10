@@ -57,19 +57,11 @@ public class CustomDeeplinkActivity extends Activity {
 
     private void openDeepLink(Uri uri) {
 
-        String protocol = uri.getScheme();
-        String server = uri.getAuthority();
-        String path = uri.getPath();
-        String query = uri.getQuery();
-        String link = uri.getQueryParameter("link");
+        String deeplinkValue = uri.getQueryParameter("link");
+        String mesageId = uri.getQueryParameter("message_id");
 
-        Log.d("Varun","protocol = " +protocol);
-        Log.d("Varun","server = " +server);
-        Log.d("Varun","path = " +path);
-        Log.d("Varun","query = " +query);
-        Log.d("Varun","link = " +link);
         if(uri != null && uri.toString() != null) {
-            tv.setText("DEEPLINK ACTIVITY URI  = " + link);
+            tv.setText("DEEPLINK ACTIVITY URI  = " + deeplinkValue + "\nMessageId = " + mesageId );
         } else {
             tv.setText("DEEPLINK ACTIVITY URI is Null" );
         }

@@ -80,7 +80,7 @@ public class InboxActivity extends Activity {
                 public void onClick(View view, int position) {
                     APXInboxMessage inboxMessage = inboxList.get(position);
 //                    Toast.makeText(getApplicationContext(), inboxMessage.getSummary() + " is selected!", Toast.LENGTH_SHORT).show();
-                    showDialogForInboxMessageContent(inboxList.get(position).getContent());
+                    showDialogForInboxMessageContent(inboxMessage, inboxMessage.getContent());
                 }
 
                 @Override
@@ -173,7 +173,7 @@ public class InboxActivity extends Activity {
         }
     }
      
-    private void showDialogForInboxMessageContent(String htmlContent) {
+    private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
         htmlContent = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<body>\n" +
@@ -209,18 +209,9 @@ public class InboxActivity extends Activity {
     });
 
 
-        webView.setWebViewClient(new CustomWebViewClient(this, webView) {
+        webView.setWebViewClient(new CustomWebViewClient(this, webView, richMessageObject) {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-           /* Uri uri = Uri.parse(url);
-            String protocol = uri.getScheme();
-            String server = uri.getAuthority();
-            String path = uri.getPath();
-            String query = uri.getQuery();
-            String link = uri.getQueryParameter("link");
 
-
-            webView.loadUrl(url);
-*/
             super.shouldOverrideUrlLoading(view, url);
             return true;
         }
