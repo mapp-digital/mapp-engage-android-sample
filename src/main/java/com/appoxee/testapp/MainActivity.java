@@ -22,6 +22,7 @@ import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
+import com.appoxee.internal.inapp.model.InAppStatistics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

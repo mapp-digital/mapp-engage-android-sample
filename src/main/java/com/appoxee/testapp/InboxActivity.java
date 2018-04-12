@@ -81,6 +81,10 @@ public class InboxActivity extends Activity {
                     APXInboxMessage inboxMessage = inboxList.get(position);
 //                    Toast.makeText(getApplicationContext(), inboxMessage.getSummary() + " is selected!", Toast.LENGTH_SHORT).show();
                     showDialogForInboxMessageContent(inboxMessage, inboxMessage.getContent());
+                    inboxMessage.markAsRead(InboxActivity.this, inboxMessage);
+                    inboxMessage.markAsDeleted(InboxActivity.this, inboxMessage);
+                    inboxMessage.markAsUnRead(InboxActivity.this, inboxMessage);
+                    Log.v("Varun", "APXInboxMessage = " + inboxMessage);
                 }
 
                 @Override
