@@ -27,10 +27,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appoxee.internal.inapp.CustomWebViewClient;
+import com.appoxee.internal.inapp.APXInboxWebViewClient;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
-import com.appoxee.internal.inapp.model.InAppMessage;
 
 import java.util.List;
 
@@ -79,12 +78,10 @@ public class InboxActivity extends Activity {
                 @Override
                 public void onClick(View view, int position) {
                     APXInboxMessage inboxMessage = inboxList.get(position);
-//                    Toast.makeText(getApplicationContext(), inboxMessage.getSummary() + " is selected!", Toast.LENGTH_SHORT).show();
                     showDialogForInboxMessageContent(inboxMessage, inboxMessage.getContent());
-                    inboxMessage.markAsRead(InboxActivity.this, inboxMessage);
-                    inboxMessage.markAsDeleted(InboxActivity.this, inboxMessage);
-                    inboxMessage.markAsUnRead(InboxActivity.this, inboxMessage);
-                    Log.v("Varun", "APXInboxMessage = " + inboxMessage);
+                    inboxMessage.markAsRead(InboxActivity.this);
+                    inboxMessage.markAsDeleted(InboxActivity.this);
+                    inboxMessage.markAsUnRead(InboxActivity.this);
                 }
 
                 @Override
@@ -213,7 +210,7 @@ public class InboxActivity extends Activity {
     });
 
 
-        webView.setWebViewClient(new CustomWebViewClient(this, webView, richMessageObject) {
+        webView.setWebViewClient(new APXInboxWebViewClient(this, webView, richMessageObject) {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
             super.shouldOverrideUrlLoading(view, url);
