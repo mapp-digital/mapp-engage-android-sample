@@ -32,10 +32,11 @@ android {
 
         debug {
             initWith(debug)
-            buildConfigField "String", "SDK_KEY", "\"5a603f3e070584.57072624\""
-            buildConfigField "String", "APP_ID", "\"123456\""
+            buildConfigField "String", "SDK_KEY", "\"5ac2255e4aab62.48935395\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
+            buildConfigField "String", "APP_ID", "\"123456\""
             buildConfigField "String", "TENANT_ID", "\"42\""
+
 
         }
 
@@ -70,6 +71,7 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
     debugCompile project(path: ":sdk", configuration: "debug")
 
     frankfartCompile project(path: ":sdk", configuration: "frankfart")

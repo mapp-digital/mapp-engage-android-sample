@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -15,12 +16,21 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
+import com.appoxee.internal.inapp.model.APXInboxMessage;
+import com.appoxee.internal.inapp.model.InAppMessage;
+import com.appoxee.internal.inapp.model.InAppCallback;
+import com.appoxee.internal.inapp.model.InAppInboxCallback;
+import com.appoxee.internal.inapp.model.InAppStatistics;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
@@ -39,6 +49,28 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mDeviceIdTV = (EditText) findViewById(R.id.deviceid);
         setDefaultText();
         Appoxee.instance().addInitListener(this);
+        InAppCallback inAppCallback =  new InAppCallback();
+        inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
+            @Override
+            public void onInAppEvent(String eventName, String eventValue) {
+                Log.d("VARUN eventName = ", eventName);
+                Log.d("VARUN eventValue = ", eventValue);
+                Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
+        inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
+            @Override
+            public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
+                Log.d("messages","messages = " +richMessages.get(0).getContent());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
+                Intent intent = new Intent(MainActivity.this, InboxActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,11 +142,48 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this,
                         mTenantIdTV.getText().toString().trim(),
                         mUserIdTV.getText().toString().trim(),
                         mDeviceIdTV.getText().toString().trim(),
                         mAppIdTV.getText().toString().trim(),"app_open");
+            }
+        });
+
+        findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_feedback");
+            }
+        });
+
+        findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_discount");
+            }
+        });
+
+        findViewById(R.id.inappAppPromo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_promo");
+            }
+        });
+
+
+        findViewById(R.id.inappInbox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().fetchInboxMessages(MainActivity.this);
+            }
+        });
+
+        findViewById(R.id.multipleMessages).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this,  "app_welcome");
             }
         });
 
@@ -175,6 +244,19 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private void stopGeoFencing(){
         Appoxee.instance().stopGeoFencing();
+    }
+
+    private String getJsonString(List<InAppMessage> inbox) {
+        // Before converting to GSON check value of id
+        Gson gson = null;
+        if (inbox != null && !inbox.isEmpty()) {
+            gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create();
+        } else {
+            gson = new Gson();
+        }
+        return gson.toJson(inbox);
     }
 
     private void setDefaultText() {

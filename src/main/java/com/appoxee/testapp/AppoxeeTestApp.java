@@ -24,13 +24,10 @@ public class AppoxeeTestApp extends Application {
         AppoxeeOptions opt = new AppoxeeOptions();
 
         opt.sdkKey = BuildConfig.SDK_KEY;
-//        opt.sdkKey = "576fc13f3d23e3.06780385";
-
-        opt.googleProjectId = "651820799870";
-
+        opt.googleProjectId = "182774534911";
         opt.cepURL = BuildConfig.CEP_URL;
-        opt.tenantID = BuildConfig.TENANT_ID;
         opt.appID = BuildConfig.APP_ID;
+        opt.tenantID = BuildConfig.TENANT_ID;
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)

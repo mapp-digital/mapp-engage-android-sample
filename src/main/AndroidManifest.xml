@@ -9,20 +9,78 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity"></activity>
+
+
+        <activity android:name=".SecondActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="deeplink"/>
+                <action android:name="com.appoxee.test"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+
+        <!--Deeplinking Start-->
+        <activity android:name=".DeepLinkActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="deeplink"/>
+                <action android:name="com.appoxee.VIEW_DEEPLINK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name=".CustomDeeplinkActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="custom"/>
+                <action android:name="com.appoxee.VIEW_CUSTOM_LINKS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".InboxActivity">
+
+            <intent-filter>
+                <data android:scheme="apx"/>
+                <data android:host="inbox"/>
+                <action android:name="com.appoxee.VIEW_INBOX"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+
+       <!-- Deeplinking End-->
+
         <receiver android:name=".MyPushBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="com.appoxee.PUSH_OPENED" />
                 <action android:name="com.appoxee.PUSH_RECEIVED" />
                 <action android:name="com.appoxee.PUSH_DISMISSED" />
                 <category android:name="${applicationId}" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data android:scheme="http"
+                    android:host="www.example.com"
+                    android:pathPrefix="/gizmos" />
             </intent-filter>
         </receiver>
     </application>
