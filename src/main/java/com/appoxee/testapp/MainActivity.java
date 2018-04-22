@@ -2,6 +2,7 @@ package com.appoxee.testapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -37,7 +38,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
-    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV;
+    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV, mEventName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mAppIdTV = (EditText) findViewById(R.id.appId);
         mUserIdTV = (EditText) findViewById(R.id.userId);
         mDeviceIdTV = (EditText) findViewById(R.id.deviceid);
+        mEventName = (EditText) findViewById(R.id.event_name);
         setDefaultText();
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback =  new InAppCallback();
@@ -142,8 +144,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this,
+               callInappMessages(MainActivity.this,
                         mTenantIdTV.getText().toString().trim(),
                         mUserIdTV.getText().toString().trim(),
                         mDeviceIdTV.getText().toString().trim(),
@@ -151,14 +152,18 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
+      /*  findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_feedback");
+                callInappMessages(MainActivity.this,
+                        mTenantIdTV.getText().toString().trim(),
+                        mUserIdTV.getText().toString().trim(),
+                        mDeviceIdTV.getText().toString().trim(),
+                        mAppIdTV.getText().toString().trim(),"app_feedback");
             }
-        });
+        });*/
 
-        findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
+        /*findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_discount");
@@ -185,9 +190,19 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onClick(View v) {
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this,  "app_welcome");
             }
-        });
+        });*/
 
 
+    }
+
+    private void callInappMessages(final Context ctx, String tenantId, String userId,
+                              String deviceId, String appId, final String event) {
+        Appoxee.instance().triggerDMCCallInApp(MainActivity.this,
+                mTenantIdTV.getText().toString().trim(),
+                mUserIdTV.getText().toString().trim(),
+                mDeviceIdTV.getText().toString().trim(),
+                mAppIdTV.getText().toString().trim(),
+                mEventName.getText().toString().trim());
     }
 
 
@@ -264,5 +279,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mDeviceIdTV.setText("02AC264E264EE92B248781008B7571CE979E2AB0724020F59E63336ECCD97B2D");
         mUserIdTV.setText("8900000003");
         mAppIdTV.setText("123456");
+        mEventName.setText("app_open");
     }
 }
