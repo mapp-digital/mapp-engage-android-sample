@@ -38,7 +38,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
-    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV, mEventName;
+    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV, mEventName, mJamieUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mUserIdTV = (EditText) findViewById(R.id.userId);
         mDeviceIdTV = (EditText) findViewById(R.id.deviceid);
         mEventName = (EditText) findViewById(R.id.event_name);
+        mJamieUrl = (EditText) findViewById(R.id.jamieUrlVal);
         setDefaultText();
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback =  new InAppCallback();
@@ -141,6 +142,18 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
+        findViewById(R.id.fetchInbox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().fetchInboxMessages(MainActivity.this,
+                        mTenantIdTV.getText().toString().trim(),
+                        mUserIdTV.getText().toString().trim(),
+                        mDeviceIdTV.getText().toString().trim(),
+                        mAppIdTV.getText().toString().trim(),
+                        mJamieUrl.getText().toString().trim());
+            }
+        });
+
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,7 +215,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 mUserIdTV.getText().toString().trim(),
                 mDeviceIdTV.getText().toString().trim(),
                 mAppIdTV.getText().toString().trim(),
-                mEventName.getText().toString().trim());
+                mEventName.getText().toString().trim(),
+                mJamieUrl.getText().toString().trim());
     }
 
 
@@ -280,5 +294,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mUserIdTV.setText("8900000003");
         mAppIdTV.setText("123456");
         mEventName.setText("app_open");
+        mJamieUrl.setText(BuildConfig.CEP_URL);
     }
 }

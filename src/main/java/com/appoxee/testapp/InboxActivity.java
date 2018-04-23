@@ -175,7 +175,7 @@ public class InboxActivity extends Activity {
     }
      
     private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
-        htmlContent = "<!DOCTYPE html>\n" +
+      /*  htmlContent = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<body>\n" +
                 "<h1>Inapp example</h1>\n" +
@@ -187,7 +187,7 @@ public class InboxActivity extends Activity {
                 "<p><a href=\"apxAction://custom?link=%7Bsome%20custom%20data%7D\">Custom Data</a> This link will dismiss the Inapp and notify the developer on custom data.</p>\n" +
                 "<p><a href=\"apxAction://inbox?message_id=123456\">INBOX Data</a> This link will open Inbox Activity with that message Id.</p>\n" +
                 "</body>\n" +
-                "</html>";
+                "</html>";*/
     final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
     LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

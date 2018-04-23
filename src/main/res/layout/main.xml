@@ -142,14 +142,33 @@
             android:padding="10dp" />
 
         <TextView
+            android:id="@+id/jamieUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/deviceid"
+            android:text="Jamie Url :"/>
+
+        <EditText
+            android:id="@+id/jamieUrlVal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/jamieUrl"
+            android:layout_margin="10dp"
+            android:hint="Enter the url "
+            android:maxLines="2"
+            android:padding="10dp" />
+
+        <TextView
             android:id="@+id/eventNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:layout_marginLeft="10dp"
             android:textSize="8sp"
-            android:layout_below="@+id/deviceid"
-            android:text="app_open(F), app_feedback(M), app_discount(B), app_promo(actions), app_welcome(MM)"/>
+            android:layout_below="@+id/jamieUrlVal"
+            android:text="Event Names : app_open(F), app_feedback(M), app_discount(B), app_promo(actions), app_welcome(MM)"/>
 
 
         <EditText
@@ -168,6 +187,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/event_name"
             android:text="Trigger In App Call" />
+
+        <Button
+            android:id="@+id/fetchInbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dmcCallInApp"
+            android:text="Fetch Inbox" />
 
 
 

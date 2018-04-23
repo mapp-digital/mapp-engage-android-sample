@@ -61,9 +61,9 @@ public class CustomDeeplinkActivity extends Activity {
         String mesageId = uri.getQueryParameter("message_id");
 
         if(uri != null && uri.toString() != null) {
-            tv.setText("DEEPLINK ACTIVITY URI  = " + deeplinkValue + "\nMessageId = " + mesageId );
+            tv.setText("CUSTOM DEEPLINK ACTIVITY URI  = " + deeplinkValue + "\nMessageId = " + mesageId );
         } else {
-            tv.setText("DEEPLINK ACTIVITY URI is Null" );
+            tv.setText("CUSTOM DEEPLINK ACTIVITY URI is Null" );
         }
 
     }
