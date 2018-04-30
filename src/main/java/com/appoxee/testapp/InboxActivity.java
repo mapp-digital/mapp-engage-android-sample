@@ -27,14 +27,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appoxee.Appoxee;
 import com.appoxee.internal.inapp.APXInboxWebViewClient;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
+import com.appoxee.internal.inapp.model.InAppInboxCallback;
 
 import java.util.List;
 
 /**
- * Created by Varun on 4/3/2018.
+ * Created by InboxActivity on 4/3/2018.
  */
 
 public class InboxActivity extends Activity {
@@ -61,11 +63,15 @@ public class InboxActivity extends Activity {
         tv.setVisibility(View.GONE);
 
         Bundle bundle;
+        Uri uri = null;
+
 
         if (getIntent() != null) {
             bundle = getIntent().getExtras();
             if (APX_LAUNCH_INBOX_ACTION.equals(getIntent().getAction())) {
                 uri = getIntent().getData();
+                //
+                getMessageId(uri);
             }
             /*if(uri != null) {
                 String foo = uri.getQueryParameter("foo");
@@ -73,6 +79,24 @@ public class InboxActivity extends Activity {
             if (bundle != null) {
                 inboxList = (List<APXInboxMessage>) bundle.getSerializable("inboxMessages");
             }
+
+            InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
+            inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
+                @Override
+                public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
+                    Log.d("messages","messages = " +richMessages.get(0).getContent());
+                    /*Bundle bundle = new Bundle();
+                    bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
+                    Intent intent = new Intent(this, InboxActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);*/
+                }
+
+                @Override
+                public void onInAppInboxMessage(APXInboxMessage message) {
+                    Log.d("messages","messages = " +message.getContent());
+                }
+            });
 
             recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
                 @Override
@@ -113,8 +137,8 @@ public class InboxActivity extends Activity {
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
             public void onInAppEvent(String eventName, String eventValue) {
-                Log.d("VARUN eventName = ", eventName);
-                Log.d("VARUN eventValue = ", eventValue);
+                Log.d("Inbox eventName = ", eventName);
+                Log.d("Inbox eventValue = ", eventValue);
                 Toast.makeText(InboxActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
 
                 if(modalDialog!=null && modalDialog.isShowing()) {
@@ -122,6 +146,29 @@ public class InboxActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void getMessageId(Uri uri) {
+
+        String protocol = uri.getScheme();
+        String server = uri.getAuthority();
+        String path = uri.getPath();
+        String query = uri.getQuery();
+        String messageId = uri.getQueryParameter("message_id");
+
+        Log.d("InboxActivity","protocol = " +protocol);
+        Log.d("InboxActivity","server = " +server);
+        Log.d("InboxActivity","path = " +path);
+        Log.d("InboxActivity","query = " +query);
+        Log.d("InboxActivity","messageId = " +messageId);
+        if(uri != null && uri.toString() != null) {
+            tv.setText("\n MessageId = " + messageId );
+        } else {
+            tv.setText("DEEPLINK ACTIVITY URI is Null" );
+        }
+
+        Appoxee.instance().fetchInboxMessage(this, Integer.parseInt(messageId));
+
     }
 
 
@@ -175,7 +222,7 @@ public class InboxActivity extends Activity {
     }
      
     private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
-        htmlContent = "<!DOCTYPE html>\n" +
+       /* htmlContent = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<body>\n" +
                 "<h1>Inapp example</h1>\n" +
@@ -187,7 +234,7 @@ public class InboxActivity extends Activity {
                 "<p><a href=\"apxAction://custom?link=%7Bsome%20custom%20data%7D\">Custom Data</a> This link will dismiss the Inapp and notify the developer on custom data.</p>\n" +
                 "<p><a href=\"apxAction://inbox?message_id=123456\">INBOX Data</a> This link will open Inbox Activity with that message Id.</p>\n" +
                 "</body>\n" +
-                "</html>";
+                "</html>";*/
     final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
     LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

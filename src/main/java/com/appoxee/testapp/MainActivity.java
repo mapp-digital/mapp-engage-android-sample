@@ -44,8 +44,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
             public void onInAppEvent(String eventName, String eventValue) {
-                Log.d("VARUN eventName = ", eventName);
-                Log.d("VARUN eventValue = ", eventValue);
+                Log.d("  eventName = ", eventName);
+                Log.d("  eventValue = ", eventValue);
                 Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
             }
         });
@@ -60,6 +60,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Intent intent = new Intent(MainActivity.this, InboxActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onInAppInboxMessage(APXInboxMessage message) {
+
             }
         });
 
