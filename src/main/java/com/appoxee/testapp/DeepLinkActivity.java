@@ -70,11 +70,6 @@ public class DeepLinkActivity extends Activity {
         String link = uri.getQueryParameter("link");
         String messageId = uri.getQueryParameter("message_id");
 
-        Log.d("Varun","protocol = " +protocol);
-        Log.d("Varun","server = " +server);
-        Log.d("Varun","path = " +path);
-        Log.d("Varun","query = " +query);
-        Log.d("Varun","link = " +link);
         if(uri != null && uri.toString() != null) {
             tv.setText("DEEPLINK ACTIVITY URI  = " + link + "\n MessageId = " + messageId );
         } else {
