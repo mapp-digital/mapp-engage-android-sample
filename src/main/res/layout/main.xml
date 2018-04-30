@@ -161,13 +161,32 @@
             android:padding="10dp" />
 
         <TextView
+            android:id="@+id/alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/jamieUrlVal"
+            android:text="Alias :"/>
+
+        <EditText
+            android:id="@+id/aliasVal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/alias"
+            android:layout_margin="10dp"
+            android:hint="Enter the alias value "
+            android:maxLines="2"
+            android:padding="10dp" />
+
+        <TextView
             android:id="@+id/eventNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:layout_marginLeft="10dp"
             android:textSize="8sp"
-            android:layout_below="@+id/jamieUrlVal"
+            android:layout_below="@+id/aliasVal"
             android:text="Event Names : app_open(F), app_feedback(M), app_discount(B), app_promo(actions), app_welcome(MM)"/>
 
 

@@ -38,7 +38,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
-    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV, mEventName, mJamieUrl;
+    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV, mEventName, mJamieUrl, mAlias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mDeviceIdTV = (EditText) findViewById(R.id.deviceid);
         mEventName = (EditText) findViewById(R.id.event_name);
         mJamieUrl = (EditText) findViewById(R.id.jamieUrlVal);
+        mAlias = (EditText) findViewById(R.id.aliasVal) ;
         setDefaultText();
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback =  new InAppCallback();
@@ -155,7 +156,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                         mUserIdTV.getText().toString().trim(),
                         mDeviceIdTV.getText().toString().trim(),
                         mAppIdTV.getText().toString().trim(),
-                        mJamieUrl.getText().toString().trim());
+                        mJamieUrl.getText().toString().trim(), mAlias.getText().toString().trim());
             }
         });
 
@@ -221,7 +222,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 mDeviceIdTV.getText().toString().trim(),
                 mAppIdTV.getText().toString().trim(),
                 mEventName.getText().toString().trim(),
-                mJamieUrl.getText().toString().trim());
+                mJamieUrl.getText().toString().trim(), mAlias.getText().toString().trim());
     }
 
 
@@ -300,5 +301,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         mAppIdTV.setText("123456");
         mEventName.setText("app_open");
         mJamieUrl.setText(BuildConfig.CEP_URL);
+        mAlias.setText("AUTO_106322_E119BB23A55C49005F1DE9BA030042C52EB8752F2FC2FD8BF9658E1C2B3FDF9F");
     }
 }
