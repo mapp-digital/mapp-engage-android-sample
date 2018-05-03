@@ -93,8 +93,15 @@ public class InboxActivity extends Activity {
                 }
 
                 @Override
-                public void onInAppInboxMessage(APXInboxMessage message) {
+                public void onInAppInboxMessage(final APXInboxMessage message) {
                     Log.d("messages","messages = " +message.getContent());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialogForInboxMessageContent(message, message.getContent());
+                        }
+                    });
+
                 }
             });
 
