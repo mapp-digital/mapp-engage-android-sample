@@ -57,7 +57,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         APXInboxMessage inboxMessage = inboxList.get(position);
         holder.subject.setText(inboxMessage.getSubject());
         holder.summary.setText(inboxMessage.getSummary());
-        holder.time.setText(inboxMessage.getSentDate().toString());
+        if(inboxMessage.getSentDate() != null) {
+            holder.time.setText(inboxMessage.getSentDate().toString());
+        }
         new DownLoadImageTask(holder.icon).execute(inboxMessage.getIconUrl());
     }
 

@@ -295,10 +295,17 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void setDefaultText() {
-        mTenantIdTV.setText("42");
+       /* mTenantIdTV.setText("42");
         mDeviceIdTV.setText("02AC264E264EE92B248781008B7571CE979E2AB0724020F59E63336ECCD97B2D");
         mUserIdTV.setText("8900000003");
         mAppIdTV.setText("123456");
+        mEventName.setText("app_open");
+        mJamieUrl.setText(BuildConfig.CEP_URL);
+        mAlias.setText("AUTO_106322_E119BB23A55C49005F1DE9BA030042C52EB8752F2FC2FD8BF9658E1C2B3FDF9F");*/
+        mTenantIdTV.setText("55");
+        mDeviceIdTV.setText("02AC264E264EE92B248781008B7571CE979E2AB0724020F59E63336ECCD97B2D");
+        mUserIdTV.setText("4");
+        mAppIdTV.setText("262251");
         mEventName.setText("app_open");
         mJamieUrl.setText(BuildConfig.CEP_URL);
         mAlias.setText("AUTO_106322_E119BB23A55C49005F1DE9BA030042C52EB8752F2FC2FD8BF9658E1C2B3FDF9F");
