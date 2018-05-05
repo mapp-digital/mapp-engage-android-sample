@@ -2,6 +2,7 @@ package com.appoxee.testapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -14,13 +15,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,10 +37,11 @@ import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by InboxActivity on 4/3/2018.
+ * Created by Varun on 4/3/2018.
  */
 
 public class InboxActivity extends Activity {
@@ -85,23 +90,20 @@ public class InboxActivity extends Activity {
                 @Override
                 public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
                     Log.d("messages","messages = " +richMessages.get(0).getContent());
-                    /*Bundle bundle = new Bundle();
+
+                    Bundle bundle = new Bundle();
                     bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
-                    Intent intent = new Intent(this, InboxActivity.class);
+                    Intent intent = new Intent(InboxActivity.this, InboxActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     intent.putExtras(bundle);
-                    startActivity(intent);*/
+                    startActivity(intent);
+
+
                 }
 
                 @Override
-                public void onInAppInboxMessage(final APXInboxMessage message) {
+                public void onInAppInboxMessage(APXInboxMessage message) {
                     Log.d("messages","messages = " +message.getContent());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showDialogForInboxMessageContent(message, message.getContent());
-                        }
-                    });
-
                 }
             });
 
@@ -227,29 +229,16 @@ public class InboxActivity extends Activity {
 
         }
     }
-     
+
     private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
-       /* htmlContent = "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<body>\n" +
-                "<h1>Inapp example</h1>\n" +
-                "<p><a href=\"apxAction://appStore?link=1064626297\">App Store</a> This link will close the Inapp and redirect to the App Store.</p>\n" +
-                "<p><a href=\"apxAction://landingPage?link=http%3A%2F%2Fwww.example.com\">Landing Page1</a> This link will close the Inapp and open a landing page in Safari.</p>\n" +
-                "<p><a href=\"apxAction://landingPage?openInApp=0&link=http%3A%2F%2Fwww.example.com\">Landing Page2</a> This link will close the Inapp and open a landing page in Safari.</p>\n" +
-                "<p><a href=\"apxAction://landingPage?openInApp=1&link=http%3A%2F%2Fwww.example.com\">Landing Page3</a> This link will replace the Inapp content with a Landing Page.</p>\n" +
-                "<p><a href=\"apxAction://deepLink?link=ebay%3a%2F%2Fuser%3D123%26product%3D456\">Deep Linking</a> This link will dismiss the Inapp and will perform a deep linking by notifying the developer.</p>\n" +
-                "<p><a href=\"apxAction://custom?link=%7Bsome%20custom%20data%7D\">Custom Data</a> This link will dismiss the Inapp and notify the developer on custom data.</p>\n" +
-                "<p><a href=\"apxAction://inbox?message_id=123456\">INBOX Data</a> This link will open Inbox Activity with that message Id.</p>\n" +
-                "</body>\n" +
-                "</html>";*/
-    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
-    LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    final View dialogView = inflater.inflate(com.appoxee.sdk.R.layout.dialog_modal_type_inapp, null);
-    final ProgressBar progressBar = (ProgressBar) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_inbox_message_progress_bar);
-    final WebView webView = (WebView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_webview);
+        final View dialogView = inflater.inflate(com.appoxee.sdk.R.layout.dialog_modal_type_inapp, null);
+        final ProgressBar progressBar = (ProgressBar) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_inbox_message_progress_bar);
+        final WebView webView = (WebView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_webview);
 
-    ImageView dismissDialogImageIcon = (ImageView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_close_icon);
+        ImageView dismissDialogImageIcon = (ImageView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_close_icon);
 
 
         progressBar.setVisibility(View.VISIBLE);
@@ -257,52 +246,84 @@ public class InboxActivity extends Activity {
         dialogBuilder.setTitle("");
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDefaultTextEncodingName("utf-8");
+        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int progress) {
+//                mProgressBarLoading.setProgress(progress) ;
+            }
+
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message,
+                                     JsResult result) {
+                result.confirm();
+                return true;
+            }
+        });
 
         webView.setWebChromeClient(new WebChromeClient() {
 
-    });
+
+            @Override
+            public void onProgressChanged(WebView view, int progress) {
+//                mProgressBarLoading.setProgress(progress) ;
+            }
+
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message,
+                                     JsResult result) {
+                result.confirm();
+                return true;
+            }
+        });
+
 
 
         webView.setWebViewClient(new APXInboxWebViewClient(this, webView, richMessageObject) {
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-            super.shouldOverrideUrlLoading(view, url);
-            return true;
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-
-
-            if (!ABOUT_BLANK.equals(url)) {
-                progressBar.setVisibility(View.GONE);
-                webView.setVisibility(View.VISIBLE);
+                super.shouldOverrideUrlLoading(view, url);
+                return true;
             }
-            super.onPageFinished(view, url);
-        }
-    });
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+
+
+                if (!ABOUT_BLANK.equals(url)) {
+                    progressBar.setVisibility(View.GONE);
+                    webView.setVisibility(View.VISIBLE);
+                }
+                super.onPageFinished(view, url);
+            }
+        });
 
         dismissDialogImageIcon.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (modalDialog != null) {
-                modalDialog.dismiss();
+            @Override
+            public void onClick(View v) {
+                if (modalDialog != null) {
+                    modalDialog.dismiss();
+                }
             }
-        }
-    });
+        });
 
-        webView.loadData(htmlContent, "text/html", null);
+
+        String encodedHtml = Base64.encodeToString(htmlContent.getBytes(), Base64.NO_PADDING);
+        webView.loadData(encodedHtml, "text/html", "base64");
 
         dialogBuilder.setView(dialogView);
 
 
-    modalDialog = dialogBuilder.create();
+        modalDialog = dialogBuilder.create();
         modalDialog.setCancelable(true);
         modalDialog.requestWindowFeature(modalDialog.getWindow().FEATURE_NO_TITLE);
         if(modalDialog!= null && modalDialog.isShowing()) {
-        modalDialog.dismiss();
-    }
+            modalDialog.dismiss();
+        }
         modalDialog.show();
 
 
