@@ -102,8 +102,14 @@ public class InboxActivity extends Activity {
                 }
 
                 @Override
-                public void onInAppInboxMessage(APXInboxMessage message) {
+                public void onInAppInboxMessage(final APXInboxMessage message) {
                     Log.d("messages","messages = " +message.getContent());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialogForInboxMessageContent(message, message.getContent());
+                        }
+                    });
                 }
             });
 
@@ -231,6 +237,9 @@ public class InboxActivity extends Activity {
     }
 
     private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
+        if(modalDialog != null && modalDialog.isShowing()) {
+            modalDialog.dismiss();
+        }
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
