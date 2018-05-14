@@ -13,7 +13,9 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
@@ -35,6 +37,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
+    private LinearLayout mMainLayout;
+    private TextView mTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +73,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
+        mMainLayout = (LinearLayout) findViewById(R.id.parentLayout);
+        mTextView = (TextView) findViewById(R.id.dummyText);
+        mMainLayout.setVisibility(View.GONE);//Make it visible to see other controls what Appoxee has in stock
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +187,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
 
 
+
     }
 
 
@@ -189,9 +198,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
+                mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
     }
+
 
     private void startGeo() {
         if (geoPermissionNotGranted()){
