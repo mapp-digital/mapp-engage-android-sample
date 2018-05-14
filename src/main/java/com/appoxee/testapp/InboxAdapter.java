@@ -60,6 +60,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         if(inboxMessage.getSentDate() != null) {
             holder.time.setText(inboxMessage.getSentDate().toString());
         }
+
         new DownLoadImageTask(holder.icon).execute(inboxMessage.getIconUrl());
     }
 

@@ -102,8 +102,14 @@ public class InboxActivity extends Activity {
                 }
 
                 @Override
-                public void onInAppInboxMessage(APXInboxMessage message) {
+                public void onInAppInboxMessage(final APXInboxMessage message) {
                     Log.d("messages","messages = " +message.getContent());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialogForInboxMessageContent(message, message.getContent());
+                        }
+                    });
                 }
             });
 
@@ -229,16 +235,19 @@ public class InboxActivity extends Activity {
 
         }
     }
-     
+
     private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
-    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
-    LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(modalDialog != null && modalDialog.isShowing()) {
+            modalDialog.dismiss();
+        }
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    final View dialogView = inflater.inflate(com.appoxee.sdk.R.layout.dialog_modal_type_inapp, null);
-    final ProgressBar progressBar = (ProgressBar) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_inbox_message_progress_bar);
-    final WebView webView = (WebView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_webview);
+        final View dialogView = inflater.inflate(com.appoxee.sdk.R.layout.dialog_modal_type_inapp, null);
+        final ProgressBar progressBar = (ProgressBar) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_inbox_message_progress_bar);
+        final WebView webView = (WebView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_webview);
 
-    ImageView dismissDialogImageIcon = (ImageView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_close_icon);
+        ImageView dismissDialogImageIcon = (ImageView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_close_icon);
 
 
         progressBar.setVisibility(View.VISIBLE);
@@ -246,17 +255,10 @@ public class InboxActivity extends Activity {
         dialogBuilder.setTitle("");
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-//        webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDomStorageEnabled(true);
-//        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setPluginState(WebSettings.PluginState.ON);
-        webView.setWebChromeClient(new WebChromeClient() {
-
-    });
 
         webView.setWebChromeClient(new WebChromeClient() {
 
@@ -277,46 +279,46 @@ public class InboxActivity extends Activity {
 
 
         webView.setWebViewClient(new APXInboxWebViewClient(this, webView, richMessageObject) {
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-            super.shouldOverrideUrlLoading(view, url);
-            return true;
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-
-
-            if (!ABOUT_BLANK.equals(url)) {
-                progressBar.setVisibility(View.GONE);
-                webView.setVisibility(View.VISIBLE);
+                super.shouldOverrideUrlLoading(view, url);
+                return true;
             }
-            super.onPageFinished(view, url);
-        }
-    });
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+
+
+                if (!ABOUT_BLANK.equals(url)) {
+                    progressBar.setVisibility(View.GONE);
+                    webView.setVisibility(View.VISIBLE);
+                }
+                super.onPageFinished(view, url);
+            }
+        });
 
         dismissDialogImageIcon.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (modalDialog != null) {
-                modalDialog.dismiss();
+            @Override
+            public void onClick(View v) {
+                if (modalDialog != null) {
+                    modalDialog.dismiss();
+                }
             }
-        }
-    });
+        });
+
 
         String encodedHtml = Base64.encodeToString(htmlContent.getBytes(), Base64.NO_PADDING);
-
         webView.loadData(encodedHtml, "text/html", "base64");
 
         dialogBuilder.setView(dialogView);
 
 
-    modalDialog = dialogBuilder.create();
+        modalDialog = dialogBuilder.create();
         modalDialog.setCancelable(true);
         modalDialog.requestWindowFeature(modalDialog.getWindow().FEATURE_NO_TITLE);
         if(modalDialog!= null && modalDialog.isShowing()) {
-        modalDialog.dismiss();
-    }
+            modalDialog.dismiss();
+        }
         modalDialog.show();
 
 
