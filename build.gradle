@@ -31,9 +31,9 @@ android {
         }
         debug {
             initWith(debug)
-            buildConfigField "String", "SDK_KEY", "\"5af2cdeb8ed080.27210061\""
+            buildConfigField "String", "SDK_KEY", "\"5af9a93be26256.41031409\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"262317\""
+            buildConfigField "String", "APP_ID", "\"262367\""
             buildConfigField "String", "TENANT_ID", "\"55\""
 
 
@@ -41,12 +41,12 @@ android {
 
         frankfart {
             initWith(debug)
-            buildConfigField "String", "SDK_KEY", "\"5af2cdeb8ed080.27210061\""
+            buildConfigField "String", "SDK_KEY", "\"5af9a93be26256.41031409\""
 
         }
         virginia {
             initWith(debug)
-            buildConfigField "String", "SDK_KEY", "\"5af2cdeb8ed080.27210061\""
+            buildConfigField "String", "SDK_KEY", "\"5af9a93be26256.41031409\""
 
         }
 
