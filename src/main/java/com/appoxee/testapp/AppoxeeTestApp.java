@@ -24,7 +24,8 @@ public class AppoxeeTestApp extends Application {
         AppoxeeOptions opt = new AppoxeeOptions();
 
         opt.sdkKey = BuildConfig.SDK_KEY;
-        opt.googleProjectId = "182774534911";
+        //262412
+        opt.googleProjectId = "651820799870";
         opt.cepURL = BuildConfig.CEP_URL;
         opt.appID = BuildConfig.APP_ID;
         opt.tenantID = BuildConfig.TENANT_ID;
