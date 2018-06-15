@@ -92,6 +92,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
+                Appoxee.instance().getDeviceInfoDMC();
                 appoxee.setAlias("sdk4.alias-" + aliasCounter);
                 appoxee.addTag("tag"+aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);

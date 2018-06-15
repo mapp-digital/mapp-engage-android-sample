@@ -8,9 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-/**
- * Created by Varun on 4/7/2018.
- */
 
 public class CustomDeeplinkActivity extends Activity {
 

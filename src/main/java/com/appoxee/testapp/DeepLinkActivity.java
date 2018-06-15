@@ -11,9 +11,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-/**
- * Created by Varun on 4/7/2018.
- */
 
 public class DeepLinkActivity extends Activity {
 
