@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
+import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.inapp.model.InAppStatistics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -71,6 +73,16 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onInAppInboxMessage(APXInboxMessage message) {
 
             }
+        });
+
+        InAppMessageDismissalCallback inAppMessageDismissalCallback = new InAppMessageDismissalCallback();
+        inAppMessageDismissalCallback.addOnInAppMessageDismissalCallback(new InAppMessageDismissalCallback.onInAppMessageDismissalCallback() {
+            @Override
+            public void onInAppMessageDismissalCallback(int templateId, String eventId, boolean isSendStats) {
+
+                Log.v("MainActivity","onInAppMessageDismissalCallback");
+            }
+
         });
 
         mMainLayout = (LinearLayout) findViewById(R.id.parentLayout);

@@ -33,7 +33,7 @@ android {
             initWith(debug)
             buildConfigField "String", "SDK_KEY", "\"5aa9049a6e7ca5.98824603\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"262508\""
+            buildConfigField "String", "APP_ID", "\"262517\""
             buildConfigField "String", "TENANT_ID", "\"55\""
 
 
