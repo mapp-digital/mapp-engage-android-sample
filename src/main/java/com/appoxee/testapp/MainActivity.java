@@ -2,9 +2,9 @@ package com.appoxee.testapp;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
+import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.inapp.model.InAppStatistics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,20 +39,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
-    private EditText mTenantIdTV, mAppIdTV, mUserIdTV, mDeviceIdTV, mEventName, mJamieUrl, mAlias;
+    private LinearLayout mMainLayout;
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        mTenantIdTV = (EditText) findViewById(R.id.tenantId);
-        mAppIdTV = (EditText) findViewById(R.id.appId);
-        mUserIdTV = (EditText) findViewById(R.id.userId);
-        mDeviceIdTV = (EditText) findViewById(R.id.deviceid);
-        mEventName = (EditText) findViewById(R.id.event_name);
-        mJamieUrl = (EditText) findViewById(R.id.jamieUrlVal);
-        mAlias = (EditText) findViewById(R.id.aliasVal) ;
-        setDefaultText();
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback =  new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
@@ -82,6 +75,19 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
+        InAppMessageDismissalCallback inAppMessageDismissalCallback = new InAppMessageDismissalCallback();
+        inAppMessageDismissalCallback.addOnInAppMessageDismissalCallback(new InAppMessageDismissalCallback.onInAppMessageDismissalCallback() {
+            @Override
+            public void onInAppMessageDismissalCallback(int templateId, String eventId, boolean isSendStats) {
+
+                Log.v("MainActivity","onInAppMessageDismissalCallback");
+            }
+
+        });
+
+        mMainLayout = (LinearLayout) findViewById(R.id.parentLayout);
+        mTextView = (TextView) findViewById(R.id.dummyText);
+        mMainLayout.setVisibility(View.GONE);//Make it visible to see other controls what Appoxee has in stock
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +98,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
-                Appoxee.instance().getDeviceInfoDMC();
                 appoxee.setAlias("sdk4.alias-" + aliasCounter);
                 appoxee.addTag("tag"+aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
@@ -150,41 +155,21 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        findViewById(R.id.fetchInbox).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().fetchInboxMessages(MainActivity.this,
-                        mTenantIdTV.getText().toString().trim(),
-                        mUserIdTV.getText().toString().trim(),
-                        mDeviceIdTV.getText().toString().trim(),
-                        mAppIdTV.getText().toString().trim(),
-                        mJamieUrl.getText().toString().trim(), mAlias.getText().toString().trim());
-            }
-        });
-
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               callInappMessages(MainActivity.this,
-                        mTenantIdTV.getText().toString().trim(),
-                        mUserIdTV.getText().toString().trim(),
-                        mDeviceIdTV.getText().toString().trim(),
-                        mAppIdTV.getText().toString().trim(),"app_open");
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
             }
         });
 
-      /*  findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callInappMessages(MainActivity.this,
-                        mTenantIdTV.getText().toString().trim(),
-                        mUserIdTV.getText().toString().trim(),
-                        mDeviceIdTV.getText().toString().trim(),
-                        mAppIdTV.getText().toString().trim(),"app_feedback");
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_feedback");
             }
-        });*/
+        });
 
-        /*findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_discount");
@@ -211,20 +196,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onClick(View v) {
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this,  "app_welcome");
             }
-        });*/
+        });
 
 
-    }
 
-    private void callInappMessages(final Context ctx, String tenantId, String userId,
-                              String deviceId, String appId, final String event) {
-        Appoxee.instance().triggerDMCCallInApp(MainActivity.this,
-                mTenantIdTV.getText().toString().trim(),
-                mUserIdTV.getText().toString().trim(),
-                mDeviceIdTV.getText().toString().trim(),
-                mAppIdTV.getText().toString().trim(),
-                mEventName.getText().toString().trim(),
-                mJamieUrl.getText().toString().trim(), mAlias.getText().toString().trim());
     }
 
 
@@ -235,12 +210,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
-                //Test Call only for the Testing
-                Appoxee.instance().getDeviceInfoDMC();
-
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
+                mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
     }
+
 
     private void startGeo() {
         if (geoPermissionNotGranted()){
@@ -294,22 +269,5 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             gson = new Gson();
         }
         return gson.toJson(inbox);
-    }
-
-    private void setDefaultText() {
-       /* mTenantIdTV.setText("42");
-        mDeviceIdTV.setText("02AC264E264EE92B248781008B7571CE979E2AB0724020F59E63336ECCD97B2D");
-        mUserIdTV.setText("8900000003");
-        mAppIdTV.setText("123456");
-        mEventName.setText("app_open");
-        mJamieUrl.setText(BuildConfig.CEP_URL);
-        mAlias.setText("AUTO_106322_E119BB23A55C49005F1DE9BA030042C52EB8752F2FC2FD8BF9658E1C2B3FDF9F");*/
-        mTenantIdTV.setText("55");
-        mDeviceIdTV.setText("02AC264E264EE92B248781008B7571CE979E2AB0724020F59E63336ECCD97B2D");
-        mUserIdTV.setText("4");
-        mAppIdTV.setText("262356");
-        mEventName.setText("app_open");
-        mJamieUrl.setText(BuildConfig.CEP_URL);
-        mAlias.setText("AUTO_106322_E119BB23A55C49005F1DE9BA030042C52EB8752F2FC2FD8BF9658E1C2B3FDF9F");
     }
 }
