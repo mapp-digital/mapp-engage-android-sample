@@ -225,11 +225,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         }
     }
     private boolean geoPermissionNotGranted() {
-        return ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
     private void askForGeoPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
 
         } else {
             ActivityCompat.requestPermissions(this,

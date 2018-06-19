@@ -1,220 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/device_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="info" />
-
-        <Button
-            android:id="@+id/get_alias"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/device_info"
-            android:text="getAlias" />
-
-        <Button
-            android:id="@+id/second_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/get_alias"
-            android:text="2nd activity" />
-
-        <Button
-            android:id="@+id/geo_fencing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/second_activity"
-            android:text="Start Geo" />
-
-        <Button
-            android:id="@+id/stop_geo_fencing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/second_activity"
-            android:layout_toRightOf="@+id/geo_fencing"
-            android:text="Stop Geo" />
-
-        <Switch
-            android:id="@+id/push_enabled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/second_activity"
-            android:layout_toRightOf="@+id/stop_geo_fencing"
-
-            android:checked="false"
-            android:padding="10dp"
-            android:text="Push enabled     " />
-
-
-        <Button
-            android:id="@+id/buttonDeviceInfo"
+        <LinearLayout
+            android:id="@+id/parentLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/push_enabled"
-            android:text="Get Device Info"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/app_idtv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/push_enabled"
-            android:text="App id :"/>
+            <Button
+                android:id="@+id/device_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="info" />
+
+            <Button
+                android:id="@+id/get_alias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="getAlias" />
+
+            <Button
+                android:id="@+id/second_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2nd activity" />
+
+            <Button
+                android:id="@+id/geo_fencing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Geo" />
+
+            <Button
+                android:id="@+id/stop_geo_fencing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stop Geo" />
+
+            <Switch
+                android:id="@+id/push_enabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Push enabled" />
+
+            <Button
+                android:id="@+id/buttonDeviceInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Device Info" />
+
+            <Button
+                android:id="@+id/dmcCallInApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FullScreen: App Open" />
 
 
-        <EditText
-            android:id="@+id/appId"
+            <Button
+                android:id="@+id/inappModalType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Modal: App Feedback" />
+
+            <Button
+                android:id="@+id/inappBannerType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Banner: App Discount" />
+
+            <Button
+                android:id="@+id/inappAppPromo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PROMO: App Promo" />
+
+
+
+            <Button
+                android:id="@+id/multipleMessages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fetch Multiple Messages" />
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/app_idtv"
-            android:layout_margin="10dp"
-            android:hint="Enter App Id"
-            android:maxLines="2"
-            android:padding="10dp" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tenant_idtv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/appId"
-            android:text="Tenant id :"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:text="This is a sample App"
+                android:textColor="@android:color/black" />
 
-        <EditText
-            android:id="@+id/tenantId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tenant_idtv"
-            android:layout_margin="10dp"
-            android:hint="Enter Tenant Id"
-            android:maxLines="2"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/user_idtv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/tenantId"
-            android:text="User id :"/>
-
-        <EditText
-            android:id="@+id/userId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/user_idtv"
-            android:layout_margin="10dp"
-            android:hint="Enter User Id"
-            android:maxLines="2"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/deviceidTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/userId"
-            android:text="Device id :"/>
-
-        <EditText
-            android:id="@+id/deviceid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/deviceidTv"
-            android:layout_margin="10dp"
-            android:hint="Enter Device Id"
-            android:maxLines="2"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/jamieUrl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/deviceid"
-            android:text="Jamie Url :"/>
-
-        <EditText
-            android:id="@+id/jamieUrlVal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/jamieUrl"
-            android:layout_margin="10dp"
-            android:hint="Enter the url "
-            android:maxLines="2"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/alias"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/jamieUrlVal"
-            android:text="Alias :"/>
-
-        <EditText
-            android:id="@+id/aliasVal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/alias"
-            android:layout_margin="10dp"
-            android:hint="Enter the alias value "
-            android:maxLines="2"
-            android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/eventNameTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_marginLeft="10dp"
-            android:textSize="8sp"
-            android:layout_below="@+id/aliasVal"
-            android:text="Event Names : app_open(F), app_feedback(M), app_discount(B), app_promo(actions), app_welcome(MM)"/>
+            <TextView
+                android:id="@+id/dummyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@android:color/black" />
 
 
-        <EditText
-            android:id="@+id/event_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/eventNameTv"
-            android:layout_margin="10dp"
-            android:hint="Enter event name"
-            android:maxLines="2"
-            android:padding="10dp" />
+            <Button
+                android:id="@+id/inappInbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fetch Inbox Messages" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/dmcCallInApp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/event_name"
-            android:text="Trigger In App Call" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/fetchInbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dmcCallInApp"
-            android:text="Fetch Inbox" />
-
-
-
-    </RelativeLayout>
 </ScrollView>
