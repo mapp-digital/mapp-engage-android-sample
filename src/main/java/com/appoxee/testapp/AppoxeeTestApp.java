@@ -1,6 +1,7 @@
 package com.appoxee.testapp;
 
 import android.app.Application;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 
 import com.appoxee.Appoxee;
@@ -41,8 +42,9 @@ public class AppoxeeTestApp extends Application {
         Appoxee.engage(this, opt);
         Appoxee.instance().addInitListener(initFinishedListener);
         long end = System.currentTimeMillis();
-        Log.i("APX", "Start Service took " + (end-start) + " ms on main thread");
+        Log.i("APX", "Start Service took " + (end - start) + " ms on main thread");
         Appoxee.instance().setAlias("alias0");
+        Appoxee.setOrientation(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
         Log.d("APX", "info (before init finished): " + info);
     }
