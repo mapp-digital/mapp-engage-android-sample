@@ -253,8 +253,7 @@ public class InboxActivity extends Activity {
         webView.setVisibility(View.GONE);
         dialogBuilder.setTitle("");
 
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        webView.setLayerType(View.LAYER_TYPE_NONE, null);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
