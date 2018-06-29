@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
-
+//This is a test commit
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
