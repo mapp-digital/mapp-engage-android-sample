@@ -87,7 +87,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
         mMainLayout = (LinearLayout) findViewById(R.id.parentLayout);
         mTextView = (TextView) findViewById(R.id.dummyText);
-        mMainLayout.setVisibility(View.GONE);//Make it visible to see other controls what Appoxee has in stock
+        //mMainLayout.setVisibility(View.GONE);//Make it visible to see other controls what Appoxee has in stock
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
