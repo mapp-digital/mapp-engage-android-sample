@@ -85,5 +85,9 @@
                     android:pathPrefix="/gizmos" />
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e75f68137916a36f768f49040b9925ce67d7c6cb" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
