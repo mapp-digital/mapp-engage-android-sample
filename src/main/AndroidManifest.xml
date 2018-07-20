@@ -70,7 +70,9 @@
 
        <!-- Deeplinking End-->
 
-        <receiver android:name=".MyPushBroadcastReceiver" android:exported="false">
+        <receiver android:name=".MyPushBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.appoxee.PUSH_OPENED" />
                 <action android:name="com.appoxee.PUSH_RECEIVED" />

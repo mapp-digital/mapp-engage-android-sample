@@ -34,7 +34,7 @@ public class AppoxeeTestApp extends Application {
         AppoxeeOptions opt = new AppoxeeOptions();
 
         opt.sdkKey = BuildConfig.SDK_KEY;
-        opt.googleProjectId = "182774534911";
+        opt.googleProjectId = "1028993954364";
         opt.cepURL = BuildConfig.CEP_URL;
         opt.appID = BuildConfig.APP_ID;
         opt.tenantID = BuildConfig.TENANT_ID;
@@ -64,6 +64,7 @@ public class AppoxeeTestApp extends Application {
         }
         LeakCanary.install(this);
         // Normal app init code...
+        Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
     }
 
 }
