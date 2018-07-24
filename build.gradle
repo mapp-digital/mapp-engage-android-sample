@@ -42,9 +42,9 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5b5091346cbf39.25949639\""  //5b276c7e514f19.16779020
-            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"262725\""
+            buildConfigField "String", "SDK_KEY", "\"5b55aacb9c3d94.96693102\""  //5b276c7e514f19.16779020
+            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com/\""
+            buildConfigField "String", "APP_ID", "\"262750\""
             buildConfigField "String", "TENANT_ID", "\"55\""
         }
 
