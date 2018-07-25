@@ -9,6 +9,8 @@ import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.crashlytics.android.Crashlytics;
+import com.squareup.leakcanary.LeakCanary;
+
 import io.fabric.sdk.android.Fabric;
 
 public class AppoxeeTestApp extends Application {
@@ -32,7 +34,7 @@ public class AppoxeeTestApp extends Application {
         AppoxeeOptions opt = new AppoxeeOptions();
 
         opt.sdkKey = BuildConfig.SDK_KEY;
-        opt.googleProjectId = "182774534911";
+        opt.googleProjectId = "1028993954364";
         opt.cepURL = BuildConfig.CEP_URL;
         opt.appID = BuildConfig.APP_ID;
         opt.tenantID = BuildConfig.TENANT_ID;
@@ -54,5 +56,15 @@ public class AppoxeeTestApp extends Application {
         Appoxee.setOrientation(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
         Log.d("APX", "info (before init finished): " + info);
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+        Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
     }
+
 }
