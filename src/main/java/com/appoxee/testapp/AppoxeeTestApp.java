@@ -35,9 +35,9 @@ public class AppoxeeTestApp extends Application {
 
         opt.sdkKey = "5b56f2bae61a14.21530253";
         opt.googleProjectId = "1028993954364";
-        opt.cepURL = "https://jamie-test.shortest-route.com/";
+        /*opt.cepURL = "https://jamie-test.shortest-route.com/";
         opt.appID = "262750";
-        opt.tenantID = "55";
+        opt.tenantID = "55";*/
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
