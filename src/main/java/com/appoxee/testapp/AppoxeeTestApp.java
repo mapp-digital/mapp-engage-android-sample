@@ -34,8 +34,8 @@ public class AppoxeeTestApp extends Application {
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
 
-        opt.sdkKey = "5b64499a64da43.97309042";
-        opt.googleProjectId = "182774534911";
+        opt.sdkKey = "5b56f2bae61a14.21530253";
+        opt.googleProjectId = "1028993954364";
         opt.cepURL = "https://jamie-test.shortest-route.com/";
         opt.appID = "262750";
         opt.tenantID = "55";
