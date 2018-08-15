@@ -10,6 +10,7 @@ import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
+//import com.squareup.leakcanary.LeakCanary;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -33,11 +34,11 @@ public class AppoxeeTestApp extends Application {
         long start = System.currentTimeMillis();
         AppoxeeOptions opt = new AppoxeeOptions();
 
-        opt.sdkKey = BuildConfig.SDK_KEY;
+        opt.sdkKey = "5b56f2bae61a14.21530253";
         opt.googleProjectId = "1028993954364";
-        opt.cepURL = BuildConfig.CEP_URL;
-        opt.appID = BuildConfig.APP_ID;
-        opt.tenantID = BuildConfig.TENANT_ID;
+        opt.cepURL = "https://jamie-test.shortest-route.com/";
+        opt.appID = "262750";
+        opt.tenantID = "55";
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
@@ -56,15 +57,15 @@ public class AppoxeeTestApp extends Application {
         Appoxee.setOrientation(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
         Log.d("APX", "info (before init finished): " + info);
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
+       if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
         LeakCanary.install(this);
         // Normal app init code...
-        Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
+
     }
 
 }
