@@ -58,14 +58,16 @@ public class AppoxeeTestApp extends Application {
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
         Log.d("APX", "info (before init finished): " + info);
         Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
-       if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
-        // Normal app init code...
-
+//       if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(this);
+//        // Normal app init code...
+Appoxee.instance().addPushStatusChangeListener(permissionAllowed -> {
+//TODO code handle
+});
     }
 
 }
