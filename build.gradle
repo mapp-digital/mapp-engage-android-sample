@@ -12,6 +12,7 @@ buildscript {
     }
 
     repositories {
+        google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
@@ -22,7 +23,7 @@ buildscript {
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.0'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.appoxee.example"
@@ -34,6 +35,8 @@ android {
 
     }
     buildTypes {
+
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -42,9 +45,9 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5b56f2bae61a14.21530253\""  //5b276c7e514f19.16779020
-            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com/\""
-            buildConfigField "String", "APP_ID", "\"262750\""
+            buildConfigField "String", "SDK_KEY", "\"5b3cc94d7b77d5.93248549\""  //5b276c7e514f19.16779020
+            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
+            buildConfigField "String", "APP_ID", "\"262616\""
             buildConfigField "String", "TENANT_ID", "\"55\""
         }
 
@@ -71,25 +74,20 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
-    implementation 'com.google.android.gms:play-services-gcm:15.0.1'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation ('com.google.android.gms:play-services-gcm:15.0.1')
+            {
+                exclude group: 'com.android.support'
+            }
+    implementation ('com.android.support:recyclerview-v7:28.0.0-rc02')
+    implementation ('com.google.code.gson:gson:2.8.2')
     implementation project(':sdk')
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
     }
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
 }
