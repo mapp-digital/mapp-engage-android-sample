@@ -90,6 +90,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Fetch Multiple Messages" />
+
+            <Button
+                android:id="@+id/fcm_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get FCM Token" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="@android:color/holo_red_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FCM TOKEN" />
         </LinearLayout>
 
 

@@ -28,6 +28,7 @@ import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.inapp.model.InAppStatistics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -42,7 +43,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
-
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
             }
         });
-
+        textView= (TextView)findViewById(R.id.textView2);
+        textView.setText(FirebaseInstanceId.getInstance().getToken());
         InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
         inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
             @Override
@@ -197,6 +199,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onClick(View v) {
 
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this,  "app_welcome");
+            }
+        });
+
+        findViewById(R.id.fcm_token).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                textView.setText(FirebaseInstanceId.getInstance().getToken());
             }
         });
 
