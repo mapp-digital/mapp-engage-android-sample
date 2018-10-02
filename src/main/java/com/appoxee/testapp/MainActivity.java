@@ -2,6 +2,9 @@ package com.appoxee.testapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -205,7 +208,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.fcm_token).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label", FirebaseInstanceId.getInstance().getToken());
+                clipboard.setPrimaryClip(clip);
                 textView.setText(FirebaseInstanceId.getInstance().getToken());
             }
         });
