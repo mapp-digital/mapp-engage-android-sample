@@ -31,7 +31,7 @@ import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.inapp.model.InAppStatistics;
-import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -41,35 +41,36 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
-//This is a test commit
+    //This is a test commit
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
     TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Appoxee.instance().addInitListener(this);
-        InAppCallback inAppCallback =  new InAppCallback();
+        InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
             public void onInAppEvent(String eventName, String eventValue) {
                 Log.d("  eventName = ", eventName);
                 Log.d("  eventValue = ", eventValue);
-                Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "KEY = " + eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
             }
         });
-        textView= (TextView)findViewById(R.id.textView2);
-        textView.setText(FirebaseInstanceId.getInstance().getToken());
+        textView = (TextView) findViewById(R.id.textView2);
+        //  textView.setText(FirebaseInstanceId.getInstance().getToken());
         InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
         inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
             @Override
             public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
-                Log.d("messages","messages = " +richMessages.get(0).getContent());
+                Log.d("messages", "messages = " + richMessages.get(0).getContent());
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
+                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
                 Intent intent = new Intent(MainActivity.this, InboxActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -86,7 +87,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onInAppMessageDismissalCallback(int templateId, String eventId, boolean isSendStats) {
 
-                Log.v("MainActivity","onInAppMessageDismissalCallback");
+                Log.v("MainActivity", "onInAppMessageDismissalCallback");
             }
 
         });
@@ -105,7 +106,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
                 appoxee.setAlias("sdk4.alias-" + aliasCounter);
-                appoxee.addTag("tag"+aliasCounter);
+                appoxee.addTag("tag" + aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
                 appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
@@ -129,14 +130,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-               Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
             }
         });
         findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              startGeo();
+                startGeo();
             }
         });
         findViewById(R.id.stop_geo_fencing).setOnClickListener(new View.OnClickListener() {
@@ -146,7 +147,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        pushEnabledSwitch = (Switch)findViewById(R.id.push_enabled);
+        pushEnabledSwitch = (Switch) findViewById(R.id.push_enabled);
         pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -201,7 +202,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this,  "app_welcome");
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_welcome");
             }
         });
 
@@ -209,12 +210,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", FirebaseInstanceId.getInstance().getToken());
-                clipboard.setPrimaryClip(clip);
-                textView.setText(FirebaseInstanceId.getInstance().getToken());
+                // ClipData clip = ClipData.newPlainText("label", FirebaseInstanceId.getInstance().getToken());
+                //   clipboard.setPrimaryClip(clip);
+                //  textView.setText(FirebaseInstanceId.getInstance().getToken());
+               // Appoxee.test(MainActivity.this);
             }
         });
-
 
 
     }
@@ -235,15 +236,17 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
 
     private void startGeo() {
-        if (geoPermissionNotGranted()){
-           Appoxee.instance().startGeoFencing();
+        if (geoPermissionNotGranted()) {
+            Appoxee.instance().startGeoFencing();
         } else {
             askForGeoPermission();
         }
     }
+
     private boolean geoPermissionNotGranted() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
+
     private void askForGeoPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -271,7 +274,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         }
     }
 
-    private void stopGeoFencing(){
+    private void stopGeoFencing() {
         Appoxee.instance().stopGeoFencing();
     }
 
