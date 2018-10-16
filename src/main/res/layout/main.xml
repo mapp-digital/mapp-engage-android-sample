@@ -27,6 +27,21 @@
                 android:layout_height="wrap_content"
                 android:text="getAlias" />
 
+            <EditText
+                android:id="@+id/etxt_set_alias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Number..."
+                android:inputType="number"/>
+
+            <Button
+                android:id="@+id/btn_set_alias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Set alias"/>
+
+
             <Button
                 android:id="@+id/second_activity"
                 android:layout_width="wrap_content"
@@ -122,6 +137,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Fetch Inbox Messages" />
+
+
+
         </LinearLayout>
 
     </LinearLayout>

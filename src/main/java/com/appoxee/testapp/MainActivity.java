@@ -2,6 +2,7 @@ package com.appoxee.testapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
+import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
@@ -42,11 +45,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
+    Appoxee appoxee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        appoxee = Appoxee.instance();
+
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback =  new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
@@ -105,6 +112,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
                 appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
 
+                createBuilder("",appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
             }
         });
@@ -116,6 +124,21 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Appoxee appoxee = Appoxee.instance();
                 Set<String> tags = appoxee.getTags();
                 Log.d("APX", "tags: " + new Gson().toJson(tags));
+//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+//                alertDialog.setMessage(new Gson().toJson(tags)).setTitle("AlertDialog");
+//                AlertDialog dialog = alertDialog.create();
+//                dialog.show();
+
+                createBuilder("",  appoxee.getAlias());
+            }
+        });
+
+        findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editText = findViewById(R.id.etxt_set_alias);
+                appoxee.setAlias("sdk4.alias-" + String.valueOf(editText.getText().toString()));
+                createBuilder("New alias", "Added new alias");
 
             }
         });
@@ -126,6 +149,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
+                Toast.makeText(MainActivity.this, "New activity opened", Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
@@ -145,7 +169,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Appoxee.instance().setPushEnabled(isChecked);
+                RequestStatus status = Appoxee.instance().setPushEnabled(isChecked);
+
             }
         });
 
@@ -153,6 +178,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 Appoxee.instance().getDeviceInfoDMC();
+                String s = new StringBuilder("Device model: ")
+                        .append(appoxee.getDeviceInfo().deviceModel)
+                        .append("\n")
+                        .append("App version: ")
+                        .append(appoxee.getDeviceInfo().appVersion)
+                        .append("\n")
+                        .append("OS version: ")
+                        .append(appoxee.getDeviceInfo().osVersion).toString();
+                createBuilder("", s);
             }
         });
 
@@ -271,5 +305,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             gson = new Gson();
         }
         return gson.toJson(inbox);
+    }
+
+    private void createBuilder(String title, String message){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setMessage(message).setTitle(title);
+        AlertDialog dialog = alertDialog.create();
+        dialog.show();
     }
 }
