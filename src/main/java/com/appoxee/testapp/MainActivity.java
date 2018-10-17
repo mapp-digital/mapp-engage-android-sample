@@ -137,7 +137,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 EditText editText = findViewById(R.id.etxt_set_alias);
-                appoxee.setAlias("sdk4.alias-" + String.valueOf(editText.getText().toString()));
+                appoxee.setAlias(String.valueOf(editText.getText().toString()));
                 createBuilder("New alias", "Added new alias");
 
             }

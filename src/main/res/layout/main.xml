@@ -31,8 +31,8 @@
                 android:id="@+id/etxt_set_alias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Number..."
-                android:inputType="number"/>
+                android:hint="Email"
+                android:inputType="textEmailAddress"/>
 
             <Button
                 android:id="@+id/btn_set_alias"
