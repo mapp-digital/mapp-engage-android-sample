@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Appoxee Testapp</string>
+    <string name="screen_orientation_portrait">SCREEN_ORIENTATION_PORTRAIT</string>
+    <string name="screen_orientation_landscape">SCREEN_ORIENTATION_LANDSCAPE</string>
+    <string name="screen_orientation_reverse_landscape">SCREEN_ORIENTATION_REVERSE_LANDSCAPE</string>
+    <string name="screen_orientation_reverse_portrait">SCREEN_ORIENTATION_REVERSE_PORTRAIT</string>
+
+    <string-array name="screen_orientation">
+        <item>SCREEN_ORIENTATION_PORTRAIT</item>
+        <item>SCREEN_ORIENTATION_LANDSCAPE</item>
+        <item>SCREEN_ORIENTATION_REVERSE_LANDSCAPE</item>
+        <item>SCREEN_ORIENTATION_REVERSE_PORTRAIT</item>
+    </string-array>
 </resources>
