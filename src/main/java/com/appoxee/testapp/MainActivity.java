@@ -3,6 +3,7 @@ package com.appoxee.testapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -46,7 +48,7 @@ import java.util.Set;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
 
-public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener{
+public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
@@ -311,7 +313,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.btn_orientation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               dialogScreenOrientation();
+                dialogScreenOrientation();
             }
         });
     }
@@ -330,35 +332,41 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
     }
 
-    void dialogScreenOrientation(){
+    void dialogScreenOrientation() {
 
         String[] screen_orientation = getResources().getStringArray(R.array.screen_orientation);
         final AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
-        //alt_bld.setIcon(R.drawable.icon);
         alt_bld.setTitle("Select a screen orientation");
-        alt_bld.setSingleChoiceItems(screen_orientation, -1, new DialogInterface
-                .OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-
-                switch(item) {
-                    case 0:{
+        alt_bld.setItems(screen_orientation, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: {
                         appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        break;
                     }
+
+                    case 1: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                         break;
-                    case 1:
-                            appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    }
+
+                    case 2: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
                         break;
-                    case 2:
-                            appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                    }
+
+                    case 3: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
                         break;
-                    case 3:
-                            appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                        break;
+                    }
+
                 }
 
-                Toast.makeText(getApplicationContext(),(getResources().getStringArray(R.array.screen_orientation)[item]), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), (getResources().getStringArray(R.array.screen_orientation)[which]), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
+
         });
         AlertDialog alert = alt_bld.create();
         alert.show();
@@ -426,5 +434,5 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         AlertDialog dialog = alertDialog.create();
         dialog.show();
     }
-
 }
+
