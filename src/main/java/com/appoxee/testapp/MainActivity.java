@@ -3,6 +3,8 @@ package com.appoxee.testapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -14,10 +16,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +38,6 @@ import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
-import com.appoxee.internal.inapp.model.InAppStatistics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -39,8 +46,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import static com.appoxee.Appoxee.removeBadgeNumber;
+
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
-//This is a test commit
+    //This is a test commit
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
@@ -55,13 +64,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         appoxee = Appoxee.instance();
 
         Appoxee.instance().addInitListener(this);
-        InAppCallback inAppCallback =  new InAppCallback();
+        InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
             public void onInAppEvent(String eventName, String eventValue) {
                 Log.d("  eventName = ", eventName);
                 Log.d("  eventValue = ", eventValue);
-                Toast.makeText(MainActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "KEY = " + eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -69,9 +78,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
             @Override
             public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
-                Log.d("messages","messages = " +richMessages.get(0).getContent());
+                Log.d("messages", "messages = " + richMessages.get(0).getContent());
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
+                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
                 Intent intent = new Intent(MainActivity.this, InboxActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -88,7 +97,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onInAppMessageDismissalCallback(int templateId, String eventId, boolean isSendStats) {
 
-                Log.v("MainActivity","onInAppMessageDismissalCallback");
+                Log.v("MainActivity", "onInAppMessageDismissalCallback");
             }
 
         });
@@ -107,12 +116,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
                 appoxee.setAlias("sdk4.alias-" + aliasCounter);
-                appoxee.addTag("tag"+aliasCounter);
+                appoxee.addTag("tag" + aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
                 appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
 
-                createBuilder("",appoxee.getAlias());
+                createBuilder("", appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
             }
         });
@@ -124,12 +133,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Appoxee appoxee = Appoxee.instance();
                 Set<String> tags = appoxee.getTags();
                 Log.d("APX", "tags: " + new Gson().toJson(tags));
-//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-//                alertDialog.setMessage(new Gson().toJson(tags)).setTitle("AlertDialog");
-//                AlertDialog dialog = alertDialog.create();
-//                dialog.show();
-
-                createBuilder("",  appoxee.getAlias());
+                createBuilder("", appoxee.getAlias());
             }
         });
 
@@ -147,7 +151,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-               Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
                 Toast.makeText(MainActivity.this, "New activity opened", Toast.LENGTH_SHORT).show();
             }
@@ -155,7 +159,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              startGeo();
+                startGeo();
             }
         });
         findViewById(R.id.stop_geo_fencing).setOnClickListener(new View.OnClickListener() {
@@ -165,7 +169,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        pushEnabledSwitch = (Switch)findViewById(R.id.push_enabled);
+        pushEnabledSwitch = (Switch) findViewById(R.id.push_enabled);
         pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -230,12 +234,88 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this,  "app_welcome");
+                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_welcome");
             }
         });
 
+        //TODO: add function for test
+        findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Set<String> tags = appoxee.getTags();
+                StringBuilder s = new StringBuilder("");
+                for (String tag : tags) {
+                    s.append("\n")
+                            .append(tag);
+                }
+                createBuilder("All tags", s.toString());
+            }
+        });
 
+        findViewById(R.id.btn_set_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText tag = findViewById(R.id.etxt_set_tag);
+                appoxee.addTag(tag.getText().toString());
+                createBuilder("Set tag", "Setted new tag");
+                tag.setText("s");
+            }
+        });
 
+        findViewById(R.id.btn_remove_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText tag = findViewById(R.id.etxt_remove_tag);
+                appoxee.removeTag(tag.getText().toString());
+                createBuilder("Remote tag", "Remoted tag");
+                tag.setText("");
+            }
+        });
+
+        findViewById(R.id.btn_set_attribute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText attribute = findViewById(R.id.etxt_set_attribute);
+                appoxee.setAttribute(attribute.getText().toString(), attribute.getText().toString());
+                createBuilder("Set attribute", "Added new attribute");
+                attribute.setText("");
+            }
+        });
+
+        findViewById(R.id.btn_get_attribute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText attribute = findViewById(R.id.etxt_get_attribute);
+                String s = appoxee.getAttributeStringValue(attribute.getText().toString());
+                createBuilder("Get attribute", s);
+                attribute.setText("");
+            }
+        });
+
+        findViewById(R.id.btn_remove_attribute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText attribute = findViewById(R.id.etxt_remove_attribute);
+                appoxee.removeAttribute(attribute.getText().toString());
+                createBuilder("Remove attribute", "Removed attribute");
+                attribute.setText("");
+            }
+        });
+
+        findViewById(R.id.btn_remove_badge_number).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeBadgeNumber(MainActivity.this);
+                createBuilder("Remove badge", "All badges deleted");
+            }
+        });
+
+        findViewById(R.id.btn_orientation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogScreenOrientation();
+            }
+        });
     }
 
 
@@ -252,17 +332,58 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
     }
 
+    void dialogScreenOrientation() {
+
+        String[] screen_orientation = getResources().getStringArray(R.array.screen_orientation);
+        final AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+        alt_bld.setTitle("Select a screen orientation");
+        alt_bld.setItems(screen_orientation, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        break;
+                    }
+
+                    case 1: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        break;
+                    }
+
+                    case 2: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                        break;
+                    }
+
+                    case 3: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                        break;
+                    }
+
+                }
+
+                Toast.makeText(getApplicationContext(), (getResources().getStringArray(R.array.screen_orientation)[which]), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+
+        });
+        AlertDialog alert = alt_bld.create();
+        alert.show();
+    }
 
     private void startGeo() {
-        if (geoPermissionNotGranted()){
-           Appoxee.instance().startGeoFencing();
+        if (geoPermissionNotGranted()) {
+            Appoxee.instance().startGeoFencing();
         } else {
             askForGeoPermission();
         }
     }
+
     private boolean geoPermissionNotGranted() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
+
     private void askForGeoPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -290,7 +411,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         }
     }
 
-    private void stopGeoFencing(){
+    private void stopGeoFencing() {
         Appoxee.instance().stopGeoFencing();
     }
 
@@ -307,10 +428,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         return gson.toJson(inbox);
     }
 
-    private void createBuilder(String title, String message){
+    private void createBuilder(String title, String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setMessage(message).setTitle(title);
         AlertDialog dialog = alertDialog.create();
         dialog.show();
     }
 }
+
