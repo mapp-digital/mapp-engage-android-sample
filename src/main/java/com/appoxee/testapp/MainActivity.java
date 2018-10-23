@@ -3,29 +3,20 @@ package com.appoxee.testapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +45,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
-    Appoxee appoxee;
+    private Appoxee appoxee;
+    private EditText set_alias;
+    private EditText set_tag;
+    private EditText remove_tag;
+    private EditText set_attribute;
+    private EditText get_attribute;
+    private EditText remove_attribute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +59,17 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         setContentView(R.layout.main);
 
         appoxee = Appoxee.instance();
+        set_alias = findViewById(R.id.etxt_set_alias);
+        set_tag = findViewById(R.id.etxt_set_tag);
+        remove_tag = findViewById(R.id.etxt_remove_tag);
+        set_attribute = findViewById(R.id.etxt_set_attribute);
+        get_attribute = findViewById(R.id.etxt_get_attribute);
+        remove_attribute = findViewById(R.id.etxt_remove_attribute);
+        init();
 
+    }
+
+    private void init() {
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
@@ -130,20 +137,26 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                Appoxee appoxee = Appoxee.instance();
-                Set<String> tags = appoxee.getTags();
-                Log.d("APX", "tags: " + new Gson().toJson(tags));
-                createBuilder("", appoxee.getAlias());
+//                Appoxee appoxee = Appoxee.instance();
+//                Set<String> tags = appoxee.getTags();
+//                Log.d("APX", "tags: " + new Gson().toJson(tags));
+
+                String getAlias = getAlias();
+                createBuilder("", getAlias);
             }
         });
 
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText editText = findViewById(R.id.etxt_set_alias);
-                appoxee.setAlias(String.valueOf(editText.getText().toString()));
-                createBuilder("New alias", "Added new alias");
 
+                if (set_alias.getText().length() == 0){
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                }else{
+                    appoxee.setAlias(String.valueOf(set_alias.getText().toString()));
+                    createBuilder("New alias", "Added alias: " + set_alias.getText());
+                    set_alias.setText("");
+                }
             }
         });
 
@@ -182,14 +195,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 Appoxee.instance().getDeviceInfoDMC();
-                String s = new StringBuilder("Device model: ")
-                        .append(appoxee.getDeviceInfo().deviceModel)
-                        .append("\n")
-                        .append("App version: ")
-                        .append(appoxee.getDeviceInfo().appVersion)
-                        .append("\n")
-                        .append("OS version: ")
-                        .append(appoxee.getDeviceInfo().osVersion).toString();
+                String s = "Device model: " +
+                        appoxee.getDeviceInfo().deviceModel +
+                        "\n" +
+                        "App version: " +
+                        appoxee.getDeviceInfo().appVersion +
+                        "\n" +
+                        "OS version: " +
+                        appoxee.getDeviceInfo().osVersion;
                 createBuilder("", s);
             }
         });
@@ -238,7 +251,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        //TODO: add function for test
         findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,57 +267,82 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.btn_set_tag).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText tag = findViewById(R.id.etxt_set_tag);
-                appoxee.addTag(tag.getText().toString());
-                createBuilder("Set tag", "Setted new tag");
-                tag.setText("s");
+
+                if (set_tag.getText().length() == 0){
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                }else{
+                    appoxee.addTag(set_tag.getText().toString());
+                    createBuilder("Set tag", "Setted tag: " + set_tag.getText());
+                    set_tag.setText("");
+                }
+
             }
         });
 
         findViewById(R.id.btn_remove_tag).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText tag = findViewById(R.id.etxt_remove_tag);
-                appoxee.removeTag(tag.getText().toString());
-                createBuilder("Remote tag", "Remoted tag");
-                tag.setText("");
+
+                if (remove_tag.getText().length() == 0){
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                }else{
+                    RequestStatus status = appoxee.removeTag(remove_tag.getText().toString());
+                    createBuilder("Remove tag", "Removed tag: " + remove_tag.getText());
+                    remove_tag.setText("");
+                }
+
             }
         });
 
         findViewById(R.id.btn_set_attribute).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText attribute = findViewById(R.id.etxt_set_attribute);
-                appoxee.setAttribute(attribute.getText().toString(), attribute.getText().toString());
-                createBuilder("Set attribute", "Added new attribute");
-                attribute.setText("");
+
+                if (set_attribute.getText().length() == 0){
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                }else{
+                    appoxee.setAttribute(set_attribute.getText().toString(), set_attribute.getText().toString());
+                    createBuilder("Set attribute", "Added attribute: " + set_attribute.getText());
+                    set_attribute.setText("");
+                }
             }
         });
 
         findViewById(R.id.btn_get_attribute).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText attribute = findViewById(R.id.etxt_get_attribute);
-                String s = appoxee.getAttributeStringValue(attribute.getText().toString());
-                createBuilder("Get attribute", s);
-                attribute.setText("");
+
+                String s = appoxee.getAttributeStringValue(get_attribute.getText().toString());
+                if (s == null || s.equals("")){
+                    Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
+                }else{
+                    createBuilder("Get attribute", "Get attribute: " + s);
+                    get_attribute.setText("");
+                }
+
             }
         });
 
         findViewById(R.id.btn_remove_attribute).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText attribute = findViewById(R.id.etxt_remove_attribute);
-                appoxee.removeAttribute(attribute.getText().toString());
-                createBuilder("Remove attribute", "Removed attribute");
-                attribute.setText("");
+
+                String s = appoxee.getAttributeStringValue(remove_attribute.getText().toString());
+                if (s == null || s.equals("")){
+                    Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
+                }else{
+                    appoxee.removeAttribute(remove_attribute.getText().toString());
+                    createBuilder("Remove attribute", "Removed attribute: " +  s);
+                    remove_attribute.setText("");
+                }
+
             }
         });
 
         findViewById(R.id.btn_remove_badge_number).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeBadgeNumber(MainActivity.this);
+                removeBadgeNumber(MainActivity.this.getApplicationContext());
                 createBuilder("Remove badge", "All badges deleted");
             }
         });
@@ -321,6 +358,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     @Override
     public void onInitCompleted(boolean successful, Exception failReason) {
+
         Log.i("APX", "init completed listener - MainActivity");
         runOnUiThread(new Runnable() {
             @Override
@@ -433,6 +471,29 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         alertDialog.setMessage(message).setTitle(title);
         AlertDialog dialog = alertDialog.create();
         dialog.show();
+    }
+
+
+
+    public String  getAlias(){
+        return  appoxee.getAlias();
+    }
+
+
+    public String  getAttribute(String attr ){
+
+        String attribute = appoxee.getAttributeStringValue(attr);
+        if (attribute == null || attribute.equals("")){
+            attribute = "";
+        }else{
+            get_attribute.setText("");
+        }
+
+        return  attribute;
+    }
+
+    public void removeTag(String tag){
+       appoxee.removeTag(tag);
     }
 }
 
