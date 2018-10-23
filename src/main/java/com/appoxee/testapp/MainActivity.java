@@ -150,9 +150,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                if (set_alias.getText().length() == 0){
+                if (set_alias.getText().length() == 0) {
                     Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     appoxee.setAlias(String.valueOf(set_alias.getText().toString()));
                     createBuilder("New alias", "Added alias: " + set_alias.getText());
                     set_alias.setText("");
@@ -268,9 +268,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                if (set_tag.getText().length() == 0){
+                if (set_tag.getText().length() == 0) {
                     Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     appoxee.addTag(set_tag.getText().toString());
                     createBuilder("Set tag", "Setted tag: " + set_tag.getText());
                     set_tag.setText("");
@@ -283,9 +283,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                if (remove_tag.getText().length() == 0){
+                if (remove_tag.getText().length() == 0) {
                     Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     RequestStatus status = appoxee.removeTag(remove_tag.getText().toString());
                     createBuilder("Remove tag", "Removed tag: " + remove_tag.getText());
                     remove_tag.setText("");
@@ -298,9 +298,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                if (set_attribute.getText().length() == 0){
+                if (set_attribute.getText().length() == 0) {
                     Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     appoxee.setAttribute(set_attribute.getText().toString(), set_attribute.getText().toString());
                     createBuilder("Set attribute", "Added attribute: " + set_attribute.getText());
                     set_attribute.setText("");
@@ -313,9 +313,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onClick(View v) {
 
                 String s = appoxee.getAttributeStringValue(get_attribute.getText().toString());
-                if (s == null || s.equals("")){
+                if (s == null || s.equals("")) {
                     Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     createBuilder("Get attribute", "Get attribute: " + s);
                     get_attribute.setText("");
                 }
@@ -328,11 +328,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onClick(View v) {
 
                 String s = appoxee.getAttributeStringValue(remove_attribute.getText().toString());
-                if (s == null || s.equals("")){
+                if (s == null || s.equals("")) {
                     Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     appoxee.removeAttribute(remove_attribute.getText().toString());
-                    createBuilder("Remove attribute", "Removed attribute: " +  s);
+                    createBuilder("Remove attribute", "Removed attribute: " + s);
                     remove_attribute.setText("");
                 }
 
@@ -474,26 +474,25 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
 
-
-    public String  getAlias(){
-        return  appoxee.getAlias();
+    public String getAlias() {
+        return appoxee.getAlias();
     }
 
 
-    public String  getAttribute(String attr ){
+    public String getAttribute(String attr) {
 
         String attribute = appoxee.getAttributeStringValue(attr);
-        if (attribute == null || attribute.equals("")){
+        if (attribute == null || attribute.equals("")) {
             attribute = "";
-        }else{
+        } else {
             get_attribute.setText("");
         }
 
-        return  attribute;
+        return attribute;
     }
 
-    public void removeTag(String tag){
-       appoxee.removeTag(tag);
+    public void removeTag(String tag) {
+        appoxee.removeTag(tag);
     }
 }
 
