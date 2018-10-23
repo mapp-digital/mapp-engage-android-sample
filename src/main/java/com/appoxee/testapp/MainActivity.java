@@ -45,13 +45,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
-    Appoxee appoxee;
-    EditText set_alias;
-    EditText set_tag;
-    EditText remove_tag;
-    EditText set_attribute;
-    EditText get_attribute;
-    EditText remove_attribute;
+    private Appoxee appoxee;
+    private EditText set_alias;
+    private EditText set_tag;
+    private EditText remove_tag;
+    private EditText set_attribute;
+    private EditText get_attribute;
+    private EditText remove_attribute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,10 +137,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                Appoxee appoxee = Appoxee.instance();
-                Set<String> tags = appoxee.getTags();
-                Log.d("APX", "tags: " + new Gson().toJson(tags));
-                createBuilder("", appoxee.getAlias());
+//                Appoxee appoxee = Appoxee.instance();
+//                Set<String> tags = appoxee.getTags();
+//                Log.d("APX", "tags: " + new Gson().toJson(tags));
+
+                String getAlias = getAlias();
+                createBuilder("", getAlias);
             }
         });
 
@@ -284,7 +286,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 if (remove_tag.getText().length() == 0){
                     Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
                 }else{
-                    appoxee.removeTag(remove_tag.getText().toString());
+                    RequestStatus status = appoxee.removeTag(remove_tag.getText().toString());
                     createBuilder("Remove tag", "Removed tag: " + remove_tag.getText());
                     remove_tag.setText("");
                 }
@@ -469,6 +471,29 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         alertDialog.setMessage(message).setTitle(title);
         AlertDialog dialog = alertDialog.create();
         dialog.show();
+    }
+
+
+
+    public String  getAlias(){
+        return  appoxee.getAlias();
+    }
+
+
+    public String  getAttribute(String attr ){
+
+        String attribute = appoxee.getAttributeStringValue(attr);
+        if (attribute == null || attribute.equals("")){
+            attribute = "";
+        }else{
+            get_attribute.setText("");
+        }
+
+        return  attribute;
+    }
+
+    public void removeTag(String tag){
+       appoxee.removeTag(tag);
     }
 }
 
