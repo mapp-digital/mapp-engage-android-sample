@@ -42,9 +42,9 @@ public class MainActivityTest {
     private Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(SecondActivity.class.getName(), null, false);
 
     private MainActivity mainActivity = null;
-    private String mAlias = "Alias";
-    private String mTag = "Tag";
-    private String mAttribute = "Attribute";
+    private String mAlias = "test2@test.com";
+    private String mTag = "Tag1";
+    private String mAttribute = "Attribute2";
 
     @Before
     public void setUp() throws Exception {
