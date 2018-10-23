@@ -62,8 +62,8 @@ public class InboxActivity extends Activity {
 
         setContentView(R.layout.inbox_list_layout);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        tv = (TextView)findViewById(R.id.textView);
+        recyclerView =  findViewById(R.id.recycler_view);
+        tv = findViewById(R.id.textView);
         tv.setVisibility(View.GONE);
 
         Bundle bundle;
@@ -252,7 +252,6 @@ public class InboxActivity extends Activity {
         progressBar.setVisibility(View.VISIBLE);
         webView.setVisibility(View.GONE);
         dialogBuilder.setTitle("");
-
         webView.setLayerType(View.LAYER_TYPE_NONE, null);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
