@@ -2,15 +2,15 @@ package com.appoxee.testapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.appoxee.Appoxee;
 import com.appoxee.DeviceInfo;
+import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
@@ -40,18 +42,40 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import static com.appoxee.Appoxee.removeBadgeNumber;
+
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private Switch pushEnabledSwitch;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
+    private Appoxee appoxee;
+    private EditText set_alias;
+    private EditText set_tag;
+    private EditText remove_tag;
+    private EditText set_attribute;
+    private EditText get_attribute;
+    private EditText remove_attribute;
     TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        appoxee = Appoxee.instance();
+        set_alias = findViewById(R.id.etxt_set_alias);
+        set_tag = findViewById(R.id.etxt_set_tag);
+        remove_tag = findViewById(R.id.etxt_remove_tag);
+        set_attribute = findViewById(R.id.etxt_set_attribute);
+        get_attribute = findViewById(R.id.etxt_get_attribute);
+        remove_attribute = findViewById(R.id.etxt_remove_attribute);
+        init();
+
+    }
+
+    private void init() {
         Appoxee.instance().addInitListener(this);
         InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
@@ -111,6 +135,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
                 appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
 
+                createBuilder("", appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
             }
         });
@@ -119,10 +144,26 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                Appoxee appoxee = Appoxee.instance();
-                Set<String> tags = appoxee.getTags();
-                Log.d("APX", "tags: " + new Gson().toJson(tags));
+//                Appoxee appoxee = Appoxee.instance();
+//                Set<String> tags = appoxee.getTags();
+//                Log.d("APX", "tags: " + new Gson().toJson(tags));
 
+                String getAlias = getAlias();
+                createBuilder("", getAlias);
+            }
+        });
+
+        findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (set_alias.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                } else {
+                    appoxee.setAlias(String.valueOf(set_alias.getText().toString()));
+                    createBuilder("New alias", "Added alias: " + set_alias.getText());
+                    set_alias.setText("");
+                }
             }
         });
 
@@ -132,6 +173,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
+                Toast.makeText(MainActivity.this, "New activity opened", Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
@@ -151,7 +193,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Appoxee.instance().setPushEnabled(isChecked);
+                RequestStatus status = Appoxee.instance().setPushEnabled(isChecked);
+
             }
         });
 
@@ -159,6 +202,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 Appoxee.instance().getDeviceInfoDMC();
+                String s = "Device model: " +
+                        appoxee.getDeviceInfo().deviceModel +
+                        "\n" +
+                        "App version: " +
+                        appoxee.getDeviceInfo().appVersion +
+                        "\n" +
+                        "OS version: " +
+                        appoxee.getDeviceInfo().osVersion;
+                createBuilder("", s);
             }
         });
 
@@ -218,11 +270,114 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
 
 
+        findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Set<String> tags = appoxee.getTags();
+                StringBuilder s = new StringBuilder("");
+                for (String tag : tags) {
+                    s.append("\n")
+                            .append(tag);
+                }
+                createBuilder("All tags", s.toString());
+            }
+        });
+
+        findViewById(R.id.btn_set_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (set_tag.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                } else {
+                    appoxee.addTag(set_tag.getText().toString());
+                    createBuilder("Set tag", "Setted tag: " + set_tag.getText());
+                    set_tag.setText("");
+                }
+
+            }
+        });
+
+        findViewById(R.id.btn_remove_tag).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (remove_tag.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                } else {
+                    RequestStatus status = appoxee.removeTag(remove_tag.getText().toString());
+                    createBuilder("Remove tag", "Removed tag: " + remove_tag.getText());
+                    remove_tag.setText("");
+                }
+
+            }
+        });
+
+        findViewById(R.id.btn_set_attribute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (set_attribute.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                } else {
+                    appoxee.setAttribute(set_attribute.getText().toString(), set_attribute.getText().toString());
+                    createBuilder("Set attribute", "Added attribute: " + set_attribute.getText());
+                    set_attribute.setText("");
+                }
+            }
+        });
+
+        findViewById(R.id.btn_get_attribute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String s = appoxee.getAttributeStringValue(get_attribute.getText().toString());
+                if (s == null || s.equals("")) {
+                    Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
+                } else {
+                    createBuilder("Get attribute", "Get attribute: " + s);
+                    get_attribute.setText("");
+                }
+
+            }
+        });
+
+        findViewById(R.id.btn_remove_attribute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String s = appoxee.getAttributeStringValue(remove_attribute.getText().toString());
+                if (s == null || s.equals("")) {
+                    Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
+                } else {
+                    appoxee.removeAttribute(remove_attribute.getText().toString());
+                    createBuilder("Remove attribute", "Removed attribute: " + s);
+                    remove_attribute.setText("");
+                }
+
+            }
+        });
+
+        findViewById(R.id.btn_remove_badge_number).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeBadgeNumber(MainActivity.this.getApplicationContext());
+                createBuilder("Remove badge", "All badges deleted");
+            }
+        });
+
+        findViewById(R.id.btn_orientation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogScreenOrientation();
+            }
+        });
     }
 
 
     @Override
     public void onInitCompleted(boolean successful, Exception failReason) {
+
         Log.i("APX", "init completed listener - MainActivity");
         runOnUiThread(new Runnable() {
             @Override
@@ -234,6 +389,45 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
     }
 
+    void dialogScreenOrientation() {
+
+        String[] screen_orientation = getResources().getStringArray(R.array.screen_orientation);
+        final AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+        alt_bld.setTitle("Select a screen orientation");
+        alt_bld.setItems(screen_orientation, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        break;
+                    }
+
+                    case 1: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        break;
+                    }
+
+                    case 2: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                        break;
+                    }
+
+                    case 3: {
+                        appoxee.setOrientation(getApplication(), ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                        break;
+                    }
+
+                }
+
+                Toast.makeText(getApplicationContext(), (getResources().getStringArray(R.array.screen_orientation)[which]), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+
+        });
+        AlertDialog alert = alt_bld.create();
+        alert.show();
+    }
 
     private void startGeo() {
         if (geoPermissionNotGranted()) {
@@ -290,4 +484,34 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         }
         return gson.toJson(inbox);
     }
+
+    private void createBuilder(String title, String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setMessage(message).setTitle(title);
+        AlertDialog dialog = alertDialog.create();
+        dialog.show();
+    }
+
+
+    public String getAlias() {
+        return appoxee.getAlias();
+    }
+
+
+    public String getAttribute(String attr) {
+
+        String attribute = appoxee.getAttributeStringValue(attr);
+        if (attribute == null || attribute.equals("")) {
+            attribute = "";
+        } else {
+            get_attribute.setText("");
+        }
+
+        return attribute;
+    }
+
+    public void removeTag(String tag) {
+        appoxee.removeTag(tag);
+    }
 }
+

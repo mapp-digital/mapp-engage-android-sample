@@ -1,3 +1,39 @@
 <resources>
     <string name="app_name">Appoxee Testapp</string>
+    <string name="screen_orientation_portrait">SCREEN_ORIENTATION_PORTRAIT</string>
+    <string name="screen_orientation_landscape">SCREEN_ORIENTATION_LANDSCAPE</string>
+    <string name="screen_orientation_reverse_landscape">SCREEN_ORIENTATION_REVERSE_LANDSCAPE</string>
+    <string name="screen_orientation_reverse_portrait">SCREEN_ORIENTATION_REVERSE_PORTRAIT</string>
+    <string name="info">info</string>
+    <string name="get_alias">Get alias</string>
+    <string name="set_alias">Set alias</string>
+    <string name="_2nd_activity">2nd activity</string>
+    <string name="start_geo">Start Geo</string>
+    <string name="stop_geo">Stop Geo</string>
+    <string name="push_enabled">Push enabled</string>
+    <string name="get_device_info">Get Device Info</string>
+    <string name="fullscreen_app_open">FullScreen: App Open</string>
+    <string name="modal_app_feedback">Modal: App Feedback</string>
+    <string name="banner_app_discount">Banner: App Discount</string>
+    <string name="promo_app_promo">PROMO: App Promo</string>
+    <string name="fetch_multiple_messages">Fetch Multiple Messages</string>
+    <string name="this_is_a_sample_app">This is a sample App</string>
+    <string name="fetch_inbox_messages">Fetch Inbox Messages</string>
+    <string name="get_tags">Get tags</string>
+    <string name="some_text">Text</string>
+    <string name="set_tag">Set tag</string>
+    <string name="remove_tag">Remove tag</string>
+    <string name="set_attribute">Set attribute</string>
+    <string name="get_attribute">Get attribute</string>
+    <string name="remove_attribute">Remove attribute</string>
+    <string name="remove_badge_number">Remove badge number</string>
+    <string name="select_screen_orientation">Lock screen orientation</string>
+    <string name="email">Email</string>
+
+    <string-array name="screen_orientation">
+        <item>Screen orientation portrait</item>
+        <item>Screen orientation landscape</item>
+        <item>Screen orientation reverse portrait</item>
+        <item>Screen orientation reverse landscape</item>
+    </string-array>
 </resources>
