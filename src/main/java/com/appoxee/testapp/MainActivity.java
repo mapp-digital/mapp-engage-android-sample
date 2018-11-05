@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -66,6 +67,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
         init();
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
 
     }
 
@@ -351,6 +356,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 dialogScreenOrientation();
+            }
+        });
+
+        findViewById(R.id.btn_open_test_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ConfigurationMappOptionsActivity.class);
+                startActivity(intent);
             }
         });
     }

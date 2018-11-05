@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -15,21 +14,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--<EditText-->
-                <!--android:id="@+id/etxt_set_attribute"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:backgroundTint="@color/material_cyan_700"-->
-                <!--android:hint="@string/some_text"-->
-                <!--android:inputType="text" />-->
-
-            <!--<Button-->
-                <!--android:id="@+id/btn_set_attribute"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:backgroundTint="@color/material_cyan_700"-->
-                <!--android:text="@string/set_attribute" />-->
+            <Button
+                android:id="@+id/btn_open_test_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/configuration_mapp_options" />
 
             <Button
                 android:id="@+id/buttonDeviceInfo"
@@ -53,7 +42,7 @@
                 android:id="@+id/etxt_set_alias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
 
@@ -61,7 +50,7 @@
                 android:id="@+id/btn_set_alias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:text="@string/set_alias" />
 
 
@@ -164,7 +153,7 @@
                 android:id="@+id/etxt_set_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:hint="@string/some_text"
                 android:inputType="text" />
 
@@ -174,14 +163,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:text="@string/set_tag" />
 
             <EditText
                 android:id="@+id/etxt_remove_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:hint="@string/some_text"
                 android:inputType="text" />
 
@@ -190,7 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:text="@string/remove_tag" />
 
 
@@ -198,7 +187,7 @@
                 android:id="@+id/etxt_set_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:hint="@string/some_text"
                 android:inputType="text" />
 
@@ -207,14 +196,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:text="@string/set_attribute" />
 
             <EditText
                 android:id="@+id/etxt_get_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:hint="@string/some_text"
                 android:inputType="text" />
 
@@ -223,14 +212,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:text="@string/get_attribute" />
 
             <EditText
                 android:id="@+id/etxt_remove_attribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:hint="@string/some_text"
                 android:inputType="text" />
 
@@ -239,7 +228,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/material_cyan_700"
+                android:backgroundTint="@color/material_teal_200"
                 android:text="@string/remove_attribute" />
 
 

@@ -1,6 +1,8 @@
 package com.appoxee.testapp;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
 
@@ -9,12 +11,21 @@ import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.crashlytics.android.Crashlytics;
+import com.pixplicity.easyprefs.library.Prefs;
 
 //import com.squareup.leakcanary.LeakCanary;
 
 import io.fabric.sdk.android.Fabric;
 
 public class AppoxeeTestApp extends Application {
+
+    public static AppoxeeTestApp INSTANCE;
+    private AppoxeeOptions opt;
+    private String sdkKey = "";
+    private String googleProjectId = "";
+    private String cepURL = "";
+    private String appID = "";
+    private String tenantID = "";
 
     private Appoxee.OnInitCompletedListener initFinishedListener = new Appoxee.OnInitCompletedListener() {
         @Override
@@ -26,19 +37,30 @@ public class AppoxeeTestApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)
-                .build();
-        Fabric.with(fabric);
-        long start = System.currentTimeMillis();
-        AppoxeeOptions opt = new AppoxeeOptions();
 
-        opt.sdkKey = "5b56f2bae61a14.21530253";
-        opt.googleProjectId = "1028993954364";
-        opt.cepURL = "https://jamie-test.shortest-route.com/";
-        opt.appID = "262750";
-        opt.tenantID = "55";
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
+
+//        final Fabric fabric = new Fabric.Builder(this)
+//                .kits(new Crashlytics())
+//                .debuggable(true)
+//                .build();
+//        Fabric.with(fabric);
+        long start = System.currentTimeMillis();
+
+        opt = new AppoxeeOptions();
+        opt.sdkKey = Prefs.getString("SDK_KEY", "");
+        opt.googleProjectId = Prefs.getString("GOOGLE_PROJECT_ID", "");
+        opt.cepURL = Prefs.getString("CEP_URL", "");
+        opt.appID = Prefs.getString("APP_ID", "");
+        opt.tenantID = Prefs.getString("TENANT_ID", "");
+
+
+        INSTANCE = this;
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
@@ -65,6 +87,14 @@ public class AppoxeeTestApp extends Application {
 //        }
 //        LeakCanary.install(this);
 //        // Normal app init code...
+    }
+
+    public static Context getContext() {
+        return INSTANCE;
+    }
+
+    public AppoxeeOptions getAppoxeeOptions(){
+        return opt;
     }
 
 }
