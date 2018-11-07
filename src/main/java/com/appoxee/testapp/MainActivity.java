@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
+import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
@@ -32,6 +33,7 @@ import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +41,11 @@ import java.util.List;
 import java.util.Set;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
+import static com.appoxee.testapp.Constants.KEY_APP_ID;
+import static com.appoxee.testapp.Constants.KEY_CEP_URL;
+import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
+import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
@@ -53,6 +60,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private EditText set_attribute;
     private EditText get_attribute;
     private EditText remove_attribute;
+    private AppoxeeOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
     private void init() {
         Appoxee.instance().addInitListener(this);
+
+        options = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
         InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
@@ -364,6 +374,31 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.btn_backup_configuration).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backupConfiguration();
+            }
+        });
+    }
+
+    private void backupConfiguration() {
+        Prefs.putString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
+        Prefs.putString(KEY_GOOGLE_PROJECT_ID, BuildConfig.GOOGLE_PROJECT_ID);
+        Prefs.putString(KEY_CEP_URL, BuildConfig.CEP_URL);
+        Prefs.putString(KEY_APP_ID, BuildConfig.APP_ID);
+        Prefs.putString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
+
+        options.sdkKey = BuildConfig.SDK_KEY;
+        options.googleProjectId = BuildConfig.GOOGLE_PROJECT_ID;
+        options.cepURL = BuildConfig.CEP_URL;
+        options.appID = BuildConfig.APP_ID;
+        options.tenantID = BuildConfig.TENANT_ID;
+
+        Appoxee.engage(getApplication(), options);
+
+        Toast.makeText(this, "Reset configuration", Toast.LENGTH_LONG).show();
     }
 
 

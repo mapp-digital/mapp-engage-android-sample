@@ -244,8 +244,15 @@
                 android:id="@+id/btn_orientation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:text="@string/select_screen_orientation" />
+
+            <Button
+                android:id="@+id/btn_backup_configuration"
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/material_teal_200"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/backup_configuration" />
         </LinearLayout>
 
 
