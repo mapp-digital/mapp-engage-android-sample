@@ -1,0 +1,161 @@
+/*
+ * Created by Aleksandra Vujadinovic on 07/11/18 11:36
+ * Copyright (c) 2018 MAPP.
+ */
+
+package com.appoxee.testapp;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.appoxee.Appoxee;
+import com.appoxee.AppoxeeOptions;
+import com.pixplicity.easyprefs.library.Prefs;
+
+import static com.appoxee.testapp.Constants.*;
+
+
+public class ConfigurationMappOptionsActivity extends AppCompatActivity {
+
+    private AppoxeeOptions appoxeeOptions;
+    private EditText etxtSetSdkKey;
+    private EditText etxtSetGoogleProjectId;
+    private EditText etxtSetCepUrl;
+    private EditText etxtSetAppId;
+    private EditText etxtSetTenantId;
+
+    private String sdkKeyConf = BuildConfig.SDK_KEY;
+    private String googleProjectIdConf = BuildConfig.GOOGLE_PROJECT_ID;
+    private String cepUrlConf = BuildConfig.CEP_URL;
+    private String appIdConf = BuildConfig.APP_ID;
+    private String tenantIdConf = BuildConfig.TENANT_ID;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_configuration_mapp_options);
+
+        appoxeeOptions = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
+
+        etxtSetSdkKey = findViewById(R.id.etxt_set_sdk_key);
+        etxtSetGoogleProjectId = findViewById(R.id.etxt_set_google_project_id);
+        etxtSetCepUrl = findViewById(R.id.etxt_set_cep_url);
+        etxtSetAppId = findViewById(R.id.etxt_set_app_id);
+        etxtSetTenantId = findViewById(R.id.etxt_set_tenant_id);
+
+
+        //hidden keyboard
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+    }
+
+    public void setConfiguration(View view) {
+        String sdkKey = etxtSetSdkKey.getText().toString();
+        String googleProjectId = etxtSetGoogleProjectId.getText().toString();
+        String cepUrl = etxtSetCepUrl.getText().toString();
+        String appId = etxtSetAppId.getText().toString();
+        String tenantId = etxtSetTenantId.getText().toString();
+
+        if (sdkKey.equals("")) {
+            sdkKey = sdkKeyConf;
+        }
+        if (googleProjectId.equals("")) {
+            googleProjectId = googleProjectIdConf;
+        }
+        if (cepUrl.equals("")) {
+            cepUrl = cepUrlConf;
+        }
+        if (appId.equals("")) {
+            appId = appIdConf;
+        }
+        if (tenantId.equals("")) {
+            tenantId = tenantIdConf;
+        }
+
+        Prefs.putString(KEY_SDK_KEY, sdkKey);
+        Prefs.putString(KEY_GOOGLE_PROJECT_ID, googleProjectId);
+        Prefs.putString(KEY_CEP_URL, cepUrl);
+        Prefs.putString(KEY_APP_ID, appId);
+        Prefs.putString(KEY_TENANT_ID, tenantId);
+
+        appoxeeOptions.sdkKey = sdkKey;
+        appoxeeOptions.googleProjectId = googleProjectId;
+        appoxeeOptions.cepURL = cepUrl;
+        appoxeeOptions.appID = appId;
+        appoxeeOptions.tenantID = tenantId;
+
+
+        Appoxee.engage(getApplication(), appoxeeOptions);
+
+        showMessage();
+
+        deleteField();
+
+    }
+
+    public void refreshConfiguration(View view) {
+
+        Prefs.putString(KEY_SDK_KEY, sdkKeyConf);
+        Prefs.putString(KEY_GOOGLE_PROJECT_ID, googleProjectIdConf);
+        Prefs.putString(KEY_CEP_URL, cepUrlConf);
+        Prefs.putString(KEY_APP_ID, appIdConf);
+        Prefs.putString(KEY_TENANT_ID, tenantIdConf);
+
+        appoxeeOptions.sdkKey = sdkKeyConf;
+        appoxeeOptions.googleProjectId = googleProjectIdConf;
+        appoxeeOptions.cepURL = cepUrlConf;
+        appoxeeOptions.appID = appIdConf;
+        appoxeeOptions.tenantID = tenantIdConf;
+
+        showMessage();
+
+    }
+
+    public void deleteAllFields(View view) {
+
+        deleteField();
+
+    }
+
+    public void getConfiguration(View view) {
+
+        etxtSetSdkKey.setText(Prefs.getString(KEY_SDK_KEY, sdkKeyConf));
+        etxtSetGoogleProjectId.setText(Prefs.getString(KEY_GOOGLE_PROJECT_ID, googleProjectIdConf));
+        etxtSetCepUrl.setText(Prefs.getString(KEY_CEP_URL, cepUrlConf));
+        etxtSetAppId.setText(Prefs.getString(KEY_APP_ID, appIdConf));
+        etxtSetTenantId.setText(Prefs.getString(KEY_TENANT_ID, tenantIdConf));
+
+    }
+
+    private void deleteField() {
+
+        etxtSetSdkKey.setText("");
+        etxtSetGoogleProjectId.setText("");
+        etxtSetCepUrl.setText("");
+        etxtSetAppId.setText("");
+        etxtSetTenantId.setText("");
+
+    }
+
+    private void showMessage() {
+
+        String str = "sdkKey: " + appoxeeOptions.sdkKey +
+                "\n" +
+                "googleProjectId: " + appoxeeOptions.googleProjectId +
+                "\n" +
+                "cepURL: " + appoxeeOptions.cepURL +
+                "\n" +
+                "appID: " + appoxeeOptions.appID +
+                "\n" +
+                "tenantID: " + appoxeeOptions.tenantID;
+
+        Toast.makeText(ConfigurationMappOptionsActivity.this, str, Toast.LENGTH_LONG).show();
+
+    }
+}

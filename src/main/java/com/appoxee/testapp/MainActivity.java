@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -66,6 +67,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
         init();
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
 
     }
 
@@ -122,7 +127,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
-                appoxee.setAlias("sdk4.alias-" + aliasCounter);
+                appoxee.setAlias(getString(R.string.alias_email));
                 appoxee.addTag("tag" + aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
@@ -136,11 +141,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.get_alias).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Appoxee appoxee = Appoxee.instance();
-//                Set<String> tags = appoxee.getTags();
-//                Log.d("APX", "tags: " + new Gson().toJson(tags));
-
                 String getAlias = getAlias();
                 createBuilder("", getAlias);
             }
@@ -351,6 +351,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 dialogScreenOrientation();
+            }
+        });
+
+        findViewById(R.id.btn_open_test_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ConfigurationMappOptionsActivity.class);
+                startActivity(intent);
             }
         });
     }
