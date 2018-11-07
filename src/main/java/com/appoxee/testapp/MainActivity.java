@@ -127,7 +127,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
-                appoxee.setAlias("sdk4.alias-" + aliasCounter);
+                appoxee.setAlias(getString(R.string.alias_email));
                 appoxee.addTag("tag" + aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
@@ -141,11 +141,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.get_alias).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Appoxee appoxee = Appoxee.instance();
-//                Set<String> tags = appoxee.getTags();
-//                Log.d("APX", "tags: " + new Gson().toJson(tags));
-
                 String getAlias = getAlias();
                 createBuilder("", getAlias);
             }

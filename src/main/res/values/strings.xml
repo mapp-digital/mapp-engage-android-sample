@@ -42,6 +42,7 @@
     <string name="cep_url">Cep URL</string>
     <string name="tenant_id">Tenant ID</string>
     <string name="configuration_mapp_options">Configuration Mapp Options</string>
+    <string name="alias_email">test@mapp.com</string>
 
 
     <string-array name="screen_orientation">

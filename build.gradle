@@ -45,17 +45,16 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5b3cc94d7b77d5.93248549\""
-            //5b276c7e514f19.16779020
+            buildConfigField "String", "SDK_KEY", "\"5b56f2bae61a14.21530253\""
+            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"262616\""
+            buildConfigField "String", "APP_ID", "\"262750\""
             buildConfigField "String", "TENANT_ID", "\"55\""
         }
 
         frankfart {
             signingConfig signingConfigs.debug
             buildConfigField "String", "SDK_KEY", "\"5af2cdeb8ed080.27210061\""
-
         }
         virginia {
             signingConfig signingConfigs.debug

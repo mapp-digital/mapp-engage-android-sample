@@ -10,22 +10,15 @@ import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
-import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
 
 //import com.squareup.leakcanary.LeakCanary;
 
-import io.fabric.sdk.android.Fabric;
+import static com.appoxee.testapp.Constants.*;
 
 public class AppoxeeTestApp extends Application {
 
-    public static AppoxeeTestApp INSTANCE;
     private AppoxeeOptions opt;
-    private String sdkKey = "";
-    private String googleProjectId = "";
-    private String cepURL = "";
-    private String appID = "";
-    private String tenantID = "";
 
     private Appoxee.OnInitCompletedListener initFinishedListener = new Appoxee.OnInitCompletedListener() {
         @Override
@@ -50,17 +43,16 @@ public class AppoxeeTestApp extends Application {
 //                .debuggable(true)
 //                .build();
 //        Fabric.with(fabric);
+
+
         long start = System.currentTimeMillis();
 
         opt = new AppoxeeOptions();
-        opt.sdkKey = Prefs.getString("SDK_KEY", "");
-        opt.googleProjectId = Prefs.getString("GOOGLE_PROJECT_ID", "");
-        opt.cepURL = Prefs.getString("CEP_URL", "");
-        opt.appID = Prefs.getString("APP_ID", "");
-        opt.tenantID = Prefs.getString("TENANT_ID", "");
-
-
-        INSTANCE = this;
+        opt.sdkKey = Prefs.getString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
+        opt.googleProjectId = Prefs.getString(KEY_GOOGLE_PROJECT_ID, BuildConfig.GOOGLE_PROJECT_ID);
+        opt.cepURL = Prefs.getString(KEY_CEP_URL,  BuildConfig.CEP_URL);
+        opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
+        opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
@@ -89,9 +81,7 @@ public class AppoxeeTestApp extends Application {
 //        // Normal app init code...
     }
 
-    public static Context getContext() {
-        return INSTANCE;
-    }
+
 
     public AppoxeeOptions getAppoxeeOptions(){
         return opt;

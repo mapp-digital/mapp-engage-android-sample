@@ -1,5 +1,6 @@
 package com.appoxee.testapp;
 
+import android.os.Build;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.After;
@@ -17,11 +18,11 @@ import static org.junit.Assert.*;
 public class ConfigurationMappOptionsActivityTest {
 
     private ConfigurationMappOptionsActivity configurationMappOptionsActivity = null;
-    private String mSdkKey = "5b56f2bae61a14";
-    private String mGoogleProjectId = "1028993954364";
-    private String mCepUrl = "https://jamie-test.shortest-route.com/";
-    private String mAppId = "262750";
-    private String mTenantId = "55";
+    private String mSdkKey = BuildConfig.SDK_KEY;
+    private String mGoogleProjectId = BuildConfig.GOOGLE_PROJECT_ID;
+    private String mCepUrl = BuildConfig.CEP_URL;
+    private String mAppId = BuildConfig.APP_ID;
+    private String mTenantId = BuildConfig.TENANT_ID;
 
     @Rule
     public ActivityTestRule<ConfigurationMappOptionsActivity> mActivityRule = new ActivityTestRule(ConfigurationMappOptionsActivity.class);
