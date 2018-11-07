@@ -67,11 +67,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
         init();
+        hideKeyboard();
 
+    }
+
+    private void hideKeyboard(){
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-
     }
 
     private void init() {
