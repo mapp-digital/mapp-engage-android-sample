@@ -29,6 +29,22 @@
     <string name="remove_badge_number">Remove badge number</string>
     <string name="select_screen_orientation">Lock screen orientation</string>
     <string name="email">Email</string>
+    <string name="hint_sdk_key">5b56f2bae61a14.21530253</string>
+    <string name="hint_google_project_id">1028993954364</string>
+    <string name="hint_cep_url">https://jamie-test.shortest-route.com/</string>
+    <string name="hint_app_id">262750</string>
+    <string name="hint_tenant_id">55</string>
+    <string name="set_configuration">set configuration</string>
+    <string name="get_configuration">Get configuration</string>
+    <string name="sdk_key">SDK key</string>
+    <string name="app_id">App ID</string>
+    <string name="google_project_id">Google project ID</string>
+    <string name="cep_url">Cep URL</string>
+    <string name="tenant_id">Tenant ID</string>
+    <string name="configuration_mapp_options">Configuration Mapp Options</string>
+    <string name="alias_email">test@mapp.com</string>
+    <string name="backup_configuration">Backup configuration</string>
+
 
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>

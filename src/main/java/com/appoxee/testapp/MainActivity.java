@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
+import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
@@ -39,6 +41,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +49,11 @@ import java.util.List;
 import java.util.Set;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
+import static com.appoxee.testapp.Constants.KEY_APP_ID;
+import static com.appoxee.testapp.Constants.KEY_CEP_URL;
+import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
+import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
@@ -61,6 +69,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private EditText get_attribute;
     private EditText remove_attribute;
     TextView textView;
+    private AppoxeeOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +84,20 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
         init();
+        hideKeyboard();
 
+    }
+
+    private void hideKeyboard(){
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
     }
 
     private void init() {
         Appoxee.instance().addInitListener(this);
+
+        options = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
         InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
@@ -141,7 +159,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 DeviceInfo info = Appoxee.instance().getDeviceInfo();
                 Log.d("APX", "info: (click)" + new Gson().toJson(info));
                 Appoxee appoxee = Appoxee.instance();
-                appoxee.setAlias("sdk4.alias-" + aliasCounter);
+                appoxee.setAlias(getString(R.string.alias_email));
                 appoxee.addTag("tag" + aliasCounter);
                 appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
                 appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
@@ -383,6 +401,39 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 dialogScreenOrientation();
             }
         });
+
+        findViewById(R.id.btn_open_test_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ConfigurationMappOptionsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.btn_backup_configuration).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backupConfiguration();
+            }
+        });
+    }
+
+    private void backupConfiguration() {
+        Prefs.putString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
+        Prefs.putString(KEY_GOOGLE_PROJECT_ID, BuildConfig.GOOGLE_PROJECT_ID);
+        Prefs.putString(KEY_CEP_URL, BuildConfig.CEP_URL);
+        Prefs.putString(KEY_APP_ID, BuildConfig.APP_ID);
+        Prefs.putString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
+
+        options.sdkKey = BuildConfig.SDK_KEY;
+        options.googleProjectId = BuildConfig.GOOGLE_PROJECT_ID;
+        options.cepURL = BuildConfig.CEP_URL;
+        options.appID = BuildConfig.APP_ID;
+        options.tenantID = BuildConfig.TENANT_ID;
+
+        Appoxee.engage(getApplication(), options);
+
+        Toast.makeText(this, "Reset configuration", Toast.LENGTH_LONG).show();
     }
 
 
