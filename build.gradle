@@ -87,7 +87,6 @@ dependencies {
     implementation('com.android.support:recyclerview-v7:28.0.0')
     implementation('com.google.code.gson:gson:2.8.2')
     implementation project(':sdk')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true;
     }
