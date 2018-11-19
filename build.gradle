@@ -92,10 +92,10 @@ dependencies {
     }
     // implementation 'com.google.firebase:firebase-core:16.0.4'
     // apply plugin: 'com.google.gms.google-services'
-    implementation('com.google.firebase:firebase-messaging:17.3.4')
-            {
-                exclude group: 'com.android.support'
-            }
+//    implementation('com.google.firebase:firebase-messaging:17.3.4')
+//            {
+//                exclude group: 'com.android.support'
+//            }
 
     //debugImplementation 'com.sq-uareup.leakcanary:leakcanary-android:1.5.4'
   //  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'

@@ -36,9 +36,9 @@ import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.inapp.model.InAppStatistics;
 //import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+//import com.google.android.gms.tasks.OnSuccessListener;
+//import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -108,14 +108,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
         textView = (TextView) findViewById(R.id.textView2);
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String deviceToken = instanceIdResult.getToken();
-                textView.setText(deviceToken);
-                Log.d("token fcm", deviceToken);
-            }
-        });
+//        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+//            @Override
+//            public void onSuccess(InstanceIdResult instanceIdResult) {
+//                String deviceToken = instanceIdResult.getToken();
+//                textView.setText(deviceToken);
+//                Log.d("token fcm", deviceToken);
+//            }
+//        });
 
         //  textView.setText(FirebaseInstanceId.getInstance().getToken());
         InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
