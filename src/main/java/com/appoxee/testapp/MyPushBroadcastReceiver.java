@@ -30,4 +30,11 @@ public  class MyPushBroadcastReceiver extends PushDataReceiver {
     }
 
 
+    @Override
+    public void onSilentPush(PushData pushData) {
+        Log.d("APX", "Push Silent " + pushData);
+        super.onPushReceived(pushData);
+    }
+
+
 }
