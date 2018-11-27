@@ -14,7 +14,7 @@ public  class MyPushBroadcastReceiver extends PushDataReceiver {
     @Override
     public void onPushReceived(PushData pushData) {
         Log.d("APX", "Push received " + pushData);
-    //    super.onPushReceived(pushData);
+        super.onPushReceived(pushData);
     }
 
     @Override
