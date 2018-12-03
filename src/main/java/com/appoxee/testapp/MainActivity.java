@@ -34,7 +34,6 @@ import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
-import com.appoxee.internal.inapp.model.InAppStatistics;
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.android.gms.tasks.OnSuccessListener;
 //import com.google.firebase.iid.FirebaseInstanceId;
@@ -416,6 +415,53 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 backupConfiguration();
             }
         });
+
+        findViewById(R.id.btn_get_device_registration_state).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String state = appoxee.getDeviceRegistrationState();
+                createBuilder("Device registration state", "Current state: " + state);
+            }
+        });
+
+//        findViewById(R.id.switch_set_device_registration_state).setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                if (set_alias.getText().length() == 0) {
+//                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    appoxee.setAlias(String.valueOf(set_alias.getText().toString()));
+//                    createBuilder("New alias", "Added alias: " + set_alias.getText());
+//                    set_alias.setText("");
+//                }
+//            }
+//        });
+//
+
+        Switch deviceRegistrationState = findViewById(R.id.switch_set_device_registration_state);
+        deviceRegistrationState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    createBuilder("Current state: ", "true");
+                }
+                else{
+                    createBuilder("Current state: ", "false");
+                }
+
+                    Appoxee.instance().setDeviceRegistrationState(isChecked);
+
+            }
+        });
+
+
+//
+//        if (appoxee.isDeviceRegistered()){
+//            deviceRegistrationState.setChecked(true);
+//        } else {
+//            deviceRegistrationState.setChecked(false);
+//        }
     }
 
     private void backupConfiguration() {
