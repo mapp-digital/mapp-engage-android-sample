@@ -5,6 +5,7 @@
 
 package com.appoxee.testapp;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -96,11 +97,23 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions.appID = appId;
         appoxeeOptions.tenantID = tenantId;
 
-        Appoxee.engage(getApplication(), appoxeeOptions);
 
+        Appoxee.instance().setDeviceRegistrationState(false);
+
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Appoxee.engage(getApplication(), appoxeeOptions);
+
+            }
+        }, 1000);
         showMessage();
 
         deleteField();
+
+
 
     }
 

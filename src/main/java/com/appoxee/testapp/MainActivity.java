@@ -57,6 +57,7 @@ import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private Switch pushEnabledSwitch;
+    private  Switch deviceRegistrationState;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
@@ -424,44 +425,17 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-//        findViewById(R.id.switch_set_device_registration_state).setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                if (set_alias.getText().length() == 0) {
-//                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    appoxee.setAlias(String.valueOf(set_alias.getText().toString()));
-//                    createBuilder("New alias", "Added alias: " + set_alias.getText());
-//                    set_alias.setText("");
-//                }
-//            }
-//        });
-//
-
-        Switch deviceRegistrationState = findViewById(R.id.switch_set_device_registration_state);
+        deviceRegistrationState = findViewById(R.id.switch_set_device_registration_state);
         deviceRegistrationState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    createBuilder("Current state: ", "true");
-                }
-                else{
-                    createBuilder("Current state: ", "false");
-                }
-
-                    Appoxee.instance().setDeviceRegistrationState(isChecked);
+                 Appoxee.instance().setDeviceRegistrationState(isChecked);
 
             }
         });
 
 
-//
-//        if (appoxee.isDeviceRegistered()){
-//            deviceRegistrationState.setChecked(true);
-//        } else {
-//            deviceRegistrationState.setChecked(false);
-//        }
+
     }
 
     private void backupConfiguration() {
@@ -491,6 +465,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+               // deviceRegistrationState.setChecked(appoxee.isDeviceRegistered());
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }
