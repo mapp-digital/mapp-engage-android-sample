@@ -35,6 +35,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     private String appIdConf = BuildConfig.APP_ID;
     private String tenantIdConf = BuildConfig.TENANT_ID;
 
+    private boolean isLocked = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,21 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetCepUrl = findViewById(R.id.etxt_set_cep_url);
         textSetAppId = findViewById(R.id.etxt_set_app_id);
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
+
+        textSetGoogleProjectId.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(isLocked){
+                    if (v.isFocused()) {
+                        v.setEnabled(false);
+                        Toast.makeText(ConfigurationMappOptionsActivity.this, "This field can’t be changed", Toast.LENGTH_LONG).show();
+                    } else {
+                        v.setEnabled(true);
+                    }
+                }
+
+            }
+        });
         setConfiguration();
 
         //hidden keyboard
@@ -97,24 +114,17 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions.appID = appId;
         appoxeeOptions.tenantID = tenantId;
 
-
         Appoxee.instance().setDeviceRegistrationState(false);
-
-
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Appoxee.engage(getApplication(), appoxeeOptions);
-
             }
         }, 1000);
+
         showMessage();
-
         deleteField();
-
-
-
     }
 
     public void refreshConfiguration(View view) {
@@ -142,7 +152,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     public void getConfiguration(View view) {
         setConfiguration();
-
     }
 
     private void setConfiguration() {

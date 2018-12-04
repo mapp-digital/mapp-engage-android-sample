@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -416,26 +417,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 backupConfiguration();
             }
         });
-
-        findViewById(R.id.btn_get_device_registration_state).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String state = appoxee.getDeviceRegistrationState();
-                createBuilder("Device registration state", "Current state: " + state);
-            }
-        });
-
-        deviceRegistrationState = findViewById(R.id.switch_set_device_registration_state);
-        deviceRegistrationState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                 Appoxee.instance().setDeviceRegistrationState(isChecked);
-
-            }
-        });
-
-
-
     }
 
     private void backupConfiguration() {
@@ -451,7 +432,15 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         options.appID = BuildConfig.APP_ID;
         options.tenantID = BuildConfig.TENANT_ID;
 
-        Appoxee.engage(getApplication(), options);
+        Appoxee.instance().setDeviceRegistrationState(false);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Appoxee.engage(getApplication(), options);
+            }
+        }, 1000);
+
 
         Toast.makeText(this, "Reset configuration", Toast.LENGTH_LONG).show();
     }
@@ -465,7 +454,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
-               // deviceRegistrationState.setChecked(appoxee.isDeviceRegistered());
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }

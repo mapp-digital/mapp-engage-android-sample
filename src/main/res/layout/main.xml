@@ -20,20 +20,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/configuration_mapp_options" />
 
-
-            <Switch
-                android:id="@+id/switch_set_device_registration_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Device registration state"
-                android:checked="true"/>
-
-            <Button
-                android:id="@+id/btn_get_device_registration_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get device registration state" />
-
             <Button
                 android:id="@+id/buttonDeviceInfo"
                 android:layout_width="match_parent"
