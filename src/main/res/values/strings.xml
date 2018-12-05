@@ -52,4 +52,23 @@
         <item>Screen orientation reverse portrait</item>
         <item>Screen orientation reverse landscape</item>
     </string-array>
+
+    <string-array name="event_array">
+        <item>app_open</item>
+        <item>app_feedback</item>
+        <item>app_discount</item>
+        <item>app_promo</item>
+        <item>app_welcome</item>
+        <item>add_to_cart</item>
+        <item>booked_a_table</item>
+        <item>favourite_dish_picked</item>
+        <item>favourite_dish_picked</item>
+        <item>opens_the_sound_bar_production</item>
+        <item>open_message_center</item>
+        <item>open_push_notifications_list</item>
+        <item>open_shoping_cart</item>
+        <item>paid_via_the_app</item>
+        <item>profile_updated</item>
+    </string-array>
+
 </resources>

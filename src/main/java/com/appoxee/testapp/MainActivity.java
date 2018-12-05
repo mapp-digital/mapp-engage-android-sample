@@ -17,11 +17,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +45,7 @@ import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 //import com.google.android.gms.tasks.OnSuccessListener;
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.firebase.iid.InstanceIdResult;
+import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -54,6 +61,7 @@ import static com.appoxee.testapp.Constants.KEY_CEP_URL;
 import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
+import static com.appoxee.testapp.Util.*;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
@@ -71,6 +79,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private EditText remove_attribute;
     TextView textView;
     private AppoxeeOptions options;
+    private Spinner spinner_events;
+    private boolean isInitSpinner = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +94,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         set_attribute = findViewById(R.id.etxt_set_attribute);
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
+        spinner_events = findViewById(R.id.spinner_events);
         init();
         hideKeyboard();
 
@@ -417,7 +428,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 backupConfiguration();
             }
         });
+
+        initSpinnerEvents();
     }
+
 
     private void backupConfiguration() {
         Prefs.putString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
@@ -584,5 +598,58 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     public void removeTag(String tag) {
         appoxee.removeTag(tag);
     }
+
+    private void initSpinnerEvents() {
+        spinner_events.setPrompt("Choose one option");
+
+        String[] eventsList = getResources().getStringArray(R.array.event_array);
+        ArrayList<String>  eventsArrayList = new ArrayList<>();
+
+        eventsArrayList.add("");
+        for (String item : eventsList){
+            String s = capitalize(item);
+            eventsArrayList.add(s);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventsArrayList){
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent)
+        {
+            View v = null;
+            if (position == 0) {
+                TextView tv = new TextView(getContext());
+                tv.setHeight(0);
+                tv.setVisibility(View.GONE);
+                v = tv;
+            } else {
+                v = super.getDropDownView(position, null, parent);
+            }
+
+            parent.setVerticalScrollBarEnabled(false);
+            return v;
+        }
+        };
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_events.setAdapter(adapter);
+
+        spinner_events.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (isInitSpinner){
+                    Toast.makeText(MainActivity.this, eventsList[position - 1], Toast.LENGTH_LONG).show();
+                   Appoxee.instance().triggerDMCCallInApp(MainActivity.this, eventsList[position - 1]);
+                } else{
+                    isInitSpinner = true;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+    }
+
 }
 
