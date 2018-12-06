@@ -1,9 +1,8 @@
 package com.appoxee.testapp;
 
-public class Util {
+class Util {
 
-
-    public static String capitalize(String inputWord){
+    static String capitalize(String inputWord) {
         String[] words = inputWord.toLowerCase().split("_");
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < words.length; i++) {
