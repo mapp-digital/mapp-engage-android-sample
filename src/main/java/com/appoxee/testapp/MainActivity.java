@@ -45,7 +45,7 @@ import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 //import com.google.android.gms.tasks.OnSuccessListener;
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.firebase.iid.InstanceIdResult;
-import com.bumptech.glide.load.resource.bitmap.CenterInside;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -602,7 +602,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private void initSpinnerEvents() {
         spinner_events.setPrompt("Choose one option");
 
-        String[] eventsList = getResources().getStringArray(R.array.event_array);
+        final String[] eventsList = getResources().getStringArray(R.array.event_array);
         ArrayList<String>  eventsArrayList = new ArrayList<>();
 
         eventsArrayList.add("");
