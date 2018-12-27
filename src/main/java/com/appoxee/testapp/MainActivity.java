@@ -66,7 +66,7 @@ import static com.appoxee.testapp.Util.*;
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private Switch pushEnabledSwitch;
-    private  Switch deviceRegistrationState;
+    private Switch deviceRegistrationState;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
     private LinearLayout mMainLayout;
     private TextView mTextView;
@@ -97,10 +97,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         spinner_events = findViewById(R.id.spinner_events);
         init();
         hideKeyboard();
+        Appoxee.handleRichPush(this, getIntent());
 
     }
 
-    private void hideKeyboard(){
+    private void hideKeyboard() {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
@@ -603,31 +604,30 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         spinner_events.setPrompt("Choose one option");
 
         final String[] eventsList = getResources().getStringArray(R.array.event_array);
-        ArrayList<String>  eventsArrayList = new ArrayList<>();
+        ArrayList<String> eventsArrayList = new ArrayList<>();
 
         eventsArrayList.add("");
-        for (String item : eventsList){
+        for (String item : eventsList) {
             String s = capitalize(item);
             eventsArrayList.add(s);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventsArrayList){
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent)
-        {
-            View v = null;
-            if (position == 0) {
-                TextView tv = new TextView(getContext());
-                tv.setHeight(0);
-                tv.setVisibility(View.GONE);
-                v = tv;
-            } else {
-                v = super.getDropDownView(position, null, parent);
-            }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventsArrayList) {
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = null;
+                if (position == 0) {
+                    TextView tv = new TextView(getContext());
+                    tv.setHeight(0);
+                    tv.setVisibility(View.GONE);
+                    v = tv;
+                } else {
+                    v = super.getDropDownView(position, null, parent);
+                }
 
-            parent.setVerticalScrollBarEnabled(false);
-            return v;
-        }
+                parent.setVerticalScrollBarEnabled(false);
+                return v;
+            }
         };
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -637,13 +637,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (isInitSpinner){
+                if (isInitSpinner) {
                     Toast.makeText(MainActivity.this, eventsList[position - 1], Toast.LENGTH_LONG).show();
-                   Appoxee.instance().triggerDMCCallInApp(MainActivity.this, eventsList[position - 1]);
-                } else{
+                    Appoxee.instance().triggerDMCCallInApp(MainActivity.this, eventsList[position - 1]);
+                } else {
                     isInitSpinner = true;
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }

@@ -21,7 +21,9 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <data android:scheme="apx" />
+                <data android:host="deeplink" />
+                <action android:name="com.mapp.RICH_PUSH" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
