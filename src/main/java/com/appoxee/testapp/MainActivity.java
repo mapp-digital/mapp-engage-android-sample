@@ -107,6 +107,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         );
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Appoxee.handleRichPush(this,intent);
+    }
+
     private void init() {
         Appoxee.instance().addInitListener(this);
 
