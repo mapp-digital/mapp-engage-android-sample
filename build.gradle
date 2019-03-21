@@ -44,7 +44,7 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
+            //signingConfig signingConfigs.debug
             buildConfigField "String", "SDK_KEY", "\"5c59a56fd39ce9.45048743\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
