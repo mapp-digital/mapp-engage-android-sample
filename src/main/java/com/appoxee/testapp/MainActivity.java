@@ -269,6 +269,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("InApp", "Clicked button");
                 Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
             }
         });
@@ -440,6 +441,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
 
         initSpinnerEvents();
+
+        findViewById(R.id.dmcCallNativeInApp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Appoxee.instance().triggerDMCCallNativeInApp(MainActivity.this, "app_open");
+            }
+        });
     }
 
 

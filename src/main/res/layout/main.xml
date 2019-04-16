@@ -79,12 +79,18 @@
                 android:checked="false"
                 android:text="@string/push_enabled" />
 
+
+            <Button
+                android:id="@+id/dmcCallNativeInApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/get_native_inapp" />
+
             <Button
                 android:id="@+id/dmcCallInApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/fullscreen_app_open" />
-
 
             <Button
                 android:id="@+id/inappModalType"
