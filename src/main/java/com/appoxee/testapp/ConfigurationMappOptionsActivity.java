@@ -1,8 +1,3 @@
-/*
- * Created by Aleksandra Vujadinovic on 07/11/18 11:36
- * Copyright (c) 2018 MAPP.
- */
-
 package com.appoxee.testapp;
 
 import android.os.Handler;
@@ -15,6 +10,9 @@ import android.widget.Toast;
 
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
+import com.appoxee.testapp.AppoxeeTestApp;
+import com.appoxee.testapp.BuildConfig;
+import com.appoxee.testapp.R;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import static com.appoxee.testapp.Constants.*;
