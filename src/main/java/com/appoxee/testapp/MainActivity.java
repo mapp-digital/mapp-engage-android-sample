@@ -537,12 +537,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void askForGeoPermission() {
+       // TODO add later Manifest.permission.ACCESS_BACKGROUND_LOCATION
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
 
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
                     MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         }
 
