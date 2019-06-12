@@ -1,7 +1,6 @@
 package com.appoxee.testapp;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
@@ -10,14 +9,14 @@ import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
-import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.leakcanary.LeakCanary;
 
-//import com.squareup.leakcanary.LeakCanary;
-
-import io.fabric.sdk.android.Fabric;
-
-import static com.appoxee.testapp.Constants.*;
+import static com.appoxee.testapp.Constants.KEY_APP_ID;
+import static com.appoxee.testapp.Constants.KEY_CEP_URL;
+import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
+import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 
 public class AppoxeeTestApp extends Application {
 
@@ -75,13 +74,13 @@ public class AppoxeeTestApp extends Application {
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
         Log.d("APX", "info (before init finished): " + info);
         Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            // This process is dedicated to LeakCanary for heap analysis.
-//            // You should not init your app in this process.
-//            return;
-//        }
-//        LeakCanary.install(this);
-//        // Normal app init code...
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
     }
 
 

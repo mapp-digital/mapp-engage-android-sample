@@ -443,7 +443,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.dmcCallNativeInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallNativeInApp(MainActivity.this, "app_open");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
             }
         });
     }
