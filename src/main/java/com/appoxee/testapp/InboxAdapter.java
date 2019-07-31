@@ -3,7 +3,7 @@ package com.appoxee.testapp;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appoxee.internal.inapp.model.APXInboxMessage;
-import com.appoxee.internal.inapp.model.InAppMessage;
 
 import java.io.InputStream;
 import java.net.URL;
