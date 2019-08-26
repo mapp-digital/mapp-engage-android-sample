@@ -38,6 +38,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/get_alias" />
 
+            <Button
+                android:id="@+id/get_deviceId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/get_deviceId" />
+
             <EditText
                 android:id="@+id/etxt_set_alias"
                 android:layout_width="match_parent"

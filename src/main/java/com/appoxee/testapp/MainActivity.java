@@ -16,6 +16,8 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -202,6 +204,19 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 createBuilder("", getAlias);
             }
         });
+
+        findViewById(R.id.get_deviceId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              String deviceId = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+              createBuilder("", deviceId);
+              ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+              ClipData clip = ClipData.newPlainText("label", deviceId);
+              clipboard.setPrimaryClip(clip);
+            }
+        });
+
+
 
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
             @Override

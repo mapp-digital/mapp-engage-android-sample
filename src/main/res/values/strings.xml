@@ -44,6 +44,7 @@
     <string name="configuration_mapp_options">Configuration Mapp Options</string>
     <string name="alias_email">test@mapp.com</string>
     <string name="backup_configuration">Backup configuration</string>
+    <string name="get_deviceId">Get Device Id</string>
 
 
     <string-array name="screen_orientation">
