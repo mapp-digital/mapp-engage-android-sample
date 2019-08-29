@@ -9,7 +9,9 @@ import android.util.Log;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
+import com.appoxee.internal.util.SharedPreferenceUtil;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
+import com.appoxee.push.NotificationMode;
 import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -56,6 +58,7 @@ public class AppoxeeTestApp extends Application {
         opt.cepURL = Prefs.getString(KEY_CEP_URL,  BuildConfig.CEP_URL);
         opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
+        opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
@@ -89,5 +92,6 @@ public class AppoxeeTestApp extends Application {
     public AppoxeeOptions getAppoxeeOptions(){
         return opt;
     }
+
 
 }
