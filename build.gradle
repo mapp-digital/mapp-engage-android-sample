@@ -26,7 +26,7 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        applicationId "com.appoxee.example"
+        applicationId "com.kfc.malaysia"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -45,10 +45,10 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5ad39f73e8a2f7.41380801\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
+            buildConfigField "String", "SDK_KEY", "\"5cdc1672b2a2a1.16001477\""
+            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"95178078564\""
             buildConfigField "String", "CEP_URL", "\"https://jamie.h.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"109370\""
+            buildConfigField "String", "APP_ID", "\"109562\""
             buildConfigField "String", "TENANT_ID", "\"60210\""
 
             minifyEnabled true
