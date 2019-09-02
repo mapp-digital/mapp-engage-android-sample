@@ -46,6 +46,7 @@ import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.firebase.iid.InstanceIdResult;
 
+import com.appoxee.push.NotificationMode;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -468,6 +469,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         options.cepURL = BuildConfig.CEP_URL;
         options.appID = BuildConfig.APP_ID;
         options.tenantID = BuildConfig.TENANT_ID;
+        options.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
 
         Appoxee.instance().setDeviceRegistrationState(false);
 
