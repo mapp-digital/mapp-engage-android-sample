@@ -10,7 +10,7 @@
 //    @Override
 //    public void onMessageReceived(RemoteMessage remoteMessage) {
 //        super.onMessageReceived(remoteMessage);
-//        //TODO handle push data if you went
+//        //TODO process push data if you want
 //        PushData pushData = getData(remoteMessage);
 //    }
 //}

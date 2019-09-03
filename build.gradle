@@ -51,7 +51,7 @@ android {
             buildConfigField "String", "APP_ID", "\"109370\""
             buildConfigField "String", "TENANT_ID", "\"60210\""
 
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
