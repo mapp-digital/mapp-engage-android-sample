@@ -245,6 +245,17 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 Toast.makeText(MainActivity.this, "New activity opened", Toast.LENGTH_SHORT).show();
             }
         });
+
+        findViewById(R.id.maps_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+                Toast.makeText(MainActivity.this, "MapsActivity activity opened", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -496,7 +507,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
+                //Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
