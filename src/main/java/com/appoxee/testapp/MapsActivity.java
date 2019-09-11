@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Color;
 import android.icu.text.Transliterator;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.appoxee.internal.geo.Region;
+import com.appoxee.internal.util.SharedPreferenceUtil;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,6 +31,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +41,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -55,9 +60,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
-
+    private boolean isFirst = true;
     private Boolean mRequestingLocationUpdates;
     private String mLastUpdateTime;
+    private List<Region> regionList;
 
 
     private GoogleMap mMap;
@@ -256,13 +262,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng current = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
             if (mMap != null) {
+                if (isFirst) {
+                    mMap.clear();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, 14));
+                    mMap.addMarker(new MarkerOptions().position(current).title("Current location"));
+                    isFirst = false;
+                }
+                else {
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(current).title("Current location"));
 
-                mMap.clear();
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(current));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, 14));
-                mMap.addMarker(new MarkerOptions().position(current).title("Current location"));
-                //mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                        regionList = SharedPreferenceUtil.getInstance(this).getRegionsList();
+                        for (Region region: regionList){
+                            mMap.addCircle(new CircleOptions().center(new LatLng(region.getLat(), region.getLng()))
+                            .radius(region.getRadius())
+                            .strokeColor(Color.BLUE))
+                            .setFillColor(Color.GREEN);
+                        }
+                }
             }
+
         }
     }
 
