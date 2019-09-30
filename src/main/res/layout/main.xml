@@ -67,12 +67,6 @@
                 android:text="@string/_2nd_activity" />
 
             <Button
-                android:id="@+id/maps_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/maps_activity" />
-
-            <Button
                 android:id="@+id/geo_fencing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

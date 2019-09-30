@@ -47,15 +47,13 @@
     <string name="get_deviceId">Get Device Id</string>
 
 
-    <string name="title_activity_maps">Map</string>
-    <string name="maps_activity">geofencing map</string>
-
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>
         <item>Screen orientation landscape</item>
         <item>Screen orientation reverse portrait</item>
         <item>Screen orientation reverse landscape</item>
     </string-array>
+
     <string-array name="event_array">
         <item>app_open</item>
         <item>app_feedback</item>
