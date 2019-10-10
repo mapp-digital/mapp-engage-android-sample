@@ -59,7 +59,7 @@ public class AppoxeeTestApp extends Application {
         opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
         opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
-        opt.server = AppoxeeOptions.Server.TEST;
+        opt.server = AppoxeeOptions.Server.L3;
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
