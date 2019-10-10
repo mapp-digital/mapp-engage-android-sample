@@ -22,13 +22,13 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "com.appoxee.example"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -45,10 +45,10 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5c59a56fd39ce9.45048743\""
+            buildConfigField "String", "SDK_KEY", "\"5d68dd9cd765e2.46257934\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"263176\""
+            buildConfigField "String", "APP_ID", "\"263206\""
             buildConfigField "String", "TENANT_ID", "\"55\""
 
             minifyEnabled false
@@ -97,7 +97,9 @@ dependencies {
     implementation('com.google.firebase:firebase-messaging:20.0.0')
 
     implementation 'com.google.firebase:firebase-analytics:17.1.0'
+    implementation('com.google.android.gms:play-services-location:16.0.0')
 
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -105,7 +107,7 @@ dependencies {
 
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation ('com.pixplicity.easyprefs:library:1.9.0')
+    implementation('com.pixplicity.easyprefs:library:1.9.0')
 
 
 }

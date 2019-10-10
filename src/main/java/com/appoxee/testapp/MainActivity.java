@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
@@ -72,6 +73,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private Switch pushEnabledSwitch;
     private Switch deviceRegistrationState;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION = 1 << 4;
     private LinearLayout mMainLayout;
     private TextView mTextView;
     private Appoxee appoxee;
@@ -85,6 +87,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private AppoxeeOptions options;
     private Spinner spinner_events;
     private boolean isInitSpinner = false;
+    private boolean runningQOrLater = Build.VERSION.SDK_INT >= 29;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -540,28 +543,59 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
-        if (geoPermissionNotGranted()) {
+        if (isGeoPermissionGranted()) {
             Appoxee.instance().startGeoFencing();
         } else {
-            askForGeoPermission();
+            if(runningQOrLater) {
+                askForGeoPermissionWithBackgroundLocation();
+            }
+            else {
+                askForGeoPermission();
+            }
         }
     }
 
-    private boolean geoPermissionNotGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    private boolean isGeoPermissionGranted() {
+        if (runningQOrLater) {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED ;
+        }
+        else {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        }
     }
 
     private void askForGeoPermission() {
-       // TODO add later Manifest.permission.ACCESS_BACKGROUND_LOCATION
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-        } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
                     MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-        }
+    }
 
+    private void askForGeoPermissionWithBackgroundLocation() {
+        boolean permissionAccessFineLocationApproved =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+
+        if (permissionAccessFineLocationApproved) {
+            boolean backgroundLocationPermissionApproved =
+                    ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED;
+
+            if (backgroundLocationPermissionApproved) {
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[] {
+                                Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                        MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    },
+                    MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION);
+        }
     }
 
     @Override
@@ -570,11 +604,37 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Appoxee.instance().startGeoFencing();
-            } else {
-
-                Log.w("MianActivity", "Geo permission not granted");
+                Log.w("MainActivity", "startGeoFencing()");
             }
-        } else {
+            else {
+                Log.w("MainActivity", "Geo permission not granted");
+            }
+        }
+        else if (MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION == requestCode){
+            if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                Appoxee.instance().startGeoFencing();
+                Log.w("MainActivity", "startGeoFencing()with background");
+            }
+            else if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
+                    && grantResults[0] == PackageManager.PERMISSION_DENIED){
+                Appoxee.instance().startGeoFencing();
+                Log.w("MainActivity", "startGeoFencing()with foreground");
+            }
+            else if (grantResults.length > 0 && permissions.length == 2 && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                Appoxee.instance().startGeoFencing();
+                Log.w("MainActivity", "startGeoFencing() with background");
+            }
+            else if (grantResults.length > 0 && permissions.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_DENIED){
+                Appoxee.instance().startGeoFencing();
+                Log.w("MainActivity", "startGeoFencing() with foreground");
+            }
+            else {
+                Log.w("MainActivity", "Geo permission not granted");
+            }
+        }
+        else {
             Log.w("Main Activity", "some other permission requested? (not geo)");
         }
     }
