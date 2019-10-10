@@ -55,10 +55,11 @@ public class AppoxeeTestApp extends Application {
         opt = new AppoxeeOptions();
         opt.sdkKey = Prefs.getString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
         opt.googleProjectId = Prefs.getString(KEY_GOOGLE_PROJECT_ID, BuildConfig.GOOGLE_PROJECT_ID);
-        opt.cepURL = Prefs.getString(KEY_CEP_URL,  BuildConfig.CEP_URL);
+        opt.cepURL = Prefs.getString(KEY_CEP_URL, BuildConfig.CEP_URL);
         opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
         opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
+        opt.server = AppoxeeOptions.Server.TEST;
 
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
@@ -88,8 +89,7 @@ public class AppoxeeTestApp extends Application {
     }
 
 
-
-    public AppoxeeOptions getAppoxeeOptions(){
+    public AppoxeeOptions getAppoxeeOptions() {
         return opt;
     }
 
