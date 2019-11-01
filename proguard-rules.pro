@@ -56,6 +56,10 @@
 -keep class android.support.v4.** { *; }
 -keep interface android.support.v4.** { *; }
 
+# for android.gms.location
+-keep class com.google.android.gms.location.** { *; }
+
+
 -keepclassmembers class * implements android.os.Parcelable {
     static android.os.Parcelable$Creator CREATOR;
 }
