@@ -109,6 +109,7 @@
                 android:id="@+id/server_options"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
                 tools:layout_editor_absoluteX="1dp"
                 tools:layout_editor_absoluteY="57dp" />
             </com.google.android.material.textfield.TextInputLayout>

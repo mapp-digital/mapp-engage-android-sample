@@ -50,6 +50,7 @@ android {
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
             buildConfigField "String", "APP_ID", "\"263241\""
             buildConfigField "String", "TENANT_ID", "\"33\""
+            buildConfigField "int", "SERVER_INDEX", "2"
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
