@@ -45,7 +45,16 @@
     <string name="alias_email">test@mapp.com</string>
     <string name="backup_configuration">Backup configuration</string>
     <string name="get_deviceId">Get Device Id</string>
+    <string name="choose_server">Choose Server</string>
 
+    <string-array name="choose_server_options">
+        <item>Choose Server Options</item>
+        <item>L3</item>
+        <item>EMC</item>
+        <item>EMC_US</item>
+        <item>CROC</item>
+        <item>TEST</item>
+    </string-array>
 
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>

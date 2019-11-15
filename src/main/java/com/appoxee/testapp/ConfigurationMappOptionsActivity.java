@@ -10,7 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
@@ -28,13 +31,14 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     private EditText textSetCepUrl;
     private EditText textSetAppId;
     private EditText textSetTenantId;
+    private Spinner chooseServer;
 
     private String sdkKeyConf = BuildConfig.SDK_KEY;
     private String googleProjectIdConf = BuildConfig.GOOGLE_PROJECT_ID;
     private String cepUrlConf = BuildConfig.CEP_URL;
     private String appIdConf = BuildConfig.APP_ID;
     private String tenantIdConf = BuildConfig.TENANT_ID;
-
+    private String server;
     private boolean isLocked = true;
 
 
@@ -50,6 +54,14 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetCepUrl = findViewById(R.id.etxt_set_cep_url);
         textSetAppId = findViewById(R.id.etxt_set_app_id);
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
+        server = appoxeeOptions.server.toString();
+
+        chooseServer = findViewById(R.id.server_options);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.choose_server_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        chooseServer.setAdapter(adapter);
+        chooseServer.setOnItemSelectedListener(onItemSelectedListener);
 
         textSetGoogleProjectId.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -77,14 +89,13 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         );
     }
 
-
-
     public void setConfiguration(View view) {
         String sdkKey = textSetSdkKey.getText().toString();
         String googleProjectId = textSetGoogleProjectId.getText().toString();
         String cepUrl = textSetCepUrl.getText().toString();
         String appId = textSetAppId.getText().toString();
         String tenantId = textSetTenantId.getText().toString();
+        String server = this.server;
 
         if (sdkKey.equals("")) {
             sdkKey = sdkKeyConf;
@@ -102,6 +113,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
             tenantId = tenantIdConf;
         }
 
+
+
         Prefs.putString(KEY_SDK_KEY, sdkKey);
         Prefs.putString(KEY_GOOGLE_PROJECT_ID, googleProjectId);
         Prefs.putString(KEY_CEP_URL, cepUrl);
@@ -113,6 +126,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions.cepURL = cepUrl;
         appoxeeOptions.appID = appId;
         appoxeeOptions.tenantID = tenantId;
+        setServer(true);
 
         Appoxee.instance().setDeviceRegistrationState(false);
 
@@ -160,6 +174,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetCepUrl.setText(Prefs.getString(KEY_CEP_URL, cepUrlConf));
         textSetAppId.setText(Prefs.getString(KEY_APP_ID, appIdConf));
         textSetTenantId.setText(Prefs.getString(KEY_TENANT_ID, tenantIdConf));
+        server = appoxeeOptions.server.toString();
+        setServer(false);
     }
 
     private void deleteField() {
@@ -169,8 +185,68 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetCepUrl.setText("");
         textSetAppId.setText("");
         textSetTenantId.setText("");
+        chooseServer.setSelection(0);
+        server = appoxeeOptions.server.toString();
 
     }
+
+    private void setServer(boolean shouldWriteAppoxeeOtionsFlag) {
+        if (server.equals("L3")) {
+            if (shouldWriteAppoxeeOtionsFlag)
+                appoxeeOptions.server = AppoxeeOptions.Server.L3;
+            chooseServer.setSelection(1);
+
+        }
+        if (server.equals("EMC")){
+            if(shouldWriteAppoxeeOtionsFlag)
+                appoxeeOptions.server = AppoxeeOptions.Server.EMC;
+            chooseServer.setSelection(2);
+
+        }
+        if (server.equals("EMC_US")){
+            if(shouldWriteAppoxeeOtionsFlag)
+                appoxeeOptions.server = AppoxeeOptions.Server.EMC_US;
+            chooseServer.setSelection(3);
+
+        }
+        if (server.equals("CROC")){
+            if(shouldWriteAppoxeeOtionsFlag)
+                appoxeeOptions.server = AppoxeeOptions.Server.CROC;
+            chooseServer.setSelection(4);
+
+        }
+        if (server.equals("TEST")){
+            if (shouldWriteAppoxeeOtionsFlag)
+                appoxeeOptions.server = AppoxeeOptions.Server.TEST;
+            chooseServer.setSelection(5);
+        }
+    }
+
+    AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            if (parent.getItemAtPosition(position).equals("L3")){
+                server = "L3";
+            }
+            if (parent.getItemAtPosition(position).equals("EMC")){
+                server = "EMC";
+            }
+            if (parent.getItemAtPosition(position).equals("EMC_US")){
+                server = "EMC_US";
+            }
+            if (parent.getItemAtPosition(position).equals("CROC")){
+                server = "CROC";
+            }
+            if (parent.getItemAtPosition(position).equals("TEST")){
+                server = "TEST";
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
 
     private void showMessage() {
 
@@ -182,7 +258,9 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
                 "\n" +
                 "appID: " + appoxeeOptions.appID +
                 "\n" +
-                "tenantID: " + appoxeeOptions.tenantID;
+                "tenantID: " + appoxeeOptions.tenantID +
+                "\n" +
+                "server: " + appoxeeOptions.server.toString();
 
         Toast.makeText(ConfigurationMappOptionsActivity.this, str, Toast.LENGTH_LONG).show();
 
