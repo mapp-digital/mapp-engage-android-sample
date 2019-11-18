@@ -56,8 +56,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
 
         chooseServer = findViewById(R.id.server_options);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.choose_server_options, android.R.layout.simple_spinner_item);
+        ArrayAdapter<Enum> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, AppoxeeOptions.Server.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         chooseServer.setAdapter(adapter);
         chooseServer.setPrompt("Choose Server Option");

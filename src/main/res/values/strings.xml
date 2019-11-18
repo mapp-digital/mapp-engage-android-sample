@@ -47,14 +47,6 @@
     <string name="get_deviceId">Get Device Id</string>
     <string name="choose_server">Choose Server Option</string>
 
-    <string-array name="choose_server_options">
-        <item>L3</item>
-        <item>EMC</item>
-        <item>EMC_US</item>
-        <item>CROC</item>
-        <item>TEST</item>
-    </string-array>
-
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>
         <item>Screen orientation landscape</item>
