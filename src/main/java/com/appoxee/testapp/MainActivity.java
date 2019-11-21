@@ -33,6 +33,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appoxee.AliasErrorCallback;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
@@ -178,20 +179,20 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sp = getSharedPreferences("test", MODE_PRIVATE);
-                int aliasCounter = sp.getInt("aliasCounter", 0);
-                aliasCounter++;
-                sp.edit().putInt("aliasCounter", aliasCounter).apply();
-                DeviceInfo info = Appoxee.instance().getDeviceInfo();
-                Log.d("APX", "info: (click)" + new Gson().toJson(info));
-                Appoxee appoxee = Appoxee.instance();
-                appoxee.setAlias(getString(R.string.alias_email));
-                appoxee.addTag("tag" + aliasCounter);
-                appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
-                appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
-                appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
-
-                createBuilder("", appoxee.getAlias());
+//                SharedPreferences sp = getSharedPreferences("test", MODE_PRIVATE);
+//                int aliasCounter = sp.getInt("aliasCounter", 0);
+//                aliasCounter++;
+//                sp.edit().putInt("aliasCounter", aliasCounter).apply();
+//                DeviceInfo info = Appoxee.instance().getDeviceInfo();
+//                Log.d("APX", "info: (click)" + new Gson().toJson(info));
+//                Appoxee appoxee = Appoxee.instance();
+////                appoxee.setAlias(getString(R.string.alias_email));
+//                appoxee.addTag("tag" + aliasCounter);
+//                appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
+//                appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
+//                appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
+//
+//                createBuilder("", appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
             }
         });
@@ -229,7 +230,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 if (set_alias.getText().length() == 0) {
                     Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
                 } else {
-                    appoxee.setAlias(String.valueOf(set_alias.getText().toString()));
+                    appoxee.setAliasWithCallback(String.valueOf(set_alias.getText().toString()), new AliasErrorCallback.onAliasErrorReceived() {
+                        @Override
+                        public void onAliasErrorEvent(String eventName, String errorMessage) {
+                            set_alias.setText(errorMessage);
+                        }
+                    });
                     createBuilder("New alias", "Added alias: " + set_alias.getText());
                     set_alias.setText("");
                 }
