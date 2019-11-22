@@ -1,7 +1,6 @@
 package com.appoxee.testapp;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.util.Log;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
-import com.appoxee.internal.util.SharedPreferenceUtil;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.appoxee.push.NotificationMode;
 import com.crashlytics.android.Crashlytics;
@@ -60,7 +58,6 @@ public class AppoxeeTestApp extends Application {
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
         opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
         opt.server = AppoxeeOptions.Server.values()[Prefs.getInt(KEY_SERVER_INDEX, BuildConfig.SERVER_INDEX)];
-
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
                 .setIconResourceId(R.id.appoxee_default_push_icon)
