@@ -3,21 +3,16 @@ package com.appoxee.testapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -33,21 +28,19 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.appoxee.AliasErrorCallback;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
-import com.appoxee.DeviceInfo;
 import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
-import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
+import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
-//import com.google.firebase.iid.FirebaseInstanceId;
-//import com.google.android.gms.tasks.OnSuccessListener;
-//import com.google.firebase.iid.FirebaseInstanceId;
-//import com.google.firebase.iid.InstanceIdResult;
-
 import com.appoxee.push.NotificationMode;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -57,7 +50,6 @@ import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -67,7 +59,12 @@ import static com.appoxee.testapp.Constants.KEY_CEP_URL;
 import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
-import static com.appoxee.testapp.Util.*;
+import static com.appoxee.testapp.Util.capitalize;
+
+//import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.android.gms.tasks.OnSuccessListener;
+//import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
@@ -207,6 +204,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
                 String getAlias = getAlias();
                 createBuilder("", getAlias);
+
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label", getAlias);
+                clipboard.setPrimaryClip(clip);
             }
         });
 
