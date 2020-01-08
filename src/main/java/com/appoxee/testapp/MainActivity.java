@@ -278,14 +278,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 Appoxee.instance().getDeviceInfoDMC();
-                String s = "Device model: " +
-                        appoxee.getDeviceInfo().deviceModel +
-                        "\n" +
-                        "App version: " +
-                        appoxee.getDeviceInfo().appVersion +
-                        "\n" +
-                        "OS version: " +
-                        appoxee.getDeviceInfo().osVersion;
+                String s = appoxee.getDeviceInfo().toString();
                 createBuilder("", s);
             }
         });
