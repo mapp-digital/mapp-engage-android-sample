@@ -45,12 +45,12 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5daeb93715c808.17163526\""
+            buildConfigField "String", "SDK_KEY", "\"5e46b10f30f599.19486760\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.h.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"106526\""
-            buildConfigField "String", "TENANT_ID", "\"17037\""
-            buildConfigField "int", "SERVER_INDEX", "1"
+            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
+            buildConfigField "String", "APP_ID", "\"263496\""
+            buildConfigField "String", "TENANT_ID", "\"33\""
+            buildConfigField "int", "SERVER_INDEX", "4"
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -109,7 +109,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.0.0'
     implementation('com.pixplicity.easyprefs:library:1.9.0')
-
-
 }
 apply plugin: 'com.google.gms.google-services'
