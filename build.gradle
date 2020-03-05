@@ -45,12 +45,12 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5e32e6da7b3e06.68334252\""
+            buildConfigField "String", "SDK_KEY", "\"170aaab4e4c5e6.60695106\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"263426\""
-            buildConfigField "String", "TENANT_ID", "\"33\""
-            buildConfigField "int", "SERVER_INDEX", "4"
+            buildConfigField "String", "APP_ID", "\"263770\""
+            buildConfigField "String", "TENANT_ID", "\"55\""
+            buildConfigField "int", "SERVER_INDEX", "5"
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
