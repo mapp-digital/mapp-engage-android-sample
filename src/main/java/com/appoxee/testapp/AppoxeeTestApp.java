@@ -10,12 +10,9 @@ import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.appoxee.push.NotificationMode;
-import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
 
 //import com.squareup.leakcanary.LeakCanary;
-
-import io.fabric.sdk.android.Fabric;
 
 import static com.appoxee.testapp.Constants.*;
 
@@ -40,13 +37,6 @@ public class AppoxeeTestApp extends Application {
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
-
-        final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)
-                .build();
-        Fabric.with(fabric);
-
 
         long start = System.currentTimeMillis();
 
