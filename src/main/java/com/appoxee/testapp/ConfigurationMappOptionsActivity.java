@@ -37,7 +37,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     private String cepUrlConf = BuildConfig.CEP_URL;
     private String appIdConf = BuildConfig.APP_ID;
     private String tenantIdConf = BuildConfig.TENANT_ID;
-    private int serverIndexConf = BuildConfig.SERVER_INDEX;
+    private String serverIndexConf = BuildConfig.SERVER_INDEX;
     private boolean isLocked = true;
 
 
@@ -117,7 +117,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         Prefs.putString(KEY_CEP_URL, cepUrl);
         Prefs.putString(KEY_APP_ID, appId);
         Prefs.putString(KEY_TENANT_ID, tenantId);
-        Prefs.putInt(KEY_SERVER_INDEX, serverIndex);
+        AppoxeeOptions.Server serverName = AppoxeeOptions.Server.values()[serverIndex];
+        Prefs.putString(KEY_SERVER_INDEX, serverName.name());
 
         appoxeeOptions.sdkKey = sdkKey;
         appoxeeOptions.googleProjectId = googleProjectId;
@@ -146,15 +147,18 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         Prefs.putString(KEY_CEP_URL, cepUrlConf);
         Prefs.putString(KEY_APP_ID, appIdConf);
         Prefs.putString(KEY_TENANT_ID, tenantIdConf);
-        Prefs.putInt(KEY_SERVER_INDEX, serverIndexConf);
+        Prefs.putString(KEY_SERVER_INDEX, serverIndexConf);
 
         appoxeeOptions.sdkKey = sdkKeyConf;
         appoxeeOptions.googleProjectId = googleProjectIdConf;
         appoxeeOptions.cepURL = cepUrlConf;
         appoxeeOptions.appID = appIdConf;
         appoxeeOptions.tenantID = tenantIdConf;
-        appoxeeOptions.server = AppoxeeOptions.Server.values()[serverIndexConf];
+        appoxeeOptions.server = AppoxeeOptions.Server.valueOf(serverIndexConf);
+
         showMessage();
+
+        setConfiguration();
 
     }
 
@@ -173,7 +177,9 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetCepUrl.setText(Prefs.getString(KEY_CEP_URL, cepUrlConf));
         textSetAppId.setText(Prefs.getString(KEY_APP_ID, appIdConf));
         textSetTenantId.setText(Prefs.getString(KEY_TENANT_ID, tenantIdConf));
-        chooseServer.setSelection(Prefs.getInt(KEY_SERVER_INDEX, serverIndexConf));
+
+        int spinner_index = AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SERVER_INDEX, serverIndexConf)).ordinal();
+        chooseServer.setSelection(spinner_index);
     }
 
     private void deleteField() {
