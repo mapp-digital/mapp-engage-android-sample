@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
@@ -26,7 +27,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     private AppoxeeOptions appoxeeOptions;
     private EditText textSetSdkKey;
-    private EditText textSetGoogleProjectId;
+    private TextView textSetGoogleProjectId;
     private EditText textSetCepUrl;
     private EditText textSetAppId;
     private EditText textSetTenantId;
@@ -49,7 +50,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
 
         textSetSdkKey = findViewById(R.id.etxt_set_sdk_key);
-        textSetGoogleProjectId = findViewById(R.id.etxt_set_google_project_id);
+        textSetGoogleProjectId = findViewById(R.id.txt_set_google_project_id);
         textSetCepUrl = findViewById(R.id.etxt_set_cep_url);
         textSetAppId = findViewById(R.id.etxt_set_app_id);
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
@@ -60,20 +61,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         chooseServer.setAdapter(adapter);
         chooseServer.setPrompt("Choose Server Option");
 
-        textSetGoogleProjectId.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(isLocked){
-                    if (v.isFocused()) {
-                        v.setEnabled(false);
-                        Toast.makeText(ConfigurationMappOptionsActivity.this, "This field can’t be changed", Toast.LENGTH_LONG).show();
-                    } else {
-                        v.setEnabled(true);
-                    }
-                }
-
-            }
-        });
         setConfiguration();
 
         //hidden keyboard
@@ -185,7 +172,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     private void deleteField() {
 
         textSetSdkKey.setText("");
-        textSetGoogleProjectId.setText("");
+//        textSetGoogleProjectId.setText("");
         textSetCepUrl.setText("");
         textSetAppId.setText("");
         textSetTenantId.setText("");
