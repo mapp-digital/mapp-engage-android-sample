@@ -35,7 +35,9 @@ import androidx.core.content.ContextCompat;
 import com.appoxee.AliasErrorCallback;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
+import com.appoxee.DeviceInfo;
 import com.appoxee.RequestStatus;
+import com.appoxee.internal.inapp.DeviceInfoDMCService;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
@@ -567,6 +569,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
+        appoxee.getCustomDeviceInfoDMC(DeviceInfoDMCService.ALIAS, DeviceInfoDMCService.UDID_HASHED);
         if (isGeoPermissionGranted()) {
             Appoxee.instance().startGeoFencing();
         } else {
