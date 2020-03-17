@@ -569,7 +569,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
-        appoxee.getCustomDeviceInfoDMC(DeviceInfoDMCService.ALIAS, DeviceInfoDMCService.UDID_HASHED);
+        appoxee.getNewAlias();
         if (isGeoPermissionGranted()) {
             Appoxee.instance().startGeoFencing();
         } else {
