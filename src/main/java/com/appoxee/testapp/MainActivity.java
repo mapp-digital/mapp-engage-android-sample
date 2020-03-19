@@ -36,6 +36,7 @@ import com.appoxee.AliasErrorCallback;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
+import com.appoxee.GetAliasCallback;
 import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.DeviceInfoDMCService;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
@@ -569,7 +570,22 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
-        appoxee.getNewAlias();
+        appoxee.getNewAlias(new GetAliasCallback() {
+            @Override
+            public void onSuccess(String alias) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Alias is: " + alias, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(MainActivity.this, "Alias is: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
         if (isGeoPermissionGranted()) {
             Appoxee.instance().startGeoFencing();
         } else {
