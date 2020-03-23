@@ -37,6 +37,7 @@ import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.GetAliasCallback;
+import com.appoxee.GetCustomAttributesCallback;
 import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.DeviceInfoDMCService;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
@@ -583,7 +584,36 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 
             @Override
             public void onError(Exception exception) {
-                Toast.makeText(MainActivity.this, "Alias is: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Alias is: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        List<String> attributes = new ArrayList<>();
+        attributes.add("alias");
+        attributes.add("pushToken");
+        appoxee.getCustomAttributes(attributes, new GetCustomAttributesCallback() {
+            @Override
+            public void onSuccess(List<String> customAttributes) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Attributes are: " + customAttributes, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Attributes are: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
         if (isGeoPermissionGranted()) {
