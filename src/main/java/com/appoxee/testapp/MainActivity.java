@@ -55,6 +55,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
@@ -583,11 +584,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
 
             @Override
-            public void onError(Exception exception) {
+            public void onError(String exception) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Alias is: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Alias is: " + exception, Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -595,9 +596,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         List<String> attributes = new ArrayList<>();
         attributes.add("alias");
         attributes.add("pushToken");
+        attributes.add("dmcUserId");
+        attributes.add("pushToken_bk");
+        attributes.add("UDIDHashed");
         appoxee.getCustomAttributes(attributes, new GetCustomAttributesCallback() {
             @Override
-            public void onSuccess(List<String> customAttributes) {
+            public void onSuccess(Map<String, String> customAttributes) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -607,11 +611,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
 
             @Override
-            public void onError(Exception exception) {
+            public void onError(String exception) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Attributes are: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Attributes are: " + exception, Toast.LENGTH_LONG).show();
                     }
                 });
             }
