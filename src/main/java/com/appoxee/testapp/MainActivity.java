@@ -572,7 +572,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
-        appoxee.getNewAlias(new GetAliasCallback() {
+        appoxee.getNewAlias(true, new GetAliasCallback() {
             @Override
             public void onSuccess(String alias) {
                 runOnUiThread(new Runnable() {
@@ -599,7 +599,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         attributes.add("dmcUserId");
         attributes.add("pushToken_bk");
         attributes.add("UDIDHashed");
-        appoxee.getCustomAttributes(attributes, new GetCustomAttributesCallback() {
+        appoxee.getCustomAttributes(true, attributes, new GetCustomAttributesCallback() {
             @Override
             public void onSuccess(Map<String, String> customAttributes) {
                 runOnUiThread(new Runnable() {
