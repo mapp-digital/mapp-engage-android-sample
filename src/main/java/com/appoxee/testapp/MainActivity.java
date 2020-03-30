@@ -54,6 +54,7 @@ import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -341,6 +342,60 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
+        findViewById(R.id.get_new_alias).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appoxee.getNewAlias(true, new GetAliasCallback() {
+                    @Override
+                    public void onSuccess(String alias) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Alias is: " + alias, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String exception) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Error is: " + exception, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        findViewById(R.id.get_custom_attributes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] customAttributes = new String[] {"alias", "pushToken", "dmcUserId", "pushToken_bk", "UDIDHashed"};
+                appoxee.getCustomAttributes(true, Arrays.asList(customAttributes), new GetCustomAttributesCallback() {
+                    @Override
+                    public void onSuccess(Map<String, String> customAttributes) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Attributes are: " + customAttributes, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String exception) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Attributes are: " + exception, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
         findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -572,54 +627,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
-        appoxee.getNewAlias(true, new GetAliasCallback() {
-            @Override
-            public void onSuccess(String alias) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "Alias is: " + alias, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String exception) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "Alias is: " + exception, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-        List<String> attributes = new ArrayList<>();
-        attributes.add("alias");
-        attributes.add("pushToken");
-        attributes.add("dmcUserId");
-        attributes.add("pushToken_bk");
-        attributes.add("UDIDHashed");
-        appoxee.getCustomAttributes(true, attributes, new GetCustomAttributesCallback() {
-            @Override
-            public void onSuccess(Map<String, String> customAttributes) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "Attributes are: " + customAttributes, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String exception) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "Attributes are: " + exception, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
         if (isGeoPermissionGranted()) {
             Appoxee.instance().startGeoFencing();
         } else {
