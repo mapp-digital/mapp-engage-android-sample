@@ -351,7 +351,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MainActivity.this, "Alias is: " + alias, Toast.LENGTH_LONG).show();
+                                createBuilder("", alias);
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", alias);
+                                clipboard.setPrimaryClip(clip);
                             }
                         });
                     }
@@ -361,7 +364,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MainActivity.this, "Error is: " + exception, Toast.LENGTH_LONG).show();
+                                createBuilder("", exception);
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", exception);
+                                clipboard.setPrimaryClip(clip);
                             }
                         });
                     }
@@ -379,7 +385,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MainActivity.this, "Attributes are: " + customAttributes, Toast.LENGTH_LONG).show();
+                                createBuilder("", customAttributes.toString());
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", customAttributes.toString());
+                                clipboard.setPrimaryClip(clip);
                             }
                         });
                     }
@@ -389,7 +398,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MainActivity.this, "Attributes are: " + exception, Toast.LENGTH_LONG).show();
+                                createBuilder("", exception);
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", exception);
+                                clipboard.setPrimaryClip(clip);
                             }
                         });
                     }
