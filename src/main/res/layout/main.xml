@@ -254,7 +254,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/material_teal_200"
-                android:hint="@string/some_text"
+                android:hint="@string/keys"
                 android:inputType="text" />
 
             <Button
@@ -295,7 +295,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/material_teal_200"
-                android:text="Get Custom Attributes" />
+                android:text="@string/get_custom_attributes_from_server" />
 
             <Button
                 android:id="@+id/get_new_alias"
@@ -303,7 +303,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/material_teal_200"
-                android:text="Get Alias from Server" />
+                android:text="@string/get_alias_from_server" />
 
             <Button
                 android:id="@+id/btn_remove_badge_number"
