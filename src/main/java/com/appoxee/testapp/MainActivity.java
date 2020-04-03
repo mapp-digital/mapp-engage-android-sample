@@ -83,7 +83,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private EditText set_alias;
     private EditText set_tag;
     private EditText remove_tag;
-    private EditText set_attribute;
+    private EditText set_attribute_key;
+    private EditText set_attribute_value;
     private EditText get_attribute;
     private EditText remove_attribute;
     private EditText get_custom_attributes;
@@ -102,7 +103,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         set_alias = findViewById(R.id.etxt_set_alias);
         set_tag = findViewById(R.id.etxt_set_tag);
         remove_tag = findViewById(R.id.etxt_remove_tag);
-        set_attribute = findViewById(R.id.etxt_set_attribute);
+        set_attribute_key = findViewById(R.id.etxt_set_attribute_key);
+        set_attribute_value = findViewById(R.id.etxt_set_attribute_value);
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
         get_custom_attributes = findViewById(R.id.etxt_get_custom_attributes);
@@ -390,12 +392,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                if (set_attribute.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                if (set_attribute_key.getText().length() == 0 || set_attribute_value.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, fill key and value field above", Toast.LENGTH_SHORT).show();
                 } else {
-                    appoxee.setAttribute(set_attribute.getText().toString(), set_attribute.getText().toString());
-                    createBuilder("Set attribute", "Added attribute: " + set_attribute.getText());
-                    set_attribute.setText("");
+                    appoxee.setAttribute(set_attribute_key.getText().toString(), set_attribute_value.getText().toString());
+                    createBuilder("Set attribute", "Added attribute: " + set_attribute_key.getText() + " - " + set_attribute_value.getText().toString());
+                    set_attribute_key.setText("");
+                    set_attribute_value.setText("");
                 }
             }
         });

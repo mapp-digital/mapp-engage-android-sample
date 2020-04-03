@@ -226,11 +226,19 @@
 
 
             <EditText
-                android:id="@+id/etxt_set_attribute"
+                android:id="@+id/etxt_set_attribute_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/material_teal_200"
-                android:hint="@string/some_text"
+                android:hint="@string/key"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/etxt_set_attribute_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/material_teal_200"
+                android:hint="@string/value"
                 android:inputType="text" />
 
             <Button

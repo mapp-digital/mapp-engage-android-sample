@@ -46,6 +46,8 @@
     <string name="backup_configuration">Backup configuration</string>
     <string name="get_deviceId">Get Device Id</string>
     <string name="choose_server">Choose Server Option</string>
+    <string name="key">Key</string>
+    <string name="value">Value</string>
 
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>
