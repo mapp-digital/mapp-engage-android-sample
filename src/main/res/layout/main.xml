@@ -14,6 +14,26 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:weightSum="2"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="Logout (only logout)" />
+
+                <Button
+                    android:id="@+id/btn_logout_with_optout"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Logout (with optout)" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_open_test_activity"
                 android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appoxee.Appoxee;
@@ -26,7 +27,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     private AppoxeeOptions appoxeeOptions;
     private EditText textSetSdkKey;
-    private EditText textSetGoogleProjectId;
+    private TextView textSetGoogleProjectId;
     private EditText textSetCepUrl;
     private EditText textSetAppId;
     private EditText textSetTenantId;
@@ -37,7 +38,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     private String cepUrlConf = BuildConfig.CEP_URL;
     private String appIdConf = BuildConfig.APP_ID;
     private String tenantIdConf = BuildConfig.TENANT_ID;
-    private int serverIndexConf = BuildConfig.SERVER_INDEX;
+    private String serverIndexConf = BuildConfig.SERVER_INDEX;
     private boolean isLocked = true;
 
 
@@ -49,7 +50,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
 
         textSetSdkKey = findViewById(R.id.etxt_set_sdk_key);
-        textSetGoogleProjectId = findViewById(R.id.etxt_set_google_project_id);
+        textSetGoogleProjectId = findViewById(R.id.txt_set_google_project_id);
         textSetCepUrl = findViewById(R.id.etxt_set_cep_url);
         textSetAppId = findViewById(R.id.etxt_set_app_id);
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
@@ -60,20 +61,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         chooseServer.setAdapter(adapter);
         chooseServer.setPrompt("Choose Server Option");
 
-        textSetGoogleProjectId.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(isLocked){
-                    if (v.isFocused()) {
-                        v.setEnabled(false);
-                        Toast.makeText(ConfigurationMappOptionsActivity.this, "This field can’t be changed", Toast.LENGTH_LONG).show();
-                    } else {
-                        v.setEnabled(true);
-                    }
-                }
-
-            }
-        });
         setConfiguration();
 
         //hidden keyboard
@@ -117,7 +104,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         Prefs.putString(KEY_CEP_URL, cepUrl);
         Prefs.putString(KEY_APP_ID, appId);
         Prefs.putString(KEY_TENANT_ID, tenantId);
-        Prefs.putInt(KEY_SERVER_INDEX, serverIndex);
+        AppoxeeOptions.Server serverName = AppoxeeOptions.Server.values()[serverIndex];
+        Prefs.putString(KEY_SERVER_INDEX, serverName.name());
 
         appoxeeOptions.sdkKey = sdkKey;
         appoxeeOptions.googleProjectId = googleProjectId;
@@ -146,15 +134,18 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         Prefs.putString(KEY_CEP_URL, cepUrlConf);
         Prefs.putString(KEY_APP_ID, appIdConf);
         Prefs.putString(KEY_TENANT_ID, tenantIdConf);
-        Prefs.putInt(KEY_SERVER_INDEX, serverIndexConf);
+        Prefs.putString(KEY_SERVER_INDEX, serverIndexConf);
 
         appoxeeOptions.sdkKey = sdkKeyConf;
         appoxeeOptions.googleProjectId = googleProjectIdConf;
         appoxeeOptions.cepURL = cepUrlConf;
         appoxeeOptions.appID = appIdConf;
         appoxeeOptions.tenantID = tenantIdConf;
-        appoxeeOptions.server = AppoxeeOptions.Server.values()[serverIndexConf];
+        appoxeeOptions.server = AppoxeeOptions.Server.valueOf(serverIndexConf);
+
         showMessage();
+
+        setConfiguration();
 
     }
 
@@ -173,13 +164,15 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         textSetCepUrl.setText(Prefs.getString(KEY_CEP_URL, cepUrlConf));
         textSetAppId.setText(Prefs.getString(KEY_APP_ID, appIdConf));
         textSetTenantId.setText(Prefs.getString(KEY_TENANT_ID, tenantIdConf));
-        chooseServer.setSelection(Prefs.getInt(KEY_SERVER_INDEX, serverIndexConf));
+
+        int spinner_index = AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SERVER_INDEX, serverIndexConf)).ordinal();
+        chooseServer.setSelection(spinner_index);
     }
 
     private void deleteField() {
 
         textSetSdkKey.setText("");
-        textSetGoogleProjectId.setText("");
+//        textSetGoogleProjectId.setText("");
         textSetCepUrl.setText("");
         textSetAppId.setText("");
         textSetTenantId.setText("");

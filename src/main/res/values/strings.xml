@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Appoxee Testapp</string>
+    <string name="app_name">MAPPTESTAPP</string>
     <string name="screen_orientation_portrait">SCREEN_ORIENTATION_PORTRAIT</string>
     <string name="screen_orientation_landscape">SCREEN_ORIENTATION_LANDSCAPE</string>
     <string name="screen_orientation_reverse_landscape">SCREEN_ORIENTATION_REVERSE_LANDSCAPE</string>

@@ -37,20 +37,24 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:id="@+id/etxt_set_google_project_id"
+                android:hint="@string/google_project_id"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="0.4"/>
 
-                <EditText
-                    android:id="@+id/etxt_set_google_project_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/google_project_id"
-                    android:inputType="number"
-                    tools:ignore="Autofill" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/txt_set_google_project_id"
+                android:hint="1028993954364"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="18sp"
+                android:textColor="#fff"
+                android:gravity="center_vertical"
+                android:layout_weight="0.6"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

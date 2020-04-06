@@ -10,12 +10,9 @@ import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
 import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.appoxee.push.NotificationMode;
-import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
 
 //import com.squareup.leakcanary.LeakCanary;
-
-import io.fabric.sdk.android.Fabric;
 
 import static com.appoxee.testapp.Constants.*;
 
@@ -41,13 +38,6 @@ public class AppoxeeTestApp extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
 
-        final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)
-                .build();
-        Fabric.with(fabric);
-
-
         long start = System.currentTimeMillis();
 
         opt = new AppoxeeOptions();
@@ -57,7 +47,7 @@ public class AppoxeeTestApp extends Application {
         opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
         opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
-        opt.server = AppoxeeOptions.Server.values()[Prefs.getInt(KEY_SERVER_INDEX, BuildConfig.SERVER_INDEX)];
+        opt.server = AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SERVER_INDEX, BuildConfig.SERVER_INDEX));
         CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
         builder.setLayoutResource(R.layout.custom_notification_layout)
                 .setIconResourceId(R.id.appoxee_default_push_icon)
