@@ -40,10 +40,10 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"5e846eff2b2987.20815312\""
+            buildConfigField "String", "SDK_KEY", "\"5e9418108fef01.17378030\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"263969\""
+            buildConfigField "String", "APP_ID", "\"263995\""
             buildConfigField "String", "TENANT_ID", "\"33\""
             buildConfigField "String", "SERVER_INDEX", "\"TEST\""
 

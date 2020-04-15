@@ -36,5 +36,8 @@ public  class MyPushBroadcastReceiver extends PushDataReceiver {
 
     }
 
-
+    @Override
+    public void onButtonClick(PushData pushData, String buttonAction, int buttonPosition) {
+        super.onButtonClick(pushData, buttonAction, buttonPosition);
+    }
 }
