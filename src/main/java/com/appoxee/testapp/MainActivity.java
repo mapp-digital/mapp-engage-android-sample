@@ -35,6 +35,8 @@ import androidx.core.content.ContextCompat;
 import com.appoxee.AliasErrorCallback;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
+import com.appoxee.GetAliasCallback;
+import com.appoxee.GetCustomAttributesCallback;
 import com.appoxee.RequestStatus;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
@@ -50,7 +52,10 @@ import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
@@ -78,9 +83,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private EditText set_alias;
     private EditText set_tag;
     private EditText remove_tag;
-    private EditText set_attribute;
+    private EditText set_attribute_key;
+    private EditText set_attribute_value;
     private EditText get_attribute;
     private EditText remove_attribute;
+    private EditText get_custom_attributes;
     TextView textView;
     private AppoxeeOptions options;
     private Spinner spinner_events;
@@ -96,9 +103,11 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         set_alias = findViewById(R.id.etxt_set_alias);
         set_tag = findViewById(R.id.etxt_set_tag);
         remove_tag = findViewById(R.id.etxt_remove_tag);
-        set_attribute = findViewById(R.id.etxt_set_attribute);
+        set_attribute_key = findViewById(R.id.etxt_set_attribute_key);
+        set_attribute_value = findViewById(R.id.etxt_set_attribute_value);
         get_attribute = findViewById(R.id.etxt_get_attribute);
         remove_attribute = findViewById(R.id.etxt_remove_attribute);
+        get_custom_attributes = findViewById(R.id.etxt_get_custom_attributes);
         spinner_events = findViewById(R.id.spinner_events);
         init();
         hideKeyboard();
@@ -336,7 +345,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-
         findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -384,12 +392,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                if (set_attribute.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+                if (set_attribute_key.getText().length() == 0 || set_attribute_value.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, fill key and value field above", Toast.LENGTH_SHORT).show();
                 } else {
-                    appoxee.setAttribute(set_attribute.getText().toString(), set_attribute.getText().toString());
-                    createBuilder("Set attribute", "Added attribute: " + set_attribute.getText());
-                    set_attribute.setText("");
+                    appoxee.setAttribute(set_attribute_key.getText().toString(), set_attribute_value.getText().toString());
+                    createBuilder("Set attribute", "Added attribute: " + set_attribute_key.getText() + " - " + set_attribute_value.getText().toString());
+                    set_attribute_key.setText("");
+                    set_attribute_value.setText("");
                 }
             }
         });
@@ -422,6 +431,93 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                     remove_attribute.setText("");
                 }
 
+            }
+        });
+
+        findViewById(R.id.get_custom_attributes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (get_custom_attributes.getText().length() == 0) {
+                    Toast.makeText(MainActivity.this, "Please, fill text field above", Toast.LENGTH_SHORT).show();
+                } else {
+                    String getText = get_custom_attributes.getText().toString().replaceAll("\\s", "");
+                    String[] customAttributes = getText.split(",");
+                    appoxee.getCustomAttributes(true, Arrays.asList(customAttributes), new GetCustomAttributesCallback() {
+                        @Override
+                        public void onSuccess(Map<String, String> customAttributes) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    Iterator<Map.Entry<String, String>> iterator = customAttributes.entrySet().iterator();
+                                    int i = 1;
+                                    while (iterator.hasNext()) {
+                                        Map.Entry<String, String> entry = iterator.next();
+                                        stringBuilder.append('(');
+                                        stringBuilder.append(i);
+                                        stringBuilder.append(") ");
+                                        stringBuilder.append(entry.getKey());
+                                        stringBuilder.append(": ");
+                                        stringBuilder.append(entry.getValue());
+                                        i++;
+                                        if (iterator.hasNext())
+                                            stringBuilder.append("\n");
+                                    }
+                                    createBuilder("", stringBuilder.toString());
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("label", customAttributes.toString());
+                                    clipboard.setPrimaryClip(clip);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String exception) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    createBuilder("", exception);
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("label", exception);
+                                    clipboard.setPrimaryClip(clip);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+
+        findViewById(R.id.get_new_alias).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appoxee.getNewAlias(true, new GetAliasCallback() {
+                    @Override
+                    public void onSuccess(String alias) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                createBuilder("", alias);
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", alias);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String exception) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                createBuilder("", exception);
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", exception);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        });
+                    }
+                });
             }
         });
 

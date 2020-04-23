@@ -46,6 +46,11 @@
     <string name="backup_configuration">Backup configuration</string>
     <string name="get_deviceId">Get Device Id</string>
     <string name="choose_server">Choose Server Option</string>
+    <string name="key">Key</string>
+    <string name="value">Value</string>
+    <string name="keys">Keys</string>
+    <string name="get_custom_attributes_from_server">Get Custom Attributes from Server</string>
+    <string name="get_alias_from_server">Get Alias from Server</string>
 
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>
