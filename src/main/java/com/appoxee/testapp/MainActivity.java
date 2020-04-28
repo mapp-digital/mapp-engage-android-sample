@@ -41,6 +41,7 @@ import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
+import com.appoxee.internal.util.SharedPreferenceUtil;
 import com.appoxee.push.NotificationMode;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -664,6 +665,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void stopGeoFencing() {
+        String s = SharedPreferenceUtil.getInstance().getGeofenceEvents("GeofenceReceiver", "nothing");
+        String s1 = SharedPreferenceUtil.getInstance().getGeofenceEvents("AlarmReceiver", "nothing");
         Appoxee.instance().stopGeoFencing();
     }
 
