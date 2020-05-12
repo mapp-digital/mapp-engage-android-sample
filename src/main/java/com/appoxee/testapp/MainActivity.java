@@ -488,10 +488,10 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
-        findViewById(R.id.get_new_alias).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.get_alias_from_server).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appoxee.getNewAlias(true, new GetAliasCallback() {
+                appoxee.getAliasFromServer(true, new GetAliasCallback() {
                     @Override
                     public void onSuccess(String alias) {
                         runOnUiThread(new Runnable() {
