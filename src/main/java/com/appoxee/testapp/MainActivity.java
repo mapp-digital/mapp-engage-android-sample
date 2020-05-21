@@ -200,6 +200,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 //
 //                createBuilder("", appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
+
+                System.out.println("Push enabled: "+ Appoxee.instance().isPushEnabled());
             }
         });
 
@@ -556,25 +558,16 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.btn_logout_with_optout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Appoxee.instance().setPushEnabled(false);
-                StringBuilder s = new StringBuilder("Logout: TRUE");
 
-                if (pushEnabledSwitch.isChecked()){
-                    pushEnabledSwitch.setChecked(false);
-                    s.append("\nOpt-out: TRUE");
-                } else {
-                    s.append("\nYou are already signed out");
-                }
-
-                Toast.makeText(MainActivity.this, s.toString(), Toast.LENGTH_LONG).show();
-
+                Appoxee.instance().logOut(getApplication(), false);
             }
         });
 
         findViewById(R.id.btn_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Logout: TRUE", Toast.LENGTH_LONG).show();
+
+                Appoxee.instance().logOut(getApplication(), true);
             }
         });
     }
