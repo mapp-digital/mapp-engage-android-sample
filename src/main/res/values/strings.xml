@@ -4,7 +4,7 @@
     <string name="screen_orientation_landscape">SCREEN_ORIENTATION_LANDSCAPE</string>
     <string name="screen_orientation_reverse_landscape">SCREEN_ORIENTATION_REVERSE_LANDSCAPE</string>
     <string name="screen_orientation_reverse_portrait">SCREEN_ORIENTATION_REVERSE_PORTRAIT</string>
-    <string name="info">info</string>
+    <string name="info">is push enabled</string>
     <string name="get_alias">Get alias</string>
     <string name="set_alias">Set alias</string>
     <string name="_2nd_activity">2nd activity</string>

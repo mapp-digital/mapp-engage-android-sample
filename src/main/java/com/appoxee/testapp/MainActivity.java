@@ -201,7 +201,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
 //                createBuilder("", appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
 
-                System.out.println("Push enabled: "+ Appoxee.instance().isPushEnabled());
+                Toast.makeText(MainActivity.this, "Push enabled: " + Appoxee.instance().isPushEnabled(), Toast.LENGTH_SHORT).show();
             }
         });
 
