@@ -238,10 +238,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (set_alias.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                } else {
                     appoxee.setAliasWithCallback(String.valueOf(set_alias.getText().toString()), new AliasErrorCallback.onAliasErrorReceived() {
                         @Override
                         public void onAliasErrorEvent(String eventName, String errorMessage) {
@@ -250,7 +246,6 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                     });
                     createBuilder("New alias", "Added alias: " + set_alias.getText());
                     set_alias.setText("");
-                }
             }
         });
 
