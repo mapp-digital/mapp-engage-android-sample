@@ -13,7 +13,7 @@ import com.appoxee.push.PushDataReceiver;
 public  class MyPushBroadcastReceiver extends PushDataReceiver {
     @Override
     public void onPushReceived(PushData pushData) {
-        Log.d("APX", "Push received " + pushData);
+        Log.d("Engage", "Push received " + pushData);
         super.onPushReceived(pushData);
     }
 
@@ -36,5 +36,8 @@ public  class MyPushBroadcastReceiver extends PushDataReceiver {
 
     }
 
-
+    @Override
+    public void onButtonClick(PushData pushData, String buttonAction, int buttonPosition) {
+        Log.d("APX", "Button clicked: " + pushData);
+    }
 }
