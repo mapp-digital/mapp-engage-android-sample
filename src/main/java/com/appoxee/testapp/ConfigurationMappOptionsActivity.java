@@ -9,7 +9,6 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -63,15 +62,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
         setConfiguration();
 
-        //hidden keyboard
-        hideKeyboard();
     }
 
-    private void hideKeyboard(){
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
-    }
 
     public void setConfiguration(View view) {
         String sdkKey = textSetSdkKey.getText().toString();

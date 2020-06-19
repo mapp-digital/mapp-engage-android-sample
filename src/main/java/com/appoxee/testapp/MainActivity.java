@@ -110,15 +110,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         get_custom_attributes = findViewById(R.id.etxt_get_custom_attributes);
         spinner_events = findViewById(R.id.spinner_events);
         init();
-        hideKeyboard();
         Appoxee.handleRichPush(this, getIntent());
-
-    }
-
-    private void hideKeyboard() {
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
     }
 
     @Override
