@@ -20,6 +20,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -97,7 +98,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ConfigurationMappOptionsActivity" />
+        <activity android:name=".ConfigurationMappOptionsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>
