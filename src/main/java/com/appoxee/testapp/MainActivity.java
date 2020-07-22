@@ -238,12 +238,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    appoxee.setAliasWithCallback(String.valueOf(set_alias.getText().toString()), new AliasErrorCallback.onAliasErrorReceived() {
-                        @Override
-                        public void onAliasErrorEvent(String eventName, String errorMessage) {
-                            set_alias.setText(errorMessage);
-                        }
-                    });
+//                    appoxee.setAliasWithCallback(String.valueOf(set_alias.getText().toString()), new AliasErrorCallback.onAliasErrorReceived() {
+//                        @Override
+//                        public void onAliasErrorEvent(String eventName, String errorMessage) {
+//                            set_alias.setText(errorMessage);
+//                        }
+//                    });
+
+                appoxee.setAlias(set_alias.getText().toString());
                     createBuilder("New alias", "Added alias: " + set_alias.getText());
                     set_alias.setText("");
             }
