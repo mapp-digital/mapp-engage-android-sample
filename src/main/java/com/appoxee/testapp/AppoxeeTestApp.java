@@ -61,7 +61,6 @@ public class AppoxeeTestApp extends Application {
         Appoxee.instance().addInitListener(initFinishedListener);
         long end = System.currentTimeMillis();
         Log.i("APX", "Start Service took " + (end - start) + " ms on main thread");
-        Appoxee.instance().setAlias("alias0");
         Appoxee.setOrientation(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         DeviceInfo info = Appoxee.instance().getDeviceInfo();
         Log.d("APX", "info (before init finished): " + info);
