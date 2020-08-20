@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.appdistribution'
 
 buildscript {
     dependencies {
-        // Firebase Crashlytics Gradle plugin.
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta02'
     }
 
     repositories {
@@ -50,6 +49,12 @@ android {
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            firebaseAppDistribution {
+                releaseNotes="This is test build for testers to accept the invitation and get the app :)"
+                testers="radmila.petrovic@miticon.com, aki.testiranje@gmail.com, milan.mihajlovic@miticon.com, " +
+                        "maja.tatalovic@miticon.com, milan.stanojevic@miticon.com, anka.ivkovic@miticon.com"
+            }
         }
 
         frankfart {
