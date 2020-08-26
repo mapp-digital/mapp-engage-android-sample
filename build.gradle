@@ -51,9 +51,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             firebaseAppDistribution {
-                releaseNotes="This is test build for testers to accept the invitation and get the app :)"
-                testers="radmila.petrovic@miticon.com, aki.testiranje@gmail.com, milan.mihajlovic@miticon.com, " +
-                        "maja.tatalovic@miticon.com, milan.stanojevic@miticon.com, anka.ivkovic@miticon.com"
+
+                releaseNotes = "This is test build for testers to accept the invitation and get the app :)"
+                testersFile = "testers_appoxee.txt"
             }
         }
 
