@@ -105,9 +105,7 @@ public class MainActivityTest {
     @Test
     public void testSetAttributeOnButtonClick() {
 
-        onView(withId(R.id.etxt_set_attribute)).perform(scrollTo(), typeText(mAttribute));
-        closeSoftKeyboard();
-        onView(withId(R.id.btn_set_attribute)).perform(click());
+
 
     }
 
