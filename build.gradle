@@ -166,7 +166,7 @@ android {
             initWith debug
             versionNameSuffix "_metrics2"
 
-            buildConfigField "String", "SDK_KEY", "\"74682119b35f5.31842504\""
+            buildConfigField "String", "SDK_KEY", "\"174682119b35f5.31842504\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie.c.shortest-route.com\""
             buildConfigField "String", "APP_ID", "\"110275\""
