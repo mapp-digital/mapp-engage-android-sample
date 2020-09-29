@@ -74,7 +74,7 @@ public class DeepLinkActivity extends Activity {
         String messageId = uri.getQueryParameter("message_id");
 
         if(uri != null && uri.toString() != null) {
-            tv.setText("DEEPLINK ACTIVITY URI  = " + link + "\n MessageId = " + messageId );
+            tv.setText("DEEPLINK ACTIVITY URI  = " + query );
         } else {
             tv.setText("DEEPLINK ACTIVITY URI is Null" );
         }
