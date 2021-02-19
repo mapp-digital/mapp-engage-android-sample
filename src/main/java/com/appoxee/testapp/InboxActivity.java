@@ -117,15 +117,19 @@ public class InboxActivity extends Activity {
                 @Override
                 public void onClick(View view, int position) {
                     APXInboxMessage inboxMessage = inboxList.get(position);
+                    String status = inboxMessage.getStatus();
                     showDialogForInboxMessageContent(inboxMessage, inboxMessage.getContent());
                     inboxMessage.markAsRead(InboxActivity.this);
-                    inboxMessage.markAsDeleted(InboxActivity.this);
-                    inboxMessage.markAsUnRead(InboxActivity.this);
+//                    inboxMessage.markAsDeleted(InboxActivity.this);
+//                    inboxMessage.markAsUnRead(InboxActivity.this);
                 }
 
                 @Override
                 public void onLongClick(View view, int position) {
-
+                    APXInboxMessage inboxMessage = inboxList.get(position);
+                    String status = inboxMessage.getStatus();
+//                    inboxMessage.markAsUnRead(InboxActivity.this);
+                    Log.d("Aleksandra",status);
                 }
             }));
 

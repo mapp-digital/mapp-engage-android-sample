@@ -51,6 +51,8 @@
     <string name="keys">Keys</string>
     <string name="get_custom_attributes_from_server">Get Custom Attributes from Server</string>
     <string name="get_alias_from_server">Get Alias from Server</string>
+    <string name="get_native_inapp">native inapp</string>
+
 
     <string-array name="screen_orientation">
         <item>Screen orientation portrait</item>
