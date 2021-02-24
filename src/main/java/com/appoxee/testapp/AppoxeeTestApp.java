@@ -12,7 +12,6 @@ import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.appoxee.push.NotificationMode;
 import com.pixplicity.easyprefs.library.Prefs;
 
-//import com.squareup.leakcanary.LeakCanary;
 
 import static com.appoxee.testapp.Constants.*;
 
@@ -48,14 +47,14 @@ public class AppoxeeTestApp extends Application {
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
         opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
         opt.server = AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SERVER_INDEX, BuildConfig.SERVER_INDEX));
-        CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
-        builder.setLayoutResource(R.layout.custom_notification_layout)
-                .setIconResourceId(R.id.appoxee_default_push_icon)
-                .setTextResourceId(R.id.appoxee_default_push_message)
-                .setTitleResourceId(R.id.appoxee_default_push_subject)
-                .setTimeResourceId(R.id.appoxee_default_push_hour);
-
-        opt.customNotificationCreator = new CustomXmlLayoutNotificationCreator(builder);
+//        CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
+//        builder.setLayoutResource(R.layout.custom_notification_layout)
+//                .setIconResourceId(R.id.appoxee_default_push_icon)
+//                .setTextResourceId(R.id.appoxee_default_push_message)
+//                .setTitleResourceId(R.id.appoxee_default_push_subject)
+//                .setTimeResourceId(R.id.appoxee_default_push_hour);
+//
+//        opt.customNotificationCreator = new CustomXmlLayoutNotificationCreator(builder);
 
         Appoxee.engage(this, opt);
         Appoxee.instance().addInitListener(initFinishedListener);
