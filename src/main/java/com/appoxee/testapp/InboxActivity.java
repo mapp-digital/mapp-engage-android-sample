@@ -36,6 +36,12 @@ import com.appoxee.internal.inapp.APXInboxWebViewClient;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -247,72 +253,19 @@ public class InboxActivity extends Activity {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        final View dialogView = inflater.inflate(com.appoxee.sdk.R.layout.dialog_modal_type_inapp, null);
-        final ProgressBar progressBar = (ProgressBar) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_inbox_message_progress_bar);
-        final WebView webView = (WebView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_webview);
+        final View dialogView = inflater.inflate(R.layout.pop_up, null);
 
-        ImageView dismissDialogImageIcon = (ImageView) dialogView.findViewById(com.appoxee.sdk.R.id.appoxee_default_landing_page_close_icon);
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        webView.setVisibility(View.GONE);
-        dialogBuilder.setTitle("");
-        webView.setLayerType(View.LAYER_TYPE_NONE, null);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int progress) {
-//                mProgressBarLoading.setProgress(progress) ;
-            }
-
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message,
-                                     JsResult result) {
-                result.confirm();
-                return true;
-            }
-        });
-
-        webView.setWebChromeClient(new WebChromeClient() {
-
-
-            @Override
-            public void onProgressChanged(WebView view, int progress) {
-//                mProgressBarLoading.setProgress(progress) ;
-            }
-
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message,
-                                     JsResult result) {
-                result.confirm();
-                return true;
-            }
-        });
-
-
-
-        webView.setWebViewClient(new APXInboxWebViewClient(this, webView, richMessageObject) {
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-                super.shouldOverrideUrlLoading(view, url);
-                return true;
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-
-
-                if (!ABOUT_BLANK.equals(url)) {
-                    progressBar.setVisibility(View.GONE);
-                    webView.setVisibility(View.VISIBLE);
-                }
-                super.onPageFinished(view, url);
-            }
-        });
-
+        ImageView inAppImage = (ImageView) dialogView.findViewById(R.id.inAppImage);
+        ImageView dismissDialogImageIcon = (ImageView) dialogView.findViewById(R.id.inAppCloseDialog);
+        TextView inAppTitle = (TextView) dialogView.findViewById(R.id.inAppTitle);
+        inAppTitle.setText(richMessageObject.getSubject());
+        TextView inAppContent = (TextView) dialogView.findViewById(R.id.inAppContent);
+        inAppContent.setText(richMessageObject.getSummary());
+        Glide.with(this)
+                .asDrawable()
+                .load(richMessageObject.getIconUrl())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(inAppImage);
         dismissDialogImageIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,14 +274,7 @@ public class InboxActivity extends Activity {
                 }
             }
         });
-
-
-        String encodedHtml = Base64.encodeToString(htmlContent.getBytes(), Base64.NO_PADDING);
-        webView.loadData(encodedHtml, "text/html", "base64");
-
         dialogBuilder.setView(dialogView);
-
-
         modalDialog = dialogBuilder.create();
         modalDialog.setCancelable(true);
         modalDialog.requestWindowFeature(modalDialog.getWindow().FEATURE_NO_TITLE);
