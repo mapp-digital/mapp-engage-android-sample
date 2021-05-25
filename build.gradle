@@ -35,22 +35,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "SDK_KEY", "\"174066e94e15f3.42414761\""
+            buildConfigField "String", "SDK_KEY", "\"5fd76d903c2247.21400126\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"\""
-            buildConfigField "String", "APP_ID", "\"110256\""
-            buildConfigField "String", "TENANT_ID", "\"60210\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
+            buildConfigField "String", "APP_ID", "\"264115\""
+            buildConfigField "String", "TENANT_ID", "\"33\""
+            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
 
         }
 
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"177879a6390602.39880444\""
+            buildConfigField "String", "SDK_KEY", "\"179139b09bf608.58795732\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"300108\""
+            buildConfigField "String", "APP_ID", "\"300267\""
             buildConfigField "String", "TENANT_ID", "\"33\""
             buildConfigField "String", "SERVER_INDEX", "\"TEST\""
             minifyEnabled false
