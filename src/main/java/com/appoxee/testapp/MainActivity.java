@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +17,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -33,7 +31,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.appoxee.AliasErrorCallback;
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.GetAliasCallback;
@@ -44,10 +41,15 @@ import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
+import com.appoxee.internal.logger.Logger;
+import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.push.NotificationMode;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -95,6 +97,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private boolean isInitSpinner = false;
     private boolean runningQOrLater = Build.VERSION.SDK_INT >= 29;
 
+    private Logger devLogger;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,12 +116,14 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         spinner_events = findViewById(R.id.spinner_events);
         init();
         Appoxee.handleRichPush(this, getIntent());
+
+        devLogger = LoggerFactory.getDevLogger();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Appoxee.handleRichPush(this,intent);
+        Appoxee.handleRichPush(this, intent);
     }
 
     private void init() {
@@ -218,14 +224,13 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.get_deviceId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              String deviceId = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
-              createBuilder("", deviceId);
-              ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-              ClipData clip = ClipData.newPlainText("label", deviceId);
-              clipboard.setPrimaryClip(clip);
+                String deviceId = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                createBuilder("", deviceId);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label", deviceId);
+                clipboard.setPrimaryClip(clip);
             }
         });
-
 
 
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
@@ -233,8 +238,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onClick(View v) {
 
                 appoxee.setAlias(set_alias.getText().toString());
-                    createBuilder("New alias", "Added alias: " + set_alias.getText());
-                    set_alias.setText("");
+                createBuilder("New alias", "Added alias: " + set_alias.getText());
+                set_alias.setText("");
             }
         });
 
@@ -327,7 +332,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", textView.getText().toString());
                 clipboard.setPrimaryClip(clip);
-
+                devLogger.d("FCM TOKEN: ", clip.toString());
             }
         });
 
@@ -643,10 +648,9 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         if (isGeoPermissionGranted()) {
             Appoxee.instance().startGeoFencing();
         } else {
-            if(runningQOrLater) {
+            if (runningQOrLater) {
                 askForGeoPermissionWithBackgroundLocation();
-            }
-            else {
+            } else {
                 askForGeoPermission();
             }
         }
@@ -655,17 +659,16 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private boolean isGeoPermissionGranted() {
         if (runningQOrLater) {
             return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED ;
-        }
-        else {
+                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        } else {
             return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         }
     }
 
     private void askForGeoPermission() {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
-                    MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
+                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
     }
 
     private void askForGeoPermissionWithBackgroundLocation() {
@@ -682,12 +685,12 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             if (backgroundLocationPermissionApproved) {
 
             } else {
-                ActivityCompat.requestPermissions(this, new String[] {
+                ActivityCompat.requestPermissions(this, new String[]{
                                 Manifest.permission.ACCESS_BACKGROUND_LOCATION},
                         MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION);
             }
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {
+            ActivityCompat.requestPermissions(this, new String[]{
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION
                     },
@@ -702,36 +705,29 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Appoxee.instance().startGeoFencing();
                 Log.w("MainActivity", "startGeoFencing()");
-            }
-            else {
+            } else {
                 Log.w("MainActivity", "Geo permission not granted");
             }
-        }
-        else if (MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION == requestCode){
+        } else if (MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION == requestCode) {
             if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Appoxee.instance().startGeoFencing();
                 Log.w("MainActivity", "startGeoFencing()with background");
-            }
-            else if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
-                    && grantResults[0] == PackageManager.PERMISSION_DENIED){
+            } else if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
+                    && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Appoxee.instance().startGeoFencing();
                 Log.w("MainActivity", "startGeoFencing()with foreground");
-            }
-            else if (grantResults.length > 0 && permissions.length == 2 && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+            } else if (grantResults.length > 0 && permissions.length == 2 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 Appoxee.instance().startGeoFencing();
                 Log.w("MainActivity", "startGeoFencing() with background");
-            }
-            else if (grantResults.length > 0 && permissions.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1] == PackageManager.PERMISSION_DENIED){
+            } else if (grantResults.length > 0 && permissions.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_DENIED) {
                 Appoxee.instance().startGeoFencing();
                 Log.w("MainActivity", "startGeoFencing() with foreground");
-            }
-            else {
+            } else {
                 Log.w("MainActivity", "Geo permission not granted");
             }
-        }
-        else {
+        } else {
             Log.w("Main Activity", "some other permission requested? (not geo)");
         }
     }
@@ -833,6 +829,5 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         });
 
     }
-
 }
 
