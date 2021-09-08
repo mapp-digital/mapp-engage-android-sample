@@ -43,13 +43,12 @@ import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
+import com.appoxee.internal.service.AppoxeeServiceAdapter;
 import com.appoxee.push.NotificationMode;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -336,6 +335,51 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             }
         });
 
+        findViewById(R.id.btn_send_push).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Bundle[{push_description=Do you recive push notification?,
+                google.delivered_priority=normal,
+                google.sent_time=1631097227253,
+                google.ttl=2419200,
+                google.original_priority=normal,
+                p=81723,
+                from=1028993954364,
+                alert=MappTest,
+                google.message_id=0:1631097227271591%37fb9af9cccfb49c,
+                google.c.sender.id=1028993954364,
+                collapse_key=type_a,
+                push_title=MappTest}]*/
+
+                Bundle bundle = new Bundle();
+                bundle.putString("push_description", "Do you recive push notification?");
+                bundle.putString("google.delivered_priority", "normal");
+                bundle.putString("google.sent_time", "1631097227253");
+                bundle.putString("google.ttl", "2419200");
+                bundle.putString("google.original_priority", "normal");
+                bundle.putString("p", "81723");
+                bundle.putString("from", "1028993954364L");
+                bundle.putString("alert", "MappTest");
+                bundle.putString("google.message_id", "0:1631097227271591%37fb9af9cccfb49c");
+                bundle.putString("google.c.sender.id", "1028993954364");
+                bundle.putString("collapse_key", "type_a");
+                bundle.putString("push_title", "MappTest");
+                RemoteMessage message = new RemoteMessage(bundle);
+                AppoxeeServiceAdapter.getInstance().setRemoteMessage(message);
+            }
+        });
+
+        findViewById(R.id.btn_register_token).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String token = FirebaseInstanceId.getInstance().getToken();
+                if(token!=null) {
+                    AppoxeeServiceAdapter.getInstance().setToken(token);
+                    createBuilder("FCM Token", token);
+                }
+            }
+        });
+
         findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -594,6 +638,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     public void onInitCompleted(boolean successful, Exception failReason) {
 
         Log.i("APX", "init completed listener - MainActivity");
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

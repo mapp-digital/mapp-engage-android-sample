@@ -164,6 +164,18 @@
                 android:layout_height="wrap_content"
                 android:text="FCM TOKEN" />
 
+            <Button
+                android:id="@+id/btn_send_push"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send push message" />
+
+            <Button
+                android:id="@+id/btn_register_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register token" />
+
         </LinearLayout>
 
         <LinearLayout
