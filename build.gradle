@@ -52,12 +52,12 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"17448d4c6f75f4.75830828\""
+            buildConfigField "String", "SDK_KEY", "\"17c07c2d350614.65753469\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"785651527831\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.g.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"106633\""
-            buildConfigField "String", "TENANT_ID", "\"5963\""
-            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
+            buildConfigField "String", "APP_ID", "\"300012\""
+            buildConfigField "String", "TENANT_ID", "\"55\""
+            buildConfigField "String", "SERVER_INDEX", "\"TEST_55\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -205,8 +205,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation('androidx.recyclerview:recyclerview:1.0.0')
     implementation 'com.google.code.gson:gson:2.8.5'
-    //implementation project(':sdk')
-    implementation('com.mapp.sdk:mapp-android:6.0.17-special2')
+    implementation project(':sdk')
+    //implementation('com.mapp.sdk:mapp-android:6.0.17-special2')
 
     implementation('com.google.firebase:firebase-messaging:20.0.0')
 
