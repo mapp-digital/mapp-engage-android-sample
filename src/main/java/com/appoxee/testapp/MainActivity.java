@@ -284,7 +284,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
             }
         });
 
