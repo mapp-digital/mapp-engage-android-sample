@@ -291,21 +291,21 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
         findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_feedback");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_feedback");
             }
         });
 
         findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_discount");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_discount");
             }
         });
 
         findViewById(R.id.inappAppPromo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_promo");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_promo");
             }
         });
 
@@ -321,7 +321,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
 
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_welcome");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_welcome");
             }
         });
 
@@ -643,7 +643,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
-                Appoxee.instance().triggerDMCCallInApp(MainActivity.this, "app_open");
+                Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
@@ -862,7 +862,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (isInitSpinner) {
                     Toast.makeText(MainActivity.this, eventsList[position - 1], Toast.LENGTH_LONG).show();
-                    Appoxee.instance().triggerDMCCallInApp(MainActivity.this, eventsList[position - 1]);
+                    Appoxee.instance().triggerInApp(MainActivity.this, eventsList[position - 1]);
                 } else {
                     isInitSpinner = true;
                 }
