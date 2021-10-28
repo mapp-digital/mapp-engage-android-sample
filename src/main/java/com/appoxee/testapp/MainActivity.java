@@ -1,7 +1,14 @@
 package com.appoxee.testapp;
 
+import static com.appoxee.Appoxee.removeBadgeNumber;
+import static com.appoxee.testapp.Constants.KEY_APP_ID;
+import static com.appoxee.testapp.Constants.KEY_CEP_URL;
+import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
+import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
+import static com.appoxee.testapp.Util.capitalize;
+
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,7 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,9 +33,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
@@ -43,6 +47,10 @@ import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
+import com.appoxee.internal.permission.GeofencePermissions;
+import com.appoxee.internal.permission.GeofencingPermissionsCallback;
+import com.appoxee.internal.permission.PermissionsCallback;
+import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.service.AppoxeeServiceAdapter;
 import com.appoxee.push.NotificationMode;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,25 +63,19 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.appoxee.Appoxee.removeBadgeNumber;
-import static com.appoxee.testapp.Constants.KEY_APP_ID;
-import static com.appoxee.testapp.Constants.KEY_CEP_URL;
-import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
-import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
-import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
-import static com.appoxee.testapp.Util.capitalize;
+import java.util.stream.Collectors;
 
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.android.gms.tasks.OnSuccessListener;
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.firebase.iid.InstanceIdResult;
 
-public class MainActivity extends Activity implements Appoxee.OnInitCompletedListener {
+public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private Switch pushEnabledSwitch;
     private Switch deviceRegistrationState;
@@ -97,6 +99,8 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private boolean runningQOrLater = Build.VERSION.SDK_INT >= 29;
 
     private Logger devLogger;
+
+    private GeofencePermissions geofencePermissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +132,38 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     private void init() {
         Appoxee.instance().addInitListener(this);
 
+        geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
+            @Override
+            public void onGranted() {
+                devLogger.d("OnGranted", "startGeoFencing()");
+                Appoxee.instance().startGeoFencing();
+            }
+
+            @Override
+            public void onPermissionsNotGranted(List<String> permissions) {
+                if (permissions.contains(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        geofencePermissions.openPermissionSettings();
+                        //remove background permission
+                        permissions = permissions.stream()
+                                .filter(p -> !Manifest.permission.ACCESS_BACKGROUND_LOCATION.equals(p))
+                                .collect(Collectors.toList());
+                    }
+                }
+                if (!permissions.isEmpty())
+                    geofencePermissions.checkPermissions(permissions);
+            }
+
+            @Override
+            public void onPermanentlyDeniedPermissions(List<String> permissions) {
+                geofencePermissions.openPermissionSettings();
+            }
+        });
+
         options = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
+
         InAppCallback inAppCallback = new InAppCallback();
+
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
             public void onInAppEvent(String eventName, String eventValue) {
@@ -373,7 +407,7 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             @Override
             public void onClick(View v) {
                 String token = FirebaseInstanceId.getInstance().getToken();
-                if(token!=null) {
+                if (token != null) {
                     AppoxeeServiceAdapter.getInstance().setToken(token);
                     createBuilder("FCM Token", token);
                 }
@@ -644,9 +678,16 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
                 Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
+                restartGeofencing();
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
+    }
+
+    private void restartGeofencing() {
+        if (Appoxee.instance().isGeofencingActive()) {
+            //startGeo();
+        }
     }
 
     void dialogScreenOrientation() {
@@ -690,91 +731,16 @@ public class MainActivity extends Activity implements Appoxee.OnInitCompletedLis
     }
 
     private void startGeo() {
-        if (isGeoPermissionGranted()) {
-            Appoxee.instance().startGeoFencing();
-        } else {
-            if (runningQOrLater) {
-                askForGeoPermissionWithBackgroundLocation();
-            } else {
-                askForGeoPermission();
-            }
+        List<String> permissions;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+            permissions = new ArrayList<>(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
+        else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) { // Android Q (29) and higher requires BACKGROUND Location
+            permissions = new ArrayList<>(Arrays.asList(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION));
+        } else { // for Android R (30) and higher we can't ask both permissions at a same time
+            permissions = new ArrayList<>(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
         }
-    }
 
-    private boolean isGeoPermissionGranted() {
-        if (runningQOrLater) {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        } else {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        }
-    }
-
-    private void askForGeoPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
-                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-    }
-
-    private void askForGeoPermissionWithBackgroundLocation() {
-        boolean permissionAccessFineLocationApproved =
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED;
-
-        if (permissionAccessFineLocationApproved) {
-            boolean backgroundLocationPermissionApproved =
-                    ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED;
-
-            if (backgroundLocationPermissionApproved) {
-
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{
-                                Manifest.permission.ACCESS_BACKGROUND_LOCATION},
-                        MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION);
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    },
-                    MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (MY_PERMISSIONS_ACCESS_FINE_LOCATION == requestCode) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Appoxee.instance().startGeoFencing();
-                Log.w("MainActivity", "startGeoFencing()");
-            } else {
-                Log.w("MainActivity", "Geo permission not granted");
-            }
-        } else if (MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION == requestCode) {
-            if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Appoxee.instance().startGeoFencing();
-                Log.w("MainActivity", "startGeoFencing()with background");
-            } else if (grantResults.length > 0 && permissions.length == 1 && permissions[0].contains("android.permission.ACCESS_BACKGROUND_LOCATION")
-                    && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                Appoxee.instance().startGeoFencing();
-                Log.w("MainActivity", "startGeoFencing()with foreground");
-            } else if (grantResults.length > 0 && permissions.length == 2 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                Appoxee.instance().startGeoFencing();
-                Log.w("MainActivity", "startGeoFencing() with background");
-            } else if (grantResults.length > 0 && permissions.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1] == PackageManager.PERMISSION_DENIED) {
-                Appoxee.instance().startGeoFencing();
-                Log.w("MainActivity", "startGeoFencing() with foreground");
-            } else {
-                Log.w("MainActivity", "Geo permission not granted");
-            }
-        } else {
-            Log.w("Main Activity", "some other permission requested? (not geo)");
-        }
+        geofencePermissions.requestPermissions();
     }
 
     private void stopGeoFencing() {

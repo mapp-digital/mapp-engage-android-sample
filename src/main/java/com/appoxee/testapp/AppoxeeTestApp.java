@@ -15,7 +15,9 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import static com.appoxee.testapp.Constants.*;
 
-public class AppoxeeTestApp extends Application {
+import androidx.multidex.MultiDexApplication;
+
+public class AppoxeeTestApp extends MultiDexApplication  {
 
     private AppoxeeOptions opt;
 
