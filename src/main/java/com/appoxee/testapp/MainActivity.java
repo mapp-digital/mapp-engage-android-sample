@@ -8,7 +8,6 @@ import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 import static com.appoxee.testapp.Util.capitalize;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -20,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +49,6 @@ import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
-import com.appoxee.internal.permission.PermissionsCallback;
-import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.service.AppoxeeServiceAdapter;
 import com.appoxee.push.NotificationMode;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,12 +61,10 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 //import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.android.gms.tasks.OnSuccessListener;
@@ -141,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
             @Override
             public void onPermissionsNotGranted(List<String> permissions) {
-                if (permissions.contains(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+                /*if (permissions.contains(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         geofencePermissions.openPermissionSettings();
                         //remove background permission
@@ -151,12 +147,29 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                     }
                 }
                 if (!permissions.isEmpty())
-                    geofencePermissions.checkPermissions(permissions);
+                    geofencePermissions.checkPermissions(permissions);*/
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Permissions not granted");
+                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray())+
+                        "\nDo you want to allow requested permissions?");
+                builder.setPositiveButton("OK", (dialog, position) -> {
+                    geofencePermissions.requestPermissions();
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
             }
 
             @Override
             public void onPermanentlyDeniedPermissions(List<String> permissions) {
-                geofencePermissions.openPermissionSettings();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Permissions permanently denied");
+                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray())+
+                        "\nDo you want to open system settings and manually grant required permissions?");
+                builder.setPositiveButton("OK", (dialog, position) -> {
+                    geofencePermissions.openPermissionSettings();
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
             }
         });
 
@@ -731,15 +744,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     }
 
     private void startGeo() {
-        List<String> permissions;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-            permissions = new ArrayList<>(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
-        else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) { // Android Q (29) and higher requires BACKGROUND Location
-            permissions = new ArrayList<>(Arrays.asList(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION));
-        } else { // for Android R (30) and higher we can't ask both permissions at a same time
-            permissions = new ArrayList<>(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
-        }
-
         geofencePermissions.requestPermissions();
     }
 
