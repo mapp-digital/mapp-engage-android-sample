@@ -132,11 +132,58 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         @Override
         public void onResult(@Nullable String result) {
             devLogger.d(result);
+            if(result!=null){
+                switch (result){
+                    case GeofenceStatus.GEOFENCE_STARTED_OK:
+                        Toast.makeText(MainActivity.this,"Geofence started successfully", Toast.LENGTH_SHORT).show();
+                        break;
+                    case GeofenceStatus.GEOFENCE_STOPPED_OK:
+                        Toast.makeText(MainActivity.this,"Geofence stopped successfully", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(MainActivity.this,result, Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
         }
     };
 
     private void init() {
         Appoxee.instance().addInitListener(this);
+
+        geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
+            @Override
+            public void onGranted() {
+                devLogger.d("OnGranted", "startGeoFencing()");
+                Appoxee.instance().startGeoFencing(geofenceCallback);
+            }
+
+            @Override
+            public void onPermissionsNotGranted(List<String> permissions) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Permissions not granted");
+                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray()) +
+                        "\nDo you want to allow requested permissions?");
+                builder.setPositiveButton("OK", (dialog, position) -> {
+                    geofencePermissions.requestPermissions();
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
+            }
+
+            @Override
+            public void onPermanentlyDeniedPermissions(List<String> permissions) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Permissions permanently denied");
+                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray()) +
+                        "\nDo you want to open system settings and manually grant required permissions?");
+                builder.setPositiveButton("OK", (dialog, position) -> {
+                    geofencePermissions.openPermissionSettings();
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.create().show();
+            }
+        });
 
         options = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
 
@@ -651,40 +698,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
         Log.i("APX", "init completed listener - MainActivity");
 
-        geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
-            @Override
-            public void onGranted() {
-                devLogger.d("OnGranted", "startGeoFencing()");
-                Appoxee.instance().startGeoFencing(geofenceCallback);
-            }
-
-            @Override
-            public void onPermissionsNotGranted(List<String> permissions) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Permissions not granted");
-                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray()) +
-                        "\nDo you want to allow requested permissions?");
-                builder.setPositiveButton("OK", (dialog, position) -> {
-                    geofencePermissions.requestPermissions();
-                });
-                builder.setNegativeButton("Cancel", null);
-                builder.create().show();
-            }
-
-            @Override
-            public void onPermanentlyDeniedPermissions(List<String> permissions) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Permissions permanently denied");
-                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray()) +
-                        "\nDo you want to open system settings and manually grant required permissions?");
-                builder.setPositiveButton("OK", (dialog, position) -> {
-                    geofencePermissions.openPermissionSettings();
-                });
-                builder.setNegativeButton("Cancel", null);
-                builder.create().show();
-            }
-        });
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -694,6 +707,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
+
     }
 
     private void restartGeofencing() {
@@ -743,15 +757,15 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     }
 
     private void startGeo() {
-        if(geofencePermissions==null){
-            Toast.makeText(this,"Appoxee not initialized!", Toast.LENGTH_SHORT).show();
+        if (geofencePermissions == null) {
+            Toast.makeText(this, "Appoxee not initialized!", Toast.LENGTH_SHORT).show();
             return;
         }
         geofencePermissions.requestPermissions();
     }
 
     private void stopGeoFencing() {
-        Appoxee.instance().stopGeoFencing();
+        Appoxee.instance().stopGeoFencing(geofenceCallback);
     }
 
     private String getJsonString(List<InAppMessage> inbox) {
