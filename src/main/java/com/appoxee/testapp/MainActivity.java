@@ -1,6 +1,7 @@
 package com.appoxee.testapp;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
+import static com.appoxee.testapp.BuildConfig.*;
 import static com.appoxee.testapp.Constants.KEY_APP_ID;
 import static com.appoxee.testapp.Constants.KEY_CEP_URL;
 import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
@@ -105,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        setTitle(getString(R.string.app_name)+" "+ VERSION_NAME);
 
         appoxee = Appoxee.instance();
         set_alias = findViewById(R.id.etxt_set_alias);
@@ -666,17 +669,17 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
 
     private void backupConfiguration() {
-        Prefs.putString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
-        Prefs.putString(KEY_GOOGLE_PROJECT_ID, BuildConfig.GOOGLE_PROJECT_ID);
-        Prefs.putString(KEY_CEP_URL, BuildConfig.CEP_URL);
-        Prefs.putString(KEY_APP_ID, BuildConfig.APP_ID);
-        Prefs.putString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
+        Prefs.putString(KEY_SDK_KEY, SDK_KEY);
+        Prefs.putString(KEY_GOOGLE_PROJECT_ID, GOOGLE_PROJECT_ID);
+        Prefs.putString(KEY_CEP_URL, CEP_URL);
+        Prefs.putString(KEY_APP_ID, APP_ID);
+        Prefs.putString(KEY_TENANT_ID, TENANT_ID);
 
-        options.sdkKey = BuildConfig.SDK_KEY;
-        options.googleProjectId = BuildConfig.GOOGLE_PROJECT_ID;
-        options.cepURL = BuildConfig.CEP_URL;
-        options.appID = BuildConfig.APP_ID;
-        options.tenantID = BuildConfig.TENANT_ID;
+        options.sdkKey = SDK_KEY;
+        options.googleProjectId = GOOGLE_PROJECT_ID;
+        options.cepURL = CEP_URL;
+        options.appID = APP_ID;
+        options.tenantID = TENANT_ID;
         options.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
 
         Appoxee.instance().setDeviceRegistrationState(false);
