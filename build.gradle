@@ -53,10 +53,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"1756f89036e5f9.68081048\""
+            buildConfigField "String", "SDK_KEY", "\"17d09eb9903618.30242929\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"785651527831\""
             buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"300031\""
+            buildConfigField "String", "APP_ID", "\"300551\""
             buildConfigField "String", "TENANT_ID", "\"33\""
             buildConfigField "String", "SERVER_INDEX", "\"TEST\""
             minifyEnabled false
@@ -67,7 +67,7 @@ android {
                 testersFile = "testers_appoxee.txt"
             }
         }
-
+/*
         env33 {
             initWith debug
             versionNameSuffix "_33"
@@ -171,7 +171,7 @@ android {
                 testersFile = "testers_appoxee.txt"
             }
         }
-
+*/
     }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
