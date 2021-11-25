@@ -29,7 +29,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 31
         versionCode 1
-        versionName "1.0.7"
+        versionName "1.0.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -196,7 +196,7 @@ dependencies {
     implementation('androidx.recyclerview:recyclerview:1.2.1')
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.17-special12')
+    //implementation('com.mapp.sdk:mapp-android:6.0.17-special13')
 
     implementation('com.google.firebase:firebase-messaging:20.0.0')
 
