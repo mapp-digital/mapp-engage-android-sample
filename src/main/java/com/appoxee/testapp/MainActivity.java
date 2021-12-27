@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                 bundle.putString("collapse_key", "type_a");
                 bundle.putString("push_title", "MappTest");
                 RemoteMessage message = new RemoteMessage(bundle);
-                AppoxeeServiceAdapter.getInstance().setRemoteMessage(message);
+                Appoxee.instance().setRemoteMessage(message);
             }
         });
 
@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             public void onClick(View v) {
                 String token = FirebaseInstanceId.getInstance().getToken();
                 if (token != null) {
-                    AppoxeeServiceAdapter.getInstance().setToken(token);
+                    Appoxee.instance().setToken(token);
                     createBuilder("FCM Token", token);
                 }
             }
