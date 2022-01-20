@@ -52,7 +52,6 @@ import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
-import com.appoxee.internal.service.AppoxeeServiceAdapter;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -585,10 +584,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             }
         });
 
+
         findViewById(R.id.get_alias_from_server).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appoxee.getAliasFromServer(true, new GetAliasCallback() {
+                Appoxee.instance().getAliasFromServer(true, new GetAliasCallback() {
                     @Override
                     public void onSuccess(String alias) {
                         runOnUiThread(new Runnable() {
