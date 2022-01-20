@@ -654,7 +654,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             @Override
             public void onClick(View view) {
 
-                Appoxee.instance().logOut(getApplication(), false);
+                Appoxee.instance().logOut(false);
             }
         });
 
