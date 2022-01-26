@@ -1,7 +1,12 @@
 package com.appoxee.testapp;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
-import static com.appoxee.testapp.BuildConfig.*;
+import static com.appoxee.testapp.BuildConfig.APP_ID;
+import static com.appoxee.testapp.BuildConfig.CEP_URL;
+import static com.appoxee.testapp.BuildConfig.GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.BuildConfig.SDK_KEY;
+import static com.appoxee.testapp.BuildConfig.TENANT_ID;
+import static com.appoxee.testapp.BuildConfig.VERSION_NAME;
 import static com.appoxee.testapp.Constants.KEY_APP_ID;
 import static com.appoxee.testapp.Constants.KEY_CEP_URL;
 import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
@@ -54,9 +59,7 @@ import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        setTitle(getString(R.string.app_name)+" "+ VERSION_NAME);
+        setTitle(getString(R.string.app_name) + " " + VERSION_NAME);
 
         appoxee = Appoxee.instance();
         set_alias = findViewById(R.id.etxt_set_alias);
@@ -134,16 +137,16 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         @Override
         public void onResult(@Nullable String result) {
             devLogger.d(result);
-            if(result!=null){
-                switch (result){
+            if (result != null) {
+                switch (result) {
                     case GeofenceStatus.GEOFENCE_STARTED_OK:
-                        Toast.makeText(MainActivity.this,"Geofence started successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Geofence started successfully", Toast.LENGTH_SHORT).show();
                         break;
                     case GeofenceStatus.GEOFENCE_STOPPED_OK:
-                        Toast.makeText(MainActivity.this,"Geofence stopped successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Geofence stopped successfully", Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(MainActivity.this,result, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -200,14 +203,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             }
         });
         textView = (TextView) findViewById(R.id.textView2);
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String deviceToken = instanceIdResult.getToken();
-                textView.setText(deviceToken);
-                Log.d("token fcm", deviceToken);
-            }
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            textView.setText(token);
+            Log.d("token fcm", token);
         });
+
 
         //  textView.setText(FirebaseInstanceId.getInstance().getToken());
         InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
@@ -389,10 +389,13 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         findViewById(R.id.fcm_token).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", textView.getText().toString());
-                clipboard.setPrimaryClip(clip);
-                devLogger.d("FCM TOKEN: ", clip.toString());
+                FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("token", token);
+                    clipboard.setPrimaryClip(clip);
+                    devLogger.d("FCM TOKEN: ", clip.toString());
+                    createBuilder("Firebase token", token);
+                });
             }
         });
 
@@ -430,16 +433,14 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             }
         });
 
-        findViewById(R.id.btn_register_token).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String token = FirebaseInstanceId.getInstance().getToken();
-                if (token != null) {
-                    Appoxee.instance().setToken(token);
-                    createBuilder("FCM Token", token);
-                }
-            }
-        });
+        findViewById(R.id.btn_register_token).setOnClickListener(v ->
+                FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+                    if (token != null) {
+                        Appoxee.instance().setToken(token);
+                        createBuilder("FCM Token", token);
+                    }
+                })
+        );
 
         findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -653,7 +654,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         findViewById(R.id.btn_logout_with_optout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Appoxee.instance().logOut(false);
             }
         });
@@ -661,8 +661,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         findViewById(R.id.btn_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Appoxee.instance().logOut(getApplication(), true);
+                Appoxee.instance().logOut(true);
             }
         });
     }

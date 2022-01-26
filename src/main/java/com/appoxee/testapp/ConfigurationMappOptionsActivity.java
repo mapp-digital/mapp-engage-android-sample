@@ -1,8 +1,14 @@
 package com.appoxee.testapp;
 
-import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
+import static com.appoxee.testapp.Constants.KEY_APP_ID;
+import static com.appoxee.testapp.Constants.KEY_CEP_URL;
+import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
+import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
+import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
+
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -10,14 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
-import com.appoxee.testapp.AppoxeeTestApp;
-import com.appoxee.testapp.BuildConfig;
-import com.appoxee.testapp.R;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.pixplicity.easyprefs.library.Prefs;
-
-import static com.appoxee.testapp.Constants.*;
 
 
 public class ConfigurationMappOptionsActivity extends AppCompatActivity {
@@ -88,7 +92,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         }
 
 
-
         Prefs.putString(KEY_SDK_KEY, sdkKey);
         Prefs.putString(KEY_GOOGLE_PROJECT_ID, googleProjectId);
         Prefs.putString(KEY_CEP_URL, cepUrl);
@@ -106,11 +109,15 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
         Appoxee.instance().setDeviceRegistrationState(false);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Appoxee.engage(getApplication(), appoxeeOptions);
-            }
+        new Handler().postDelayed(() -> {
+            Appoxee.engage(getApplication(), appoxeeOptions);
+            Appoxee.instance().addInitListener((successful, failReason) -> {
+                if(successful) {
+                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+                        Appoxee.instance().setToken(token);
+                    });
+                }
+            });
         }, 1000);
 
         showMessage();
