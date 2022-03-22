@@ -28,7 +28,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     private AppoxeeOptions appoxeeOptions;
     private EditText textSetSdkKey;
-    private TextView textSetGoogleProjectId;
     private EditText textSetCepUrl;
     private EditText textSetAppId;
     private EditText textSetTenantId;
@@ -51,7 +50,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
 
         textSetSdkKey = findViewById(R.id.etxt_set_sdk_key);
-        textSetGoogleProjectId = findViewById(R.id.txt_set_google_project_id);
         textSetCepUrl = findViewById(R.id.etxt_set_cep_url);
         textSetAppId = findViewById(R.id.etxt_set_app_id);
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
@@ -69,7 +67,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     public void setConfiguration(View view) {
         String sdkKey = textSetSdkKey.getText().toString();
-        String googleProjectId = textSetGoogleProjectId.getText().toString();
         String cepUrl = textSetCepUrl.getText().toString();
         String appId = textSetAppId.getText().toString();
         String tenantId = textSetTenantId.getText().toString();
@@ -78,9 +75,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         if (sdkKey.equals("")) {
             sdkKey = sdkKeyConf;
         }
-        if (googleProjectId.equals("")) {
-            googleProjectId = googleProjectIdConf;
-        }
+
         if (cepUrl.equals("")) {
             cepUrl = cepUrlConf;
         }
@@ -93,7 +88,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
 
         Prefs.putString(KEY_SDK_KEY, sdkKey);
-        Prefs.putString(KEY_GOOGLE_PROJECT_ID, googleProjectId);
         Prefs.putString(KEY_CEP_URL, cepUrl);
         Prefs.putString(KEY_APP_ID, appId);
         Prefs.putString(KEY_TENANT_ID, tenantId);
@@ -101,7 +95,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         Prefs.putString(KEY_SERVER_INDEX, serverName.name());
 
         appoxeeOptions.sdkKey = sdkKey;
-        appoxeeOptions.googleProjectId = googleProjectId;
         appoxeeOptions.cepURL = cepUrl;
         appoxeeOptions.appID = appId;
         appoxeeOptions.tenantID = tenantId;
@@ -157,7 +150,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     private void setConfiguration() {
         textSetSdkKey.setText(Prefs.getString(KEY_SDK_KEY, sdkKeyConf));
-        textSetGoogleProjectId.setText(Prefs.getString(KEY_GOOGLE_PROJECT_ID, googleProjectIdConf));
         textSetCepUrl.setText(Prefs.getString(KEY_CEP_URL, cepUrlConf));
         textSetAppId.setText(Prefs.getString(KEY_APP_ID, appIdConf));
         textSetTenantId.setText(Prefs.getString(KEY_TENANT_ID, tenantIdConf));

@@ -393,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("token", token);
                     clipboard.setPrimaryClip(clip);
-                    devLogger.d("FCM TOKEN: ", clip.toString());
+                    devLogger.d("FCM TOKEN: ", token);
                     createBuilder("Firebase token", token);
                 });
             }
@@ -705,7 +705,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
                 Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
-                restartGeofencing();
+                //restartGeofencing();
                 mTextView.setText("App is initialized, Please wait while we display messages...");
             }
         });
@@ -861,7 +861,12 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        Appoxee.instance().removeInitListener(this);
+        super.onDestroy();
     }
 }
 

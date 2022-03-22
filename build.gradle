@@ -21,7 +21,6 @@ buildscript {
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
-def _glideVersion = safeExtGet("glideVersion", "4.12.0")
 
 android {
     compileSdkVersion 31
@@ -31,8 +30,8 @@ android {
         applicationId "com.appoxee.example"
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 1
-        versionName "1.0.15"
+        versionCode 3
+        versionName "1.0.21"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -56,12 +55,12 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"17e58c604fe61e.77446771\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"785651527831\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.g.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"206855\""
-            buildConfigField "String", "TENANT_ID", "\"5963\""
-            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+            buildConfigField "String", "SDK_KEY", "\"17faba41047623.63308981\""
+            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"abc\""
+            buildConfigField "String", "CEP_URL", "\"https://jamie.c.shortest-route.com\""
+            buildConfigField "String", "APP_ID", "\"310450\""
+            buildConfigField "String", "TENANT_ID", "\"60211\""
+            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -195,11 +194,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation('androidx.recyclerview:recyclerview:1.2.1')
-    implementation 'com.google.code.gson:gson:2.8.5'
-    //implementation project(':sdk')
-    implementation('com.mapp.sdk:mapp-android:6.0.18-rc1')
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation project(':sdk')
+    //implementation('com.mapp.sdk:mapp-android:6.0.18-rc01')
 
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation('com.google.firebase:firebase-messaging')
@@ -207,21 +206,22 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
 
     implementation ('com.google.android.gms:play-services-location:19.0.1')
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     implementation "androidx.multidex:multidex:2.0.1"
-
-
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //implementation "androidx.work:work-runtime:2.7.1"
+
+
     androidTestImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:rules:1.4.0'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "com.github.bumptech.glide:glide:${_glideVersion}"
-    annotationProcessor "com.github.bumptech.glide:compiler:${_glideVersion}"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation('com.pixplicity.easyprefs:library:1.9.0')
+    implementation "com.github.bumptech.glide:glide:4.13.1"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.13.1"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation('com.pixplicity.easyprefs:EasyPrefs:1.10.0')
 }
 apply plugin: 'com.google.gms.google-services'
 

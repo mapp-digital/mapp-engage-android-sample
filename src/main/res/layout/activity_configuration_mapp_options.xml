@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ScrollView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/llcButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -36,25 +36,6 @@
                     tools:ignore="Autofill" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/etxt_set_google_project_id"
-                android:hint="@string/google_project_id"
-                android:textSize="13sp"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.4"/>
-
-            <TextView
-                android:id="@+id/txt_set_google_project_id"
-                android:hint="1028993954364"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="18sp"
-                android:textColor="#fff"
-                android:gravity="center_vertical"
-                android:layout_weight="0.6"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -104,74 +85,82 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/choose_server" />
-            <Spinner
-                android:id="@+id/server_options"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                tools:layout_editor_absoluteX="1dp"
-                tools:layout_editor_absoluteY="57dp" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_server" />
+
+                <Spinner
+                    android:id="@+id/server_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="57dp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/btn_configure_appoxee_options"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:background="@color/material_teal_200"
-                android:text="@string/set_configuration"
-                android:onClick="setConfiguration"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <ImageButton
-                    android:id="@+id/btn_refresh"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/material_teal_200"
-                    android:src="@drawable/baseline_refresh_white_48"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:onClick="refreshConfiguration"
-                    android:contentDescription="@null" />
-
-                <ImageButton
-                    android:id="@+id/btn_delete_all_fields"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/material_teal_200"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:onClick="deleteAllFields"
-                    android:src="@drawable/baseline_delete_outline_white_48"
-                    android:contentDescription="@null" />
-            </LinearLayout>
-
-
-            <Button
-                android:id="@+id/btn_get_configuration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:background="@color/material_teal_200"
-                android:onClick="getConfiguration"
-                android:padding="8dp"
-                android:text="@string/get_configuration" />
-
-
         </LinearLayout>
     </ScrollView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/btn_configure_appoxee_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/material_teal_200"
+            android:onClick="setConfiguration"
+            android:text="@string/set_configuration" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_refresh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="@color/material_teal_200"
+                android:contentDescription="@null"
+                android:onClick="refreshConfiguration"
+                android:src="@drawable/baseline_refresh_white_48" />
+
+            <ImageButton
+                android:id="@+id/btn_delete_all_fields"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:background="@color/material_teal_200"
+                android:contentDescription="@null"
+                android:onClick="deleteAllFields"
+                android:src="@drawable/baseline_delete_outline_white_48" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_get_configuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@color/material_teal_200"
+            android:onClick="getConfiguration"
+            android:padding="8dp"
+            android:text="@string/get_configuration" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>

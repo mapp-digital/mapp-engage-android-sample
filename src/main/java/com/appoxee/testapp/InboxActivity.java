@@ -10,38 +10,28 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.appoxee.Appoxee;
-import com.appoxee.internal.inapp.APXInboxWebViewClient;
 import com.appoxee.internal.inapp.model.APXInboxMessage;
 import com.appoxee.internal.inapp.model.InAppCallback;
 import com.appoxee.internal.inapp.model.InAppInboxCallback;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +59,7 @@ public class InboxActivity extends Activity {
 
         setContentView(R.layout.inbox_list_layout);
 
-        recyclerView =  findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         tv = findViewById(R.id.textView);
         tv.setVisibility(View.GONE);
 
@@ -88,6 +78,7 @@ public class InboxActivity extends Activity {
                 String foo = uri.getQueryParameter("foo");
             }*/
             if (bundle != null) {
+                //noinspection unchecked
                 inboxList = (List<APXInboxMessage>) bundle.getSerializable("inboxMessages");
             }
 
@@ -95,10 +86,10 @@ public class InboxActivity extends Activity {
             inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
                 @Override
                 public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
-                    Log.d("messages","messages = " +richMessages.get(0).getContent());
+                    Log.d("messages", "messages = " + richMessages.get(0).getContent());
 
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>)richMessages);
+                    bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
                     Intent intent = new Intent(InboxActivity.this, InboxActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     intent.putExtras(bundle);
@@ -107,7 +98,7 @@ public class InboxActivity extends Activity {
 
                 @Override
                 public void onInAppInboxMessage(final APXInboxMessage message) {
-                    Log.d("messages","messages = " +message.getContent());
+                    Log.d("messages", "messages = " + message.getContent());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -133,7 +124,7 @@ public class InboxActivity extends Activity {
                     APXInboxMessage inboxMessage = inboxList.get(position);
                     String status = inboxMessage.getStatus();
 //                    inboxMessage.markAsUnRead(InboxActivity.this);
-                    Log.d("Aleksandra",status);
+                    Log.d("Aleksandra", status);
                 }
             }));
 
@@ -148,7 +139,7 @@ public class InboxActivity extends Activity {
                 tv.setVisibility(View.GONE);
             } else {
                 tv.setVisibility(View.VISIBLE);
-                if(uri!=null && uri.toString() != null) {
+                if (uri != null && uri.toString() != null) {
                     tv.setText("MessageId = " + uri.toString());
                 } else {
                     tv.setText("MessageId was null");
@@ -156,15 +147,15 @@ public class InboxActivity extends Activity {
             }
         }
 
-        InAppCallback inAppCallback =  new InAppCallback();
+        InAppCallback inAppCallback = new InAppCallback();
         inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
             @Override
             public void onInAppEvent(String eventName, String eventValue) {
                 Log.d("Inbox eventName = ", eventName);
                 Log.d("Inbox eventValue = ", eventValue);
-                Toast.makeText(InboxActivity.this, "KEY = " +eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
+                Toast.makeText(InboxActivity.this, "KEY = " + eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
 
-                if(modalDialog!=null && modalDialog.isShowing()) {
+                if (modalDialog != null && modalDialog.isShowing()) {
                     modalDialog.dismiss();
                 }
             }
@@ -179,15 +170,15 @@ public class InboxActivity extends Activity {
         String query = uri.getQuery();
         String messageId = uri.getQueryParameter("message_id");
 
-        Log.d("InboxActivity","protocol = " +protocol);
-        Log.d("InboxActivity","server = " +server);
-        Log.d("InboxActivity","path = " +path);
-        Log.d("InboxActivity","query = " +query);
-        Log.d("InboxActivity","messageId = " +messageId);
-        if(uri != null && uri.toString() != null) {
-            tv.setText("\n MessageId = " + messageId );
+        Log.d("InboxActivity", "protocol = " + protocol);
+        Log.d("InboxActivity", "server = " + server);
+        Log.d("InboxActivity", "path = " + path);
+        Log.d("InboxActivity", "query = " + query);
+        Log.d("InboxActivity", "messageId = " + messageId);
+        if (uri != null && uri.toString() != null) {
+            tv.setText("\n MessageId = " + messageId);
         } else {
-            tv.setText("DEEPLINK ACTIVITY URI is Null" );
+            tv.setText("DEEPLINK ACTIVITY URI is Null");
         }
 
         Appoxee.instance().fetchInboxMessage(this, Integer.parseInt(messageId));
@@ -218,7 +209,7 @@ public class InboxActivity extends Activity {
                 public void onLongPress(MotionEvent e) {
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
                     if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
                     }
                 }
             });
@@ -229,7 +220,7 @@ public class InboxActivity extends Activity {
 
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
             }
             return false;
         }
@@ -245,7 +236,7 @@ public class InboxActivity extends Activity {
     }
 
     private void showDialogForInboxMessageContent(APXInboxMessage richMessageObject, String htmlContent) {
-        if(modalDialog != null && modalDialog.isShowing()) {
+        if (modalDialog != null && modalDialog.isShowing()) {
             modalDialog.dismiss();
         }
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, com.appoxee.sdk.R.style.ModalDialogTheme);
@@ -276,7 +267,7 @@ public class InboxActivity extends Activity {
         modalDialog = dialogBuilder.create();
         modalDialog.setCancelable(true);
         modalDialog.requestWindowFeature(modalDialog.getWindow().FEATURE_NO_TITLE);
-        if(modalDialog!= null && modalDialog.isShowing()) {
+        if (modalDialog != null && modalDialog.isShowing()) {
             modalDialog.dismiss();
         }
         modalDialog.show();

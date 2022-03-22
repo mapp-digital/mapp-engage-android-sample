@@ -1,23 +1,24 @@
 package com.appoxee.testapp;
 
-import android.app.Application;
+import static com.appoxee.testapp.Constants.KEY_APP_ID;
+import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
+import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
+import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
+import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
+
 import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
 import com.appoxee.DeviceInfo;
-import com.appoxee.push.CustomXmlLayoutNotificationCreator;
 import com.appoxee.push.NotificationMode;
 import com.pixplicity.easyprefs.library.Prefs;
 
-
-import static com.appoxee.testapp.Constants.*;
-
-import androidx.multidex.MultiDexApplication;
-
-public class AppoxeeTestApp extends MultiDexApplication  {
+public class AppoxeeTestApp extends MultiDexApplication {
 
     private AppoxeeOptions opt;
 
@@ -43,20 +44,10 @@ public class AppoxeeTestApp extends MultiDexApplication  {
 
         opt = new AppoxeeOptions();
         opt.sdkKey = Prefs.getString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
-        opt.googleProjectId = Prefs.getString(KEY_GOOGLE_PROJECT_ID, BuildConfig.GOOGLE_PROJECT_ID);
-        //opt.cepURL = Prefs.getString(KEY_CEP_URL, BuildConfig.CEP_URL);
         opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
         opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
         opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
         opt.server = AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SERVER_INDEX, BuildConfig.SERVER_INDEX));
-//        CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
-//        builder.setLayoutResource(R.layout.custom_notification_layout)
-//                .setIconResourceId(R.id.appoxee_default_push_icon)
-//                .setTextResourceId(R.id.appoxee_default_push_message)
-//                .setTitleResourceId(R.id.appoxee_default_push_subject)
-//                .setTimeResourceId(R.id.appoxee_default_push_hour);
-//
-//        opt.customNotificationCreator = new CustomXmlLayoutNotificationCreator(builder);
 
         Appoxee.engage(this, opt);
         Appoxee.instance().addInitListener(initFinishedListener);
@@ -79,6 +70,4 @@ public class AppoxeeTestApp extends MultiDexApplication  {
     public AppoxeeOptions getAppoxeeOptions() {
         return opt;
     }
-
-
 }
