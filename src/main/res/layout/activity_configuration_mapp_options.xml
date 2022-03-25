@@ -43,21 +43,6 @@
                 android:layout_weight="1">
 
                 <EditText
-                    android:id="@+id/etxt_set_cep_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/cep_url"
-                    android:inputType="textWebEmailAddress"
-                    tools:ignore="Autofill,TextFields" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <EditText
                     android:id="@+id/etxt_set_app_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -116,7 +101,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/material_teal_200"
-            android:onClick="setConfiguration"
             android:text="@string/set_configuration" />
 
         <LinearLayout

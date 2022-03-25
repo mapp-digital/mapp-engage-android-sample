@@ -31,7 +31,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 31
         versionCode 3
-        versionName "1.0.21"
+        versionName "1.0.22"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -55,12 +55,12 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"17faba41047623.63308981\""
+            buildConfigField "String", "SDK_KEY", "\"17fbb7ffffe623.81693688\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"abc\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.c.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"310450\""
-            buildConfigField "String", "TENANT_ID", "\"60211\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
+            buildConfigField "String", "CEP_URL", "\"https://jamie.g.shortest-route.com\""
+            buildConfigField "String", "APP_ID", "\"206898\""
+            buildConfigField "String", "TENANT_ID", "\"5963\""
+            buildConfigField "String", "SERVER_INDEX", "\"L3\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 

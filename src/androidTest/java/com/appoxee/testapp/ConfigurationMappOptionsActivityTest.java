@@ -39,7 +39,6 @@ public class ConfigurationMappOptionsActivityTest {
     public void testSetConfigurationOnButtonClick() {
 
         onView(withId(R.id.etxt_set_sdk_key)).perform(typeText(mSdkKey));
-        onView(withId(R.id.etxt_set_google_project_id)).perform(typeText(mGoogleProjectId));
         onView(withId(R.id.etxt_set_cep_url)).perform(typeText(mCepUrl));
         onView(withId(R.id.etxt_set_app_id)).perform(typeText(mAppId));
         onView(withId(R.id.etxt_set_tenant_id)).perform(typeText(mTenantId));
