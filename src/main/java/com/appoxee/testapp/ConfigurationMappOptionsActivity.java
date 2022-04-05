@@ -7,20 +7,20 @@ import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
+import com.appoxee.internal.util.SharedPreferenceUtil;
 import com.pixplicity.easyprefs.library.Prefs;
 
 
@@ -28,14 +28,11 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     private AppoxeeOptions appoxeeOptions;
     private EditText textSetSdkKey;
-    private EditText textSetCepUrl;
     private EditText textSetAppId;
     private EditText textSetTenantId;
     private Spinner chooseServer;
 
     private String sdkKeyConf = BuildConfig.SDK_KEY;
-    private String googleProjectIdConf = BuildConfig.GOOGLE_PROJECT_ID;
-    private String cepUrlConf = BuildConfig.CEP_URL;
     private String appIdConf = BuildConfig.APP_ID;
     private String tenantIdConf = BuildConfig.TENANT_ID;
     private String serverIndexConf = BuildConfig.SERVER_INDEX;
@@ -50,11 +47,11 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         appoxeeOptions = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
 
         textSetSdkKey = findViewById(R.id.etxt_set_sdk_key);
-        textSetCepUrl = findViewById(R.id.etxt_set_cep_url);
         textSetAppId = findViewById(R.id.etxt_set_app_id);
         textSetTenantId = findViewById(R.id.etxt_set_tenant_id);
 
         chooseServer = findViewById(R.id.server_options);
+
         ArrayAdapter<Enum> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, AppoxeeOptions.Server.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         chooseServer.setAdapter(adapter);
@@ -62,73 +59,65 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
         setConfiguration();
 
+        findViewById(R.id.btn_configure_appoxee_options).setOnClickListener(v -> {
+            setNewConfiguration();
+        });
+
     }
 
 
-    public void setConfiguration(View view) {
+    public void setNewConfiguration() {
+        // save new settings
         String sdkKey = textSetSdkKey.getText().toString();
-        String cepUrl = textSetCepUrl.getText().toString();
         String appId = textSetAppId.getText().toString();
         String tenantId = textSetTenantId.getText().toString();
         int serverIndex = chooseServer.getSelectedItemPosition();
 
-        if (sdkKey.equals("")) {
+        if (sdkKey.isEmpty()) {
             sdkKey = sdkKeyConf;
         }
 
-        if (cepUrl.equals("")) {
-            cepUrl = cepUrlConf;
-        }
-        if (appId.equals("")) {
+        if (appId.isEmpty()) {
             appId = appIdConf;
         }
-        if (tenantId.equals("")) {
+        if (tenantId.isEmpty()) {
             tenantId = tenantIdConf;
         }
 
+        appoxeeOptions.sdkKey = sdkKey;
+        appoxeeOptions.appID = appId;
+        appoxeeOptions.tenantID = tenantId;
+        appoxeeOptions.server = AppoxeeOptions.Server.values()[serverIndex];
 
         Prefs.putString(KEY_SDK_KEY, sdkKey);
-        Prefs.putString(KEY_CEP_URL, cepUrl);
         Prefs.putString(KEY_APP_ID, appId);
         Prefs.putString(KEY_TENANT_ID, tenantId);
         AppoxeeOptions.Server serverName = AppoxeeOptions.Server.values()[serverIndex];
         Prefs.putString(KEY_SERVER_INDEX, serverName.name());
 
-        appoxeeOptions.sdkKey = sdkKey;
-        appoxeeOptions.cepURL = cepUrl;
-        appoxeeOptions.appID = appId;
-        appoxeeOptions.tenantID = tenantId;
-        appoxeeOptions.server = AppoxeeOptions.Server.values()[serverIndex];
-
         Appoxee.instance().setDeviceRegistrationState(false);
 
-        new Handler().postDelayed(() -> {
-            Appoxee.engage(getApplication(), appoxeeOptions);
-            Appoxee.instance().addInitListener((successful, failReason) -> {
-                if(successful) {
-                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-                        Appoxee.instance().setToken(token);
-                    });
-                }
-            });
-        }, 1000);
+        SharedPreferenceUtil.getInstance(this).setEngageOptions(appoxeeOptions);
 
-        showMessage();
-        deleteField();
+        new AlertDialog.Builder(this)
+                .setTitle("Info")
+                .setMessage("Application will restart for the changes to take effect.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    showMessage();
+                    deleteField();
+                    new Handler().postDelayed(() -> Util.restartApp(this), 100);
+                })
+                .show();
     }
 
     public void refreshConfiguration(View view) {
 
         Prefs.putString(KEY_SDK_KEY, sdkKeyConf);
-        Prefs.putString(KEY_GOOGLE_PROJECT_ID, googleProjectIdConf);
-        Prefs.putString(KEY_CEP_URL, cepUrlConf);
         Prefs.putString(KEY_APP_ID, appIdConf);
         Prefs.putString(KEY_TENANT_ID, tenantIdConf);
         Prefs.putString(KEY_SERVER_INDEX, serverIndexConf);
 
         appoxeeOptions.sdkKey = sdkKeyConf;
-        appoxeeOptions.googleProjectId = googleProjectIdConf;
-        appoxeeOptions.cepURL = cepUrlConf;
         appoxeeOptions.appID = appIdConf;
         appoxeeOptions.tenantID = tenantIdConf;
         appoxeeOptions.server = AppoxeeOptions.Server.valueOf(serverIndexConf);
@@ -150,7 +139,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
     private void setConfiguration() {
         textSetSdkKey.setText(Prefs.getString(KEY_SDK_KEY, sdkKeyConf));
-        textSetCepUrl.setText(Prefs.getString(KEY_CEP_URL, cepUrlConf));
         textSetAppId.setText(Prefs.getString(KEY_APP_ID, appIdConf));
         textSetTenantId.setText(Prefs.getString(KEY_TENANT_ID, tenantIdConf));
 
@@ -159,10 +147,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     }
 
     private void deleteField() {
-
         textSetSdkKey.setText("");
-//        textSetGoogleProjectId.setText("");
-        textSetCepUrl.setText("");
         textSetAppId.setText("");
         textSetTenantId.setText("");
     }
@@ -170,10 +155,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
     private void showMessage() {
 
         String str = "sdkKey: " + appoxeeOptions.sdkKey +
-                "\n" +
-                "googleProjectId: " + appoxeeOptions.googleProjectId +
-                "\n" +
-                "cepURL: " + appoxeeOptions.cepURL +
                 "\n" +
                 "appID: " + appoxeeOptions.appID +
                 "\n" +
