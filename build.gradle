@@ -31,7 +31,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 31
         versionCode 3
-        versionName "1.0.22"
+        versionName "1.0.23"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -55,10 +55,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"17fbb7ffffe623.81693688\""
+            buildConfigField "String", "SDK_KEY", "\"180655b7791626.21153415\""
             buildConfigField "String", "GOOGLE_PROJECT_ID", "\"abc\""
             buildConfigField "String", "CEP_URL", "\"https://jamie.g.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"206898\""
+            buildConfigField "String", "APP_ID", "\"206921\""
             buildConfigField "String", "TENANT_ID", "\"5963\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
             minifyEnabled false
@@ -197,8 +197,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation('androidx.recyclerview:recyclerview:1.2.1')
     implementation 'com.google.code.gson:gson:2.9.0'
-    implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.18-rc02')
+    //implementation project(':sdk')
+    implementation('com.mapp.sdk:mapp-android:6.0.18')
 
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation('com.google.firebase:firebase-messaging')
