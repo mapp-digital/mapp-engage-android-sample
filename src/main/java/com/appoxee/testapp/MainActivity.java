@@ -261,8 +261,8 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 //
 //                createBuilder("", appoxee.getAlias());
 //                Appoxee.instance().setAttribute("custom1", "value1");
-
-                Toast.makeText(MainActivity.this, "Push enabled: " + Appoxee.instance().isPushEnabled(), Toast.LENGTH_SHORT).show();
+                createBuilder("Push enabled", ""+Appoxee.instance().isPushEnabled());
+                //Toast.makeText(MainActivity.this, "Push enabled: " + Appoxee.instance().isPushEnabled(), Toast.LENGTH_SHORT).show();
             }
         });
 
