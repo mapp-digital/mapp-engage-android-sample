@@ -16,6 +16,7 @@ import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 import static com.appoxee.testapp.Util.capitalize;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -74,11 +75,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-//import com.google.firebase.iid.FirebaseInstanceId;
-//import com.google.android.gms.tasks.OnSuccessListener;
-//import com.google.firebase.iid.FirebaseInstanceId;
-//import com.google.firebase.iid.InstanceIdResult;
-
 public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private Switch pushEnabledSwitch;
@@ -112,8 +108,10 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         setContentView(R.layout.main);
 
         setTitle(getString(R.string.app_name) + " " + VERSION_NAME);
+        devLogger = LoggerFactory.getDevLogger();
 
         appoxee = Appoxee.instance();
+
         set_alias = findViewById(R.id.etxt_set_alias);
         set_tag = findViewById(R.id.etxt_set_tag);
         remove_tag = findViewById(R.id.etxt_remove_tag);
@@ -125,14 +123,18 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         spinner_events = findViewById(R.id.spinner_events);
         init();
         Appoxee.handleRichPush(this, getIntent());
-
-        devLogger = LoggerFactory.getDevLogger();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Appoxee.handleRichPush(this, intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
     }
 
     private final ResultCallback<String> geofenceCallback = new ResultCallback<String>() {
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     };
 
     private void init() {
+        devLogger.d("init()");
         Appoxee.instance().addInitListener(this);
 
         geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
@@ -378,6 +381,10 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             public void onClick(View v) {
                 Appoxee.instance().fetchInboxMessages(MainActivity.this);
             }
+        });
+
+        findViewById(R.id.inapp_events).setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, InAppEventsActivity.class));
         });
 
         findViewById(R.id.multipleMessages).setOnClickListener(new View.OnClickListener() {
@@ -705,6 +712,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         Log.i("APX", "init completed listener - MainActivity");
 
         runOnUiThread(new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());

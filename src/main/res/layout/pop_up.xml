@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/inAppBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,7 +10,10 @@
         android:id="@+id/standardInAppNestedContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -70,11 +74,40 @@
         android:id="@+id/inAppCloseDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/margin_8"
         android:layout_marginEnd="@dimen/margin_8"
         android:contentDescription="@null"
-        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btnWebpage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Webpage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnPlayStore"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@id/standardInAppNestedContainer" />
+
+    <Button
+        android:id="@+id/btnPlayStore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Play store"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintEnd_toStartOf="@id/btnDeepLink"
+        app:layout_constraintStart_toEndOf="@id/btnWebpage"
+        app:layout_constraintTop_toTopOf="@id/btnWebpage" />
+
+    <Button
+        android:id="@+id/btnDeepLink"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Deep link"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnPlayStore"
+        app:layout_constraintTop_toTopOf="@id/btnWebpage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

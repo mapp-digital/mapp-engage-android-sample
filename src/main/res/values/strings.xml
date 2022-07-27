@@ -52,6 +52,11 @@
     <string name="get_custom_attributes_from_server">Get Custom Attributes from Server</string>
     <string name="get_alias_from_server">Get Alias from Server</string>
     <string name="get_native_inapp">native inapp</string>
+    <string name="inapp_events">InApp Events</string>
+    <string name="you_first_need_to_create_some_inapp_messages_and_load_them_after_that_events_can_be_executed_for_existing_inapp_message">AVAILABLE ONLY IN DEBUG MODE!!!\nYou first need to create some InApp messages and load them. After that events can be executed for existing InApp Message.</string>
+    <string name="summary">Summary</string>
+    <string name="subject">Subject</string>
+    <string name="time">Time</string>
 
 
     <string-array name="screen_orientation">

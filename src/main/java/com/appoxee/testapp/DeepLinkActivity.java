@@ -9,13 +9,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.appoxee.internal.logger.LoggerFactory;
+
 import java.util.List;
 
 /**
  * Created by Varun on 4/7/2018.
  */
 
-public class DeepLinkActivity extends Activity {
+public class DeepLinkActivity extends AppCompatActivity {
 
     private final String APX_LAUNCH_DEEPLINK_ACTION = "com.appoxee.VIEW_DEEPLINK";
 
@@ -25,6 +29,7 @@ public class DeepLinkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+        LoggerFactory.getDevLogger().d("DEEPLINK ACTIVITY CREATED!!!  =   "+this);
 
         tv = (TextView) findViewById(R.id.textView);
 
@@ -41,15 +46,10 @@ public class DeepLinkActivity extends Activity {
             link = null;
         }
 
-
-
-        findViewById(R.id.open_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(link));
-                startActivity(intent);
-            }
+        findViewById(R.id.open_link).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(link));
+            startActivity(intent);
         });
 
     }
@@ -57,8 +57,6 @@ public class DeepLinkActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
     private void openDeepLink(Uri uri) {

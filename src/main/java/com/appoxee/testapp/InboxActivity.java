@@ -1,6 +1,5 @@
 package com.appoxee.testapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,12 +15,14 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +41,7 @@ import java.util.List;
  * Created by Varun on 4/3/2018.
  */
 
-public class InboxActivity extends Activity {
+public class InboxActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     InboxAdapter mAdapter;
@@ -61,7 +62,6 @@ public class InboxActivity extends Activity {
 
         recyclerView = findViewById(R.id.recycler_view);
         tv = findViewById(R.id.textView);
-        tv.setVisibility(View.GONE);
 
         Bundle bundle;
         Uri uri = null;
@@ -112,19 +112,15 @@ public class InboxActivity extends Activity {
                 @Override
                 public void onClick(View view, int position) {
                     APXInboxMessage inboxMessage = inboxList.get(position);
-                    String status = inboxMessage.getStatus();
                     showDialogForInboxMessageContent(inboxMessage, inboxMessage.getContent());
                     inboxMessage.markAsRead(InboxActivity.this);
-//                    inboxMessage.markAsDeleted(InboxActivity.this);
-//                    inboxMessage.markAsUnRead(InboxActivity.this);
+                    mAdapter.notifyItemChanged(position);
                 }
 
                 @Override
                 public void onLongClick(View view, int position) {
                     APXInboxMessage inboxMessage = inboxList.get(position);
-                    String status = inboxMessage.getStatus();
-//                    inboxMessage.markAsUnRead(InboxActivity.this);
-                    Log.d("Aleksandra", status);
+                    longClickPopupMenu(inboxMessage, position);
                 }
             }));
 
@@ -160,6 +156,32 @@ public class InboxActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void longClickPopupMenu(APXInboxMessage message, int itemPosition) {
+        CharSequence[] menuItems = new String[3];
+        menuItems[0] = "Read";
+        menuItems[1] = "Unread";
+        menuItems[2] = "Delete";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(InboxActivity.this);
+        AlertDialog dialog = builder.setTitle("Menu")
+                .setItems(menuItems, (dg, menuPosition) -> {
+                    switch (menuPosition) {
+                        case 0:
+                            message.markAsRead(InboxActivity.this);
+                            break;
+                        case 1:
+                            message.markAsUnRead(InboxActivity.this);
+                            break;
+                        default:
+                            message.markAsDeleted(InboxActivity.this);
+                            break;
+                    }
+                    mAdapter.notifyItemChanged(itemPosition);
+                })
+                .create();
+        dialog.show();
     }
 
     private void getMessageId(Uri uri) {
@@ -249,12 +271,32 @@ public class InboxActivity extends Activity {
         TextView inAppTitle = (TextView) dialogView.findViewById(R.id.inAppTitle);
         inAppTitle.setText(richMessageObject.getSubject());
         TextView inAppContent = (TextView) dialogView.findViewById(R.id.inAppContent);
+        Button btnWebPage = dialogView.findViewById(R.id.btnWebpage);
+        Button btnPlayStore = dialogView.findViewById(R.id.btnPlayStore);
+        Button btnDeepLink = dialogView.findViewById(R.id.btnDeepLink);
         inAppContent.setText(richMessageObject.getSummary());
+
         Glide.with(this)
                 .asDrawable()
                 .load(richMessageObject.getIconUrl())
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(inAppImage);
+
+        btnWebPage.setOnClickListener(v -> {
+            richMessageObject.handleAction("apxAction://landingPage?openInApp=0&link=https://www.google.com", InboxActivity.this, null);
+            modalDialog.dismiss();
+        });
+
+        btnPlayStore.setOnClickListener(v -> {
+            richMessageObject.handleAction("apxAction://appStore?openInApp=0&link=com.kiloo.subwaysurf&hl=en&gl=US", InboxActivity.this, null);
+            modalDialog.dismiss();
+        });
+
+        btnDeepLink.setOnClickListener(v -> {
+            modalDialog.dismiss();
+            richMessageObject.handleAction("apxAction://deeplink?link=https://www.test.com?a=b", InboxActivity.this, null);
+        });
+
         dismissDialogImageIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

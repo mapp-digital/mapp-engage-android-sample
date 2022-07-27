@@ -119,6 +119,12 @@
                 android:text="@string/fullscreen_app_open" />
 
             <Button
+                android:id="@+id/inapp_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/inapp_events" />
+
+            <Button
                 android:id="@+id/inappModalType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -207,7 +213,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/fetch_inbox_messages" />
-
 
             <EditText
                 android:id="@+id/etxt_set_tag"

@@ -29,8 +29,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
     private List<APXInboxMessage> inboxList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView subject, summary, time;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView subject, summary, time, status;
         public ImageView icon;
 
         public MyViewHolder(View view) {
@@ -39,6 +39,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
             summary = (TextView) view.findViewById(R.id.summary);
             icon = (ImageView) view.findViewById(R.id.imageUrl);
             time = (TextView) view.findViewById(R.id.time);
+            status=view.findViewById(R.id.status);
         }
     }
 
@@ -60,6 +61,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         APXInboxMessage inboxMessage = inboxList.get(position);
         holder.subject.setText(inboxMessage.getSubject());
         holder.summary.setText(inboxMessage.getSummary());
+        holder.status.setText(inboxMessage.getStatus()!=null ? inboxMessage.getStatus().toLowerCase() : "");
         if (inboxMessage.getSentDate() != null) {
             holder.time.setText(inboxMessage.getSentDate().toString());
         }
