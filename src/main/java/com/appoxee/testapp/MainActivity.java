@@ -2,8 +2,6 @@ package com.appoxee.testapp;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
 import static com.appoxee.testapp.BuildConfig.APP_ID;
-import static com.appoxee.testapp.BuildConfig.CEP_URL;
-import static com.appoxee.testapp.BuildConfig.GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.BuildConfig.SDK_KEY;
 import static com.appoxee.testapp.BuildConfig.SERVER_INDEX;
 import static com.appoxee.testapp.BuildConfig.TENANT_ID;
@@ -678,15 +676,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     private void backupConfiguration() {
         Prefs.putString(KEY_SDK_KEY, SDK_KEY);
-        Prefs.putString(KEY_GOOGLE_PROJECT_ID, GOOGLE_PROJECT_ID);
-        Prefs.putString(KEY_CEP_URL, CEP_URL);
         Prefs.putString(KEY_APP_ID, APP_ID);
         Prefs.putString(KEY_TENANT_ID, TENANT_ID);
         Prefs.putString(KEY_SERVER_INDEX, SERVER_INDEX);
 
         options.sdkKey = SDK_KEY;
-        options.googleProjectId = GOOGLE_PROJECT_ID;
-        options.cepURL = CEP_URL;
         options.appID = APP_ID;
         options.tenantID = TENANT_ID;
         options.server=AppoxeeOptions.Server.valueOf(SERVER_INDEX);

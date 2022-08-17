@@ -44,8 +44,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "SDK_KEY", "\"5fd76d903c2247.21400126\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"\""
             buildConfigField "String", "APP_ID", "\"264115\""
             buildConfigField "String", "TENANT_ID", "\"33\""
             buildConfigField "String", "SERVER_INDEX", "\"TEST\""
@@ -55,12 +53,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"181fc7bb15962c.37123510\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"abc\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.g.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"206942\""
-            buildConfigField "String", "TENANT_ID", "\"5963\""
-            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+            buildConfigField "String", "SDK_KEY", "\"1823e87491862e.90223284\""
+            buildConfigField "String", "APP_ID", "\"300875\""
+            buildConfigField "String", "TENANT_ID", "\"55\""
+            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
