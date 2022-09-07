@@ -53,10 +53,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"1823e87491862e.90223284\""
-            buildConfigField "String", "APP_ID", "\"300875\""
-            buildConfigField "String", "TENANT_ID", "\"55\""
-            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
+            buildConfigField "String", "SDK_KEY", "\"18288464ebf62f.59797060\""
+            buildConfigField "String", "APP_ID", "\"310498\""
+            buildConfigField "String", "TENANT_ID", "\"60211\""
+            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
