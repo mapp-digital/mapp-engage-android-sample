@@ -24,14 +24,14 @@ def safeExtGet(prop, fallback) {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion '30.0.3'
+    buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.appoxee.example"
         minSdkVersion 19
         targetSdkVersion 31
         versionCode 4
-        versionName "1.0.26"
+        versionName "1.0.30"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -53,10 +53,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"18288464ebf62f.59797060\""
-            buildConfigField "String", "APP_ID", "\"310498\""
-            buildConfigField "String", "TENANT_ID", "\"60211\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
+            buildConfigField "String", "SDK_KEY", "\"18364388c4d632.89697073\""
+            buildConfigField "String", "APP_ID", "\"300891\""
+            buildConfigField "String", "TENANT_ID", "\"33\""
+            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -188,11 +188,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation('androidx.recyclerview:recyclerview:1.2.1')
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.18')
+    //implementation('com.mapp.sdk:mapp-android:6.0.19-rc02')
 
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation('com.google.firebase:firebase-messaging')
@@ -200,7 +200,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
 
     implementation ('com.google.android.gms:play-services-location:20.0.0')
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

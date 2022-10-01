@@ -1,8 +1,6 @@
 package com.appoxee.testapp;
 
 import static com.appoxee.testapp.Constants.KEY_APP_ID;
-import static com.appoxee.testapp.Constants.KEY_CEP_URL;
-import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
@@ -97,7 +95,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
         Appoxee.instance().setDeviceRegistrationState(false);
 
-        SharedPreferenceUtil.getInstance(this).setEngageOptions(appoxeeOptions);
+        SharedPreferenceUtil.getInstance().setEngageOptions(appoxeeOptions);
 
         new AlertDialog.Builder(this)
                 .setTitle("Info")
@@ -105,7 +103,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, which) -> {
                     showMessage();
                     deleteField();
-                    new Handler().postDelayed(() -> Util.restartApp(this), 100);
+                    new Handler().postDelayed(() -> Util.restartApp(this), 500);
                 })
                 .show();
     }

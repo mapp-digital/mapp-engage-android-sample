@@ -22,7 +22,7 @@ public class AppoxeeTestApp extends MultiDexApplication {
 
     private AppoxeeOptions opt;
 
-    private Appoxee.OnInitCompletedListener initFinishedListener = new Appoxee.OnInitCompletedListener() {
+    private final Appoxee.OnInitCompletedListener initFinishedListener = new Appoxee.OnInitCompletedListener() {
         @Override
         public void onInitCompleted(boolean successful, Exception failReason) {
             Log.i("APX", "init completed listener - Application class");
