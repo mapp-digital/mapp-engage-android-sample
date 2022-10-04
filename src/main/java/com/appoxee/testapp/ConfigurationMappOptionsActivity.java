@@ -65,6 +65,8 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
 
     public void setNewConfiguration() {
+        Appoxee.instance().logOut(false);
+
         // save new settings
         String sdkKey = textSetSdkKey.getText().toString();
         String appId = textSetAppId.getText().toString();
@@ -93,8 +95,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         AppoxeeOptions.Server serverName = AppoxeeOptions.Server.values()[serverIndex];
         Prefs.putString(KEY_SERVER_INDEX, serverName.name());
 
-        Appoxee.instance().setDeviceRegistrationState(false);
-
         SharedPreferenceUtil.getInstance().setEngageOptions(appoxeeOptions);
 
         new AlertDialog.Builder(this)
@@ -103,7 +103,7 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, which) -> {
                     showMessage();
                     deleteField();
-                    new Handler().postDelayed(() -> Util.restartApp(this), 500);
+                    Util.restartApp(this);
                 })
                 .show();
     }
