@@ -2,9 +2,13 @@ package com.appoxee.testapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.fragment.app.FragmentActivity;
+
+import com.appoxee.Appoxee;
 
 class Util {
 
@@ -25,14 +29,12 @@ class Util {
     }
 
     public static void restartApp(Context context){
-/*        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }, 500);*/
-/*        if (context instanceof FragmentActivity) {
-            ((FragmentActivity)context).finish();
-        }*/
-        android.os.Process.killProcess(android.os.Process.myPid());
+        Context ctx= context.getApplicationContext();
+        PackageManager pm=ctx.getPackageManager();
+        Intent intent=pm.getLaunchIntentForPackage(ctx.getPackageName());
+        Intent mainIntent=Intent.makeRestartActivityTask(intent.getComponent());
+        //ctx.startActivity(mainIntent);
+
+        Runtime.getRuntime().exit(0);
     }
 }

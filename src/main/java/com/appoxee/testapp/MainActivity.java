@@ -280,6 +280,16 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             }
         });
 
+        findViewById(R.id.get_device_dmc).setOnClickListener(v->{
+            Map<String,String> map=Appoxee.instance().getDmcDeviceInfo();
+            if(map!=null){
+                StringBuilder sb=new StringBuilder();
+                for(Map.Entry<String, String> entry: map.entrySet()){
+                    sb.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n\n");
+                }
+                createBuilder("Device DMC Data", sb.toString());
+            }
+        });
 
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
             @Override
