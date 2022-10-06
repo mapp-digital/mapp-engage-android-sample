@@ -67,6 +67,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCompletedListener {
@@ -280,12 +281,13 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             }
         });
 
-        findViewById(R.id.get_device_dmc).setOnClickListener(v->{
-            Map<String,String> map=Appoxee.instance().getDmcDeviceInfo();
-            if(map!=null){
-                StringBuilder sb=new StringBuilder();
-                for(Map.Entry<String, String> entry: map.entrySet()){
-                    sb.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n\n");
+        findViewById(R.id.get_device_dmc).setOnClickListener(v -> {
+            Map<String, String> map = Appoxee.instance().getDmcDeviceInfo();
+            if (map != null) {
+                StringBuilder sb = new StringBuilder();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    if (!Objects.equals("alias", entry.getKey()))
+                        sb.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n\n");
                 }
                 createBuilder("Device DMC Data", sb.toString());
             }
