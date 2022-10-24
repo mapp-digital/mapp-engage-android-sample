@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         findViewById(R.id.get_deviceId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String deviceId = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                String deviceId = Appoxee.instance().getDeviceInfo().id;
                 createBuilder("", deviceId);
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", deviceId);

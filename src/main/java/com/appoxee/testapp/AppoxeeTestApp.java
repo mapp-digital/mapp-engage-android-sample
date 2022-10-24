@@ -26,6 +26,7 @@ public class AppoxeeTestApp extends MultiDexApplication {
         @Override
         public void onInitCompleted(boolean successful, Exception failReason) {
             Log.i("APX", "init completed listener - Application class");
+            Appoxee.instance().setPushEnabled(true);
         }
     };
 
@@ -54,16 +55,7 @@ public class AppoxeeTestApp extends MultiDexApplication {
         long end = System.currentTimeMillis();
         Log.i("APX", "Start Service took " + (end - start) + " ms on main thread");
         Appoxee.setOrientation(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        DeviceInfo info = Appoxee.instance().getDeviceInfo();
-        Log.d("APX", "info (before init finished): " + info);
         Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            // This process is dedicated to LeakCanary for heap analysis.
-//            // You should not init your app in this process.
-//            return;
-//        }
-//        LeakCanary.install(this);
-//        // Normal app init code...
     }
 
 

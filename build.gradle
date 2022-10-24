@@ -23,6 +23,14 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('engage-debug-key')
+            storePassword 'engage'
+            keyAlias 'engage'
+            keyPassword 'engage'
+        }
+    }
     compileSdkVersion 31
     buildToolsVersion '33.0.0'
 
@@ -53,10 +61,10 @@ android {
         debug {
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"18364388c4d632.89697073\""
-            buildConfigField "String", "APP_ID", "\"300891\""
-            buildConfigField "String", "TENANT_ID", "\"33\""
-            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
+            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
+            buildConfigField "String", "APP_ID", "\"206974\""
+            buildConfigField "String", "TENANT_ID", "\"5963\""
+            buildConfigField "String", "SERVER_INDEX", "\"L3\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -181,8 +189,8 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
@@ -220,7 +228,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation('com.pixplicity.easyprefs:EasyPrefs:1.10.0')
 }
-apply plugin: 'com.google.gms.google-services'
+
 
 task publishToTesters {
     dependsOn 'assembleStaging11'
