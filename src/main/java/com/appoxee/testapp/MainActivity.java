@@ -22,7 +22,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -166,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     private void init() {
         devLogger.d("init()");
-        Appoxee.instance().addInitListener(this);
 
         geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
             @Override
@@ -545,6 +543,8 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         findViewById(R.id.btn_logout_with_optout).setOnClickListener(view -> Appoxee.instance().logOut(false));
 
         findViewById(R.id.btn_logout).setOnClickListener(view -> Appoxee.instance().logOut(true));
+
+        Appoxee.instance().addInitListener(this);
     }
 
 
