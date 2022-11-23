@@ -39,7 +39,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 33
         versionCode 7
-        versionName "1.0.33"
+        versionName "1.0.34"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -58,7 +58,7 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
+            //signingConfig signingConfigs.debug
 
             buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
             buildConfigField "String", "APP_ID", "\"206974\""

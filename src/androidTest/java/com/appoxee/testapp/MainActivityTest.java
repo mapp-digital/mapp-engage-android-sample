@@ -50,7 +50,7 @@ public class MainActivityTest {
     @Test
     public void testGetInfoOnButtonClick() {
 
-        onView(withId(R.id.device_info)).perform(click());
+        onView(withId(R.id.buttonPushEnabled)).perform(click());
     }
 
     @Test

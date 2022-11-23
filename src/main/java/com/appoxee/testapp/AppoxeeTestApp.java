@@ -26,7 +26,7 @@ public class AppoxeeTestApp extends MultiDexApplication {
         @Override
         public void onInitCompleted(boolean successful, Exception failReason) {
             Log.i("APX", "init completed listener - Application class");
-            Appoxee.instance().setPushEnabled(true);
+            //Appoxee.instance().setPushEnabled(true);
         }
     };
 

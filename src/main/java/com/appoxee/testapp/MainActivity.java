@@ -37,6 +37,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
@@ -53,6 +54,7 @@ import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
+import com.appoxee.internal.permission.PermissionsCallback;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -72,6 +74,7 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
     private SwitchCompat pushEnabledSwitch;
+    private Toolbar toolbar;
     private TextView mTextView;
     private Appoxee appoxee;
     private EditText set_alias;
@@ -97,7 +100,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle(getString(R.string.app_name) + " " + VERSION_NAME);
+        toolbar.setSubtitle("SDK VERSION: " + com.appoxee.sdk.BuildConfig.VERSION_NAME);
+
         devLogger = LoggerFactory.getDevLogger();
 
         appoxee = Appoxee.instance();
@@ -112,6 +119,18 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         get_custom_attributes = findViewById(R.id.etxt_get_custom_attributes);
         spinner_events = findViewById(R.id.spinner_events);
         init();
+
+        pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.getId() == R.id.push_enabled) {
+                    if (isChecked != Appoxee.instance().isPushEnabled()) {
+                        Appoxee.instance().setPushEnabled(isChecked);
+                    }
+                }
+            }
+        });
+
         Appoxee.handleRichPush(this, getIntent());
     }
 
@@ -127,23 +146,14 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         if (Appoxee.instance().isReady()) {
             pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
         }
-        pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.getId() == R.id.push_enabled) {
-                    Appoxee.instance().setPushEnabled(isChecked);
-                }
-            }
-        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        pushEnabledSwitch.setOnCheckedChangeListener(null);
     }
 
-    private final ResultCallback<String> geofenceCallback = new ResultCallback<String>() {
+    private final ResultCallback<String> geofenceCallback = new ResultCallback<>() {
         @Override
         public void onResult(@Nullable String result) {
             devLogger.d(result);
@@ -249,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         });
 
         mTextView = (TextView) findViewById(R.id.dummyText);
-        findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buttonPushEnabled).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createBuilder("Push enabled", "" + Appoxee.instance().isPushEnabled());
@@ -261,10 +271,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             public void onClick(View v) {
                 String getAlias = getAlias();
                 createBuilder("", getAlias);
-
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", getAlias);
-                clipboard.setPrimaryClip(clip);
             }
         });
 
@@ -273,9 +279,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             public void onClick(View v) {
                 String deviceId = Appoxee.instance().getDeviceInfo().id;
                 createBuilder("", deviceId);
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", deviceId);
-                clipboard.setPrimaryClip(clip);
             }
         });
 
@@ -581,8 +584,14 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         runOnUiThread(() -> {
             Toast.makeText(this, "OnInitCompleted: " + successful, Toast.LENGTH_SHORT).show();
             if (successful) {
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
-                pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+                Appoxee.instance().requestNotificationsPermission(MainActivity.this, new PermissionsCallback() {
+                    @Override
+                    public void onPermissionsResult(Map<String, Integer> results) {
+                        Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
+                        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+                    }
+                });
+
             }
         });
     }
@@ -740,8 +749,9 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     @Override
     protected void onDestroy() {
-        Appoxee.instance().removeInitListener(this);
         super.onDestroy();
+        pushEnabledSwitch.setOnCheckedChangeListener(null);
+        Appoxee.instance().removeInitListener(this);
     }
 }
 
