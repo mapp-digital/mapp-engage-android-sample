@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             if (map != null) {
                 StringBuilder sb = new StringBuilder();
                 for (Map.Entry<String, String> entry : map.entrySet()) {
-                    if (!Objects.equals("alias", entry.getKey()))
+                    if (Objects.equals("UDIDHashed", entry.getKey()) || Objects.equals("dmcUserId", entry.getKey()))
                         sb.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n\n");
                 }
                 createBuilder("Device DMC Data", sb.toString());
