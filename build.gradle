@@ -13,9 +13,6 @@ buildscript {
         google()
         jcenter()
     }
-//    dependencies {
-//        classpath 'com.google.gms:google-services:3.2.1'
-//    }
 }
 
 def safeExtGet(prop, fallback) {
@@ -31,6 +28,8 @@ android {
             keyPassword 'engage'
         }
     }
+
+    namespace 'com.appoxee.testapp'
     compileSdkVersion 33
     buildToolsVersion '33.0.0'
 

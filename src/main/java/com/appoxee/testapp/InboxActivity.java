@@ -1,5 +1,6 @@
 package com.appoxee.testapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +16,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ import java.util.List;
  * Created by Varun on 4/3/2018.
  */
 
+@SuppressWarnings({"FieldCanBeLocal", "unchecked"})
 public class InboxActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -54,6 +57,7 @@ public class InboxActivity extends AppCompatActivity {
     Uri uri;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,8 +139,8 @@ public class InboxActivity extends AppCompatActivity {
                 tv.setVisibility(View.GONE);
             } else {
                 tv.setVisibility(View.VISIBLE);
-                if (uri != null && uri.toString() != null) {
-                    tv.setText("MessageId = " + uri.toString());
+                if (uri != null) {
+                    tv.setText("MessageId = " + uri);
                 } else {
                     tv.setText("MessageId was null");
                 }
@@ -185,26 +189,23 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private void getMessageId(Uri uri) {
+        if (uri != null) {
+            String protocol = uri.getScheme();
+            String server = uri.getAuthority();
+            String path = uri.getPath();
+            String query = uri.getQuery();
+            String messageId = uri.getQueryParameter("message_id");
 
-        String protocol = uri.getScheme();
-        String server = uri.getAuthority();
-        String path = uri.getPath();
-        String query = uri.getQuery();
-        String messageId = uri.getQueryParameter("message_id");
-
-        Log.d("InboxActivity", "protocol = " + protocol);
-        Log.d("InboxActivity", "server = " + server);
-        Log.d("InboxActivity", "path = " + path);
-        Log.d("InboxActivity", "query = " + query);
-        Log.d("InboxActivity", "messageId = " + messageId);
-        if (uri != null && uri.toString() != null) {
+            Log.d("InboxActivity", "protocol = " + protocol);
+            Log.d("InboxActivity", "server = " + server);
+            Log.d("InboxActivity", "path = " + path);
+            Log.d("InboxActivity", "query = " + query);
+            Log.d("InboxActivity", "messageId = " + messageId);
             tv.setText("\n MessageId = " + messageId);
+            Appoxee.instance().fetchInboxMessage(this, Integer.parseInt(messageId));
         } else {
             tv.setText("DEEPLINK ACTIVITY URI is Null");
         }
-
-        Appoxee.instance().fetchInboxMessage(this, Integer.parseInt(messageId));
-
     }
 
 
@@ -216,8 +217,8 @@ public class InboxActivity extends AppCompatActivity {
 
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
+        private final GestureDetector gestureDetector;
+        private final ClickListener clickListener;
 
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
@@ -305,20 +306,20 @@ public class InboxActivity extends AppCompatActivity {
                 }
             }
         });
-        dialogBuilder.setView(dialogView);
-        modalDialog = dialogBuilder.create();
-        modalDialog.setCancelable(true);
-        modalDialog.requestWindowFeature(modalDialog.getWindow().FEATURE_NO_TITLE);
+
         if (modalDialog != null && modalDialog.isShowing()) {
             modalDialog.dismiss();
         }
+
+        dialogBuilder.setView(dialogView);
+        modalDialog = dialogBuilder.create();
+        modalDialog.setCancelable(true);
+        modalDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         modalDialog.show();
-
-
     }
 
 
-    public class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
+    public static class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
 
         private final int[] ATTRS = new int[]{
                 android.R.attr.listDivider
@@ -328,10 +329,10 @@ public class InboxActivity extends AppCompatActivity {
 
         public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
 
-        private Drawable mDivider;
+        private final Drawable mDivider;
         private int mOrientation;
-        private Context context;
-        private int margin;
+        private final Context context;
+        private final int margin;
 
         public MyDividerItemDecoration(Context context, int orientation, int margin) {
             this.context = context;
