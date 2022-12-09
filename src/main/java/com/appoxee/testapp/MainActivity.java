@@ -12,6 +12,7 @@ import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 import static com.appoxee.testapp.Util.capitalize;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -54,7 +55,7 @@ import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
-import com.appoxee.internal.permission.PermissionsCallback;
+import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -584,12 +585,12 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         runOnUiThread(() -> {
             Toast.makeText(this, "OnInitCompleted: " + successful, Toast.LENGTH_SHORT).show();
             if (successful) {
-                Appoxee.instance().requestNotificationsPermission(MainActivity.this, new PermissionsCallback() {
-                    @Override
-                    public void onPermissionsResult(Map<String, Integer> results) {
-                        Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
-                        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+                Appoxee.instance().requestNotificationsPermission(MainActivity.this, results -> {
+                    if (results.containsKey(Manifest.permission.POST_NOTIFICATIONS) && results.get(Manifest.permission.POST_NOTIFICATIONS) == PermissionsManager.PERMISSION_GRANTED) {
+                        Toast.makeText(MainActivity.this,"POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
                     }
+                    Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
+                    pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
                 });
 
             }
