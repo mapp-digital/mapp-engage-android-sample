@@ -38,7 +38,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 33
         versionCode 8
-        versionName "1.0.35"
+        versionName "1.0.35 - Android 13 Test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -59,10 +59,10 @@ android {
         debug {
             //signingConfig signingConfigs.debug
 
-            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
-            buildConfigField "String", "APP_ID", "\"206974\""
-            buildConfigField "String", "TENANT_ID", "\"5963\""
-            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+            buildConfigField "String", "SDK_KEY", "\"17f9da298e2623.30946563\""
+            buildConfigField "String", "APP_ID", "\"206773 \""
+            buildConfigField "String", "TENANT_ID", "\"20053\""
+            buildConfigField "String", "SERVER_INDEX", "\"EMC\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
