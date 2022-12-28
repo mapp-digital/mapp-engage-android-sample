@@ -7,14 +7,12 @@ import static com.appoxee.testapp.BuildConfig.SERVER_INDEX;
 import static com.appoxee.testapp.BuildConfig.TENANT_ID;
 import static com.appoxee.testapp.BuildConfig.VERSION_NAME;
 import static com.appoxee.testapp.Constants.KEY_APP_ID;
-import static com.appoxee.testapp.Constants.KEY_CEP_URL;
-import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 import static com.appoxee.testapp.Util.capitalize;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,10 +20,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -34,14 +31,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
@@ -58,6 +55,7 @@ import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
+import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -71,15 +69,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
-    private Switch pushEnabledSwitch;
-    private Switch deviceRegistrationState;
-    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1 << 3;
-    private static final int MY_PERMISSIONS_ACCESS_FINE_AND_BACKGROUND_LOCATION = 1 << 4;
-    private LinearLayout mMainLayout;
+    private SwitchCompat pushEnabledSwitch;
+    private Toolbar toolbar;
     private TextView mTextView;
     private Appoxee appoxee;
     private EditText set_alias;
@@ -94,18 +90,22 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     private AppoxeeOptions options;
     private Spinner spinner_events;
     private boolean isInitSpinner = false;
-    private boolean runningQOrLater = Build.VERSION.SDK_INT >= 29;
 
     private Logger devLogger;
 
     private GeofencePermissions geofencePermissions;
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle(getString(R.string.app_name) + " " + VERSION_NAME);
+        toolbar.setSubtitle("SDK VERSION: " + com.appoxee.sdk.BuildConfig.VERSION_NAME);
+
         devLogger = LoggerFactory.getDevLogger();
 
         appoxee = Appoxee.instance();
@@ -120,6 +120,18 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         get_custom_attributes = findViewById(R.id.etxt_get_custom_attributes);
         spinner_events = findViewById(R.id.spinner_events);
         init();
+
+        pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.getId() == R.id.push_enabled) {
+                    if (isChecked != Appoxee.instance().isPushEnabled()) {
+                        Appoxee.instance().setPushEnabled(isChecked);
+                    }
+                }
+            }
+        });
+
         Appoxee.handleRichPush(this, getIntent());
     }
 
@@ -130,12 +142,19 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+    protected void onResume() {
+        super.onResume();
+        if (Appoxee.instance().isReady()) {
+            pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+        }
     }
 
-    private final ResultCallback<String> geofenceCallback = new ResultCallback<String>() {
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    private final ResultCallback<String> geofenceCallback = new ResultCallback<>() {
         @Override
         public void onResult(@Nullable String result) {
             devLogger.d(result);
@@ -157,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     private void init() {
         devLogger.d("init()");
-        Appoxee.instance().addInitListener(this);
 
         geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
             @Override
@@ -241,60 +259,41 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
         });
 
-        mMainLayout = (LinearLayout) findViewById(R.id.parentLayout);
         mTextView = (TextView) findViewById(R.id.dummyText);
-        //mMainLayout.setVisibility(View.GONE);//Make it visible to see other controls what Appoxee has in stock
-        findViewById(R.id.device_info).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buttonPushEnabled).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SharedPreferences sp = getSharedPreferences("test", MODE_PRIVATE);
-//                int aliasCounter = sp.getInt("aliasCounter", 0);
-//                aliasCounter++;
-//                sp.edit().putInt("aliasCounter", aliasCounter).apply();
-//                DeviceInfo info = Appoxee.instance().getDeviceInfo();
-//                Log.d("APX", "info: (click)" + new Gson().toJson(info));
-//                Appoxee appoxee = Appoxee.instance();
-////                appoxee.setAlias(getString(R.string.alias_email));
-//                appoxee.addTag("tag" + aliasCounter);
-//                appoxee.setAttribute("numericAttr" + aliasCounter, aliasCounter);
-//                appoxee.setAttribute("stringAttr" + aliasCounter, "str" + aliasCounter);
-//                appoxee.setAttribute("dateAttr" + aliasCounter, Calendar.getInstance().getTime());
-//
-//                createBuilder("", appoxee.getAlias());
-//                Appoxee.instance().setAttribute("custom1", "value1");
-                createBuilder("Push enabled", ""+Appoxee.instance().isPushEnabled());
-                //Toast.makeText(MainActivity.this, "Push enabled: " + Appoxee.instance().isPushEnabled(), Toast.LENGTH_SHORT).show();
+                createBuilder("Push enabled", "" + Appoxee.instance().isPushEnabled());
             }
         });
 
         findViewById(R.id.get_alias).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Appoxee appoxee = Appoxee.instance();
-//                Set<String> tags = appoxee.getTags();
-//                Log.d("APX", "tags: " + new Gson().toJson(tags));
-
                 String getAlias = getAlias();
                 createBuilder("", getAlias);
-
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", getAlias);
-                clipboard.setPrimaryClip(clip);
             }
         });
 
         findViewById(R.id.get_deviceId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String deviceId = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                String deviceId = Appoxee.instance().getDeviceInfo().id;
                 createBuilder("", deviceId);
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", deviceId);
-                clipboard.setPrimaryClip(clip);
             }
         });
 
+        findViewById(R.id.get_device_dmc).setOnClickListener(v -> {
+            Map<String, String> map = Appoxee.instance().getDmcDeviceInfo();
+            if (map != null) {
+                StringBuilder sb = new StringBuilder();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    if (Objects.equals("UDIDHashed", entry.getKey()) || Objects.equals("dmcUserId", entry.getKey()))
+                        sb.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n\n");
+                }
+                createBuilder("Device DMC Data", sb.toString());
+            }
+        });
 
         findViewById(R.id.btn_set_alias).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,129 +314,58 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                 Toast.makeText(MainActivity.this, "New activity opened", Toast.LENGTH_SHORT).show();
             }
         });
-        findViewById(R.id.geo_fencing).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGeo();
-            }
-        });
-        findViewById(R.id.stop_geo_fencing).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopGeoFencing();
-            }
+        findViewById(R.id.geo_fencing).setOnClickListener(v -> startGeo());
+        findViewById(R.id.stop_geo_fencing).setOnClickListener(v -> stopGeoFencing());
+
+        pushEnabledSwitch = (SwitchCompat) findViewById(R.id.push_enabled);
+
+        findViewById(R.id.buttonDeviceInfo).setOnClickListener(v -> {
+            Appoxee.instance().getDeviceInfoDMC();
+            String s = appoxee.getDeviceInfo().toString();
+            createBuilder("", s);
         });
 
-        pushEnabledSwitch = (Switch) findViewById(R.id.push_enabled);
-        pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                RequestStatus status = Appoxee.instance().setPushEnabled(isChecked);
-            }
-        });
+        findViewById(R.id.dmcCallInApp).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_open"));
 
-        findViewById(R.id.buttonDeviceInfo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().getDeviceInfoDMC();
-                String s = appoxee.getDeviceInfo().toString();
-                createBuilder("", s);
-            }
-        });
+        findViewById(R.id.inappModalType).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_feedback"));
 
-        findViewById(R.id.dmcCallInApp).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
-            }
-        });
+        findViewById(R.id.inappBannerType).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_discount"));
 
-        findViewById(R.id.inappModalType).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_feedback");
-            }
-        });
-
-        findViewById(R.id.inappBannerType).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_discount");
-            }
-        });
-
-        findViewById(R.id.inappAppPromo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_promo");
-            }
-        });
+        findViewById(R.id.inappAppPromo).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_promo"));
 
 
-        findViewById(R.id.inappInbox).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().fetchInboxMessages(MainActivity.this);
-            }
-        });
+        findViewById(R.id.inappInbox).setOnClickListener(v -> Appoxee.instance().fetchInboxMessages(MainActivity.this));
 
         findViewById(R.id.inapp_events).setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, InAppEventsActivity.class));
         });
 
-        findViewById(R.id.multipleMessages).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.multipleMessages).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_welcome"));
 
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_welcome");
-            }
-        });
+        findViewById(R.id.fcm_token).setOnClickListener(v -> FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("token", token);
+            clipboard.setPrimaryClip(clip);
+            devLogger.d("FCM TOKEN: ", token);
+            createBuilder("Firebase token", token);
+        }));
 
-        findViewById(R.id.fcm_token).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("token", token);
-                    clipboard.setPrimaryClip(clip);
-                    devLogger.d("FCM TOKEN: ", token);
-                    createBuilder("Firebase token", token);
-                });
-            }
-        });
-
-        findViewById(R.id.btn_send_push).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*Bundle[{push_description=Do you recive push notification?,
-                google.delivered_priority=normal,
-                google.sent_time=1631097227253,
-                google.ttl=2419200,
-                google.original_priority=normal,
-                p=81723,
-                from=1028993954364,
-                alert=MappTest,
-                google.message_id=0:1631097227271591%37fb9af9cccfb49c,
-                google.c.sender.id=1028993954364,
-                collapse_key=type_a,
-                push_title=MappTest}]*/
-
-                Bundle bundle = new Bundle();
-                bundle.putString("push_description", "Do you recive push notification?");
-                bundle.putString("google.delivered_priority", "normal");
-                bundle.putString("google.sent_time", "1631097227253");
-                bundle.putString("google.ttl", "2419200");
-                bundle.putString("google.original_priority", "normal");
-                bundle.putString("p", "81723");
-                bundle.putString("from", "1028993954364L");
-                bundle.putString("alert", "MappTest");
-                bundle.putString("google.message_id", "0:1631097227271591%37fb9af9cccfb49c");
-                bundle.putString("google.c.sender.id", "1028993954364");
-                bundle.putString("collapse_key", "type_a");
-                bundle.putString("push_title", "MappTest");
-                RemoteMessage message = new RemoteMessage(bundle);
-                Appoxee.instance().setRemoteMessage(message);
-            }
+        findViewById(R.id.btn_send_push).setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("push_description", "Do you recive push notification?");
+            bundle.putString("google.delivered_priority", "normal");
+            bundle.putString("google.sent_time", "1631097227253");
+            bundle.putString("google.ttl", "2419200");
+            bundle.putString("google.original_priority", "normal");
+            bundle.putString("p", "81723");
+            bundle.putString("from", "1028993954364L");
+            bundle.putString("alert", "MappTest");
+            bundle.putString("google.message_id", "0:1631097227271591%37fb9af9cccfb49c");
+            bundle.putString("google.c.sender.id", "1028993954364");
+            bundle.putString("collapse_key", "type_a");
+            bundle.putString("push_title", "MappTest");
+            RemoteMessage message = new RemoteMessage(bundle);
+            Appoxee.instance().setRemoteMessage(message);
         });
 
         findViewById(R.id.btn_register_token).setOnClickListener(v ->
@@ -449,162 +377,107 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                 })
         );
 
-        findViewById(R.id.btn_get_tags).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Set<String> tags = appoxee.getTags();
-                StringBuilder s = new StringBuilder("");
-                for (String tag : tags) {
-                    s.append("\n")
-                            .append(tag);
-                }
-                createBuilder("All tags", s.toString());
+        findViewById(R.id.btn_get_tags).setOnClickListener(v -> {
+            Set<String> tags = appoxee.getTags();
+            StringBuilder s = new StringBuilder("");
+            for (String tag : tags) {
+                s.append("\n")
+                        .append(tag);
+            }
+            createBuilder("All tags", s.toString());
+        });
+
+        findViewById(R.id.btn_set_tag).setOnClickListener(v -> {
+
+            if (set_tag.getText().length() == 0) {
+                Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+            } else {
+                appoxee.addTag(set_tag.getText().toString());
+                createBuilder("Set tag", "Setted tag: " + set_tag.getText());
+                set_tag.setText("");
+            }
+
+        });
+
+        findViewById(R.id.btn_remove_tag).setOnClickListener(v -> {
+
+            if (remove_tag.getText().length() == 0) {
+                Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
+            } else {
+                RequestStatus status = appoxee.removeTag(remove_tag.getText().toString());
+                createBuilder("Remove tag", "Removed tag: " + remove_tag.getText());
+                remove_tag.setText("");
+            }
+
+        });
+
+        findViewById(R.id.btn_set_attribute).setOnClickListener(v -> {
+
+            if (set_attribute_key.getText().length() == 0 || set_attribute_value.getText().length() == 0) {
+                Toast.makeText(MainActivity.this, "Please, fill key and value field above", Toast.LENGTH_SHORT).show();
+            } else {
+                appoxee.setAttribute(set_attribute_key.getText().toString(), set_attribute_value.getText().toString());
+                createBuilder("Set attribute", "Added attribute: " + set_attribute_key.getText() + " - " + set_attribute_value.getText().toString());
+                set_attribute_key.setText("");
+                set_attribute_value.setText("");
             }
         });
 
-        findViewById(R.id.btn_set_tag).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.btn_get_attribute).setOnClickListener(v -> {
 
-                if (set_tag.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                } else {
-                    appoxee.addTag(set_tag.getText().toString());
-                    createBuilder("Set tag", "Setted tag: " + set_tag.getText());
-                    set_tag.setText("");
-                }
-
+            String s = appoxee.getAttributeStringValue(get_attribute.getText().toString());
+            if (s == null || s.equals("")) {
+                Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
+            } else {
+                createBuilder("Get attribute", "Get attribute: " + s);
+                get_attribute.setText("");
             }
+
         });
 
-        findViewById(R.id.btn_remove_tag).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.btn_remove_attribute).setOnClickListener(v -> {
 
-                if (remove_tag.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
-                } else {
-                    RequestStatus status = appoxee.removeTag(remove_tag.getText().toString());
-                    createBuilder("Remove tag", "Removed tag: " + remove_tag.getText());
-                    remove_tag.setText("");
-                }
-
+            String s = appoxee.getAttributeStringValue(remove_attribute.getText().toString());
+            if (s == null || s.equals("")) {
+                Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
+            } else {
+                appoxee.removeAttribute(remove_attribute.getText().toString());
+                createBuilder("Remove attribute", "Removed attribute: " + s);
+                remove_attribute.setText("");
             }
+
         });
 
-        findViewById(R.id.btn_set_attribute).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (set_attribute_key.getText().length() == 0 || set_attribute_value.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, fill key and value field above", Toast.LENGTH_SHORT).show();
-                } else {
-                    appoxee.setAttribute(set_attribute_key.getText().toString(), set_attribute_value.getText().toString());
-                    createBuilder("Set attribute", "Added attribute: " + set_attribute_key.getText() + " - " + set_attribute_value.getText().toString());
-                    set_attribute_key.setText("");
-                    set_attribute_value.setText("");
-                }
-            }
-        });
-
-        findViewById(R.id.btn_get_attribute).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String s = appoxee.getAttributeStringValue(get_attribute.getText().toString());
-                if (s == null || s.equals("")) {
-                    Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
-                } else {
-                    createBuilder("Get attribute", "Get attribute: " + s);
-                    get_attribute.setText("");
-                }
-
-            }
-        });
-
-        findViewById(R.id.btn_remove_attribute).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String s = appoxee.getAttributeStringValue(remove_attribute.getText().toString());
-                if (s == null || s.equals("")) {
-                    Toast.makeText(MainActivity.this, "Doesn't exist this attribute", Toast.LENGTH_SHORT).show();
-                } else {
-                    appoxee.removeAttribute(remove_attribute.getText().toString());
-                    createBuilder("Remove attribute", "Removed attribute: " + s);
-                    remove_attribute.setText("");
-                }
-
-            }
-        });
-
-        findViewById(R.id.get_custom_attributes).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (get_custom_attributes.getText().length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please, fill text field above", Toast.LENGTH_SHORT).show();
-                } else {
-                    String getText = get_custom_attributes.getText().toString().replaceAll("\\s", "");
-                    String[] customAttributes = getText.split(",");
-                    appoxee.getCustomAttributes(true, Arrays.asList(customAttributes), new GetCustomAttributesCallback() {
-                        @Override
-                        public void onSuccess(Map<String, String> customAttributes) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    StringBuilder stringBuilder = new StringBuilder();
-                                    Iterator<Map.Entry<String, String>> iterator = customAttributes.entrySet().iterator();
-                                    int i = 1;
-                                    while (iterator.hasNext()) {
-                                        Map.Entry<String, String> entry = iterator.next();
-                                        stringBuilder.append('(');
-                                        stringBuilder.append(i);
-                                        stringBuilder.append(") ");
-                                        stringBuilder.append(entry.getKey());
-                                        stringBuilder.append(": ");
-                                        stringBuilder.append(entry.getValue());
-                                        i++;
-                                        if (iterator.hasNext())
-                                            stringBuilder.append("\n");
-                                    }
-                                    createBuilder("", stringBuilder.toString());
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("label", customAttributes.toString());
-                                    clipboard.setPrimaryClip(clip);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onError(String exception) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    createBuilder("", exception);
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("label", exception);
-                                    clipboard.setPrimaryClip(clip);
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-
-
-        findViewById(R.id.get_alias_from_server).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Appoxee.instance().getAliasFromServer(true, new GetAliasCallback() {
+        findViewById(R.id.get_custom_attributes).setOnClickListener(v -> {
+            if (get_custom_attributes.getText().length() == 0) {
+                Toast.makeText(MainActivity.this, "Please, fill text field above", Toast.LENGTH_SHORT).show();
+            } else {
+                String getText = get_custom_attributes.getText().toString().replaceAll("\\s", "");
+                String[] customAttributes = getText.split(",");
+                appoxee.getCustomAttributes(true, Arrays.asList(customAttributes), new GetCustomAttributesCallback() {
                     @Override
-                    public void onSuccess(String alias) {
+                    public void onSuccess(Map<String, String> customAttributes) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                createBuilder("", alias);
+                                StringBuilder stringBuilder = new StringBuilder();
+                                Iterator<Map.Entry<String, String>> iterator = customAttributes.entrySet().iterator();
+                                int i = 1;
+                                while (iterator.hasNext()) {
+                                    Map.Entry<String, String> entry = iterator.next();
+                                    stringBuilder.append('(');
+                                    stringBuilder.append(i);
+                                    stringBuilder.append(") ");
+                                    stringBuilder.append(entry.getKey());
+                                    stringBuilder.append(": ");
+                                    stringBuilder.append(entry.getValue());
+                                    i++;
+                                    if (iterator.hasNext())
+                                        stringBuilder.append("\n");
+                                }
+                                createBuilder("", stringBuilder.toString());
                                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("label", alias);
+                                ClipData clip = ClipData.newPlainText("label", customAttributes.toString());
                                 clipboard.setPrimaryClip(clip);
                             }
                         });
@@ -626,51 +499,56 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             }
         });
 
-        findViewById(R.id.btn_remove_badge_number).setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.get_alias_from_server).setOnClickListener(v -> Appoxee.instance().getAliasFromServer(true, new GetAliasCallback() {
             @Override
-            public void onClick(View v) {
-                removeBadgeNumber(MainActivity.this.getApplicationContext());
-                createBuilder("Remove badge", "All badges deleted");
+            public void onSuccess(String alias) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createBuilder("", alias);
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", alias);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                });
             }
+
+            @Override
+            public void onError(String exception) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createBuilder("", exception);
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", exception);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                });
+            }
+        }));
+
+        findViewById(R.id.btn_remove_badge_number).setOnClickListener(v -> {
+            removeBadgeNumber(MainActivity.this.getApplicationContext());
+            createBuilder("Remove badge", "All badges deleted");
         });
 
-        findViewById(R.id.btn_orientation).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogScreenOrientation();
-            }
+        findViewById(R.id.btn_orientation).setOnClickListener(v -> dialogScreenOrientation());
+
+        findViewById(R.id.btn_open_test_activity).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ConfigurationMappOptionsActivity.class);
+            startActivity(intent);
         });
 
-        findViewById(R.id.btn_open_test_activity).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ConfigurationMappOptionsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        findViewById(R.id.btn_backup_configuration).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backupConfiguration();
-            }
-        });
+        findViewById(R.id.btn_backup_configuration).setOnClickListener(v -> backupConfiguration());
 
         initSpinnerEvents();
 
-        findViewById(R.id.btn_logout_with_optout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Appoxee.instance().logOut(false);
-            }
-        });
+        findViewById(R.id.btn_logout_with_optout).setOnClickListener(view -> Appoxee.instance().logOut(false));
 
-        findViewById(R.id.btn_logout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Appoxee.instance().logOut(true);
-            }
-        });
+        findViewById(R.id.btn_logout).setOnClickListener(view -> Appoxee.instance().logOut(true));
+
+        Appoxee.instance().addInitListener(this);
     }
 
 
@@ -683,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         options.sdkKey = SDK_KEY;
         options.appID = APP_ID;
         options.tenantID = TENANT_ID;
-        options.server=AppoxeeOptions.Server.valueOf(SERVER_INDEX);
+        options.server = AppoxeeOptions.Server.valueOf(SERVER_INDEX);
         options.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
 
         Appoxee.instance().setDeviceRegistrationState(false);
@@ -702,20 +580,21 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     @Override
     public void onInitCompleted(boolean successful, Exception failReason) {
-
         Log.i("APX", "init completed listener - MainActivity");
 
-        runOnUiThread(new Runnable() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void run() {
-                pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
-                Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
-                //restartGeofencing();
-                mTextView.setText("App is initialized, Please wait while we display messages...");
+        runOnUiThread(() -> {
+            Toast.makeText(this, "OnInitCompleted: " + successful, Toast.LENGTH_SHORT).show();
+            if (successful) {
+                Appoxee.instance().requestNotificationsPermission(MainActivity.this, results -> {
+                    if (results.containsKey(Manifest.permission.POST_NOTIFICATIONS) && results.get(Manifest.permission.POST_NOTIFICATIONS) == PermissionsManager.PERMISSION_GRANTED) {
+                        Toast.makeText(MainActivity.this,"POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
+                    }
+                    Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
+                    pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+                });
+
             }
         });
-
     }
 
     private void restartGeofencing() {
@@ -871,8 +750,9 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     @Override
     protected void onDestroy() {
-        Appoxee.instance().removeInitListener(this);
         super.onDestroy();
+        pushEnabledSwitch.setOnCheckedChangeListener(null);
+        Appoxee.instance().removeInitListener(this);
     }
 }
 

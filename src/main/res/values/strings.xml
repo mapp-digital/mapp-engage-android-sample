@@ -57,6 +57,7 @@
     <string name="summary">Summary</string>
     <string name="subject">Subject</string>
     <string name="time">Time</string>
+    <string name="get_device_dmc">Get user id</string>
 
 
     <string-array name="screen_orientation">

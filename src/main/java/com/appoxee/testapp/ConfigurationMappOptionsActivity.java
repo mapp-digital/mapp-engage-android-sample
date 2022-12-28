@@ -1,8 +1,6 @@
 package com.appoxee.testapp;
 
 import static com.appoxee.testapp.Constants.KEY_APP_ID;
-import static com.appoxee.testapp.Constants.KEY_CEP_URL;
-import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
@@ -67,6 +65,9 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
 
     public void setNewConfiguration() {
+
+        Appoxee.instance().resetRegistration();
+
         // save new settings
         String sdkKey = textSetSdkKey.getText().toString();
         String appId = textSetAppId.getText().toString();
@@ -84,10 +85,10 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
             tenantId = tenantIdConf;
         }
 
-        appoxeeOptions.sdkKey = sdkKey;
-        appoxeeOptions.appID = appId;
-        appoxeeOptions.tenantID = tenantId;
-        appoxeeOptions.server = AppoxeeOptions.Server.values()[serverIndex];
+//        appoxeeOptions.sdkKey = sdkKey;
+//        appoxeeOptions.appID = appId;
+//        appoxeeOptions.tenantID = tenantId;
+//        appoxeeOptions.server = AppoxeeOptions.Server.values()[serverIndex];
 
         Prefs.putString(KEY_SDK_KEY, sdkKey);
         Prefs.putString(KEY_APP_ID, appId);
@@ -95,17 +96,19 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
         AppoxeeOptions.Server serverName = AppoxeeOptions.Server.values()[serverIndex];
         Prefs.putString(KEY_SERVER_INDEX, serverName.name());
 
-        Appoxee.instance().setDeviceRegistrationState(false);
-
-        SharedPreferenceUtil.getInstance(this).setEngageOptions(appoxeeOptions);
-
         new AlertDialog.Builder(this)
                 .setTitle("Info")
                 .setMessage("Application will restart for the changes to take effect.")
                 .setPositiveButton("OK", (dialog, which) -> {
                     showMessage();
+
                     deleteField();
-                    new Handler().postDelayed(() -> Util.restartApp(this), 100);
+
+                    //SharedPreferenceUtil.getInstance().setEngageOptions(appoxeeOptions);
+
+                    int pid = android.os.Process.myPid();
+                    android.os.Process.killProcess(pid);
+                    //Util.restartApp(this);
                 })
                 .show();
     }

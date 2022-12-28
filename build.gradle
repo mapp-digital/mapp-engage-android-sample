@@ -13,9 +13,6 @@ buildscript {
         google()
         jcenter()
     }
-//    dependencies {
-//        classpath 'com.google.gms:google-services:3.2.1'
-//    }
 }
 
 def safeExtGet(prop, fallback) {
@@ -23,22 +20,31 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion '30.0.3'
+    signingConfigs {
+        debug {
+            storeFile file('engage-debug-key')
+            storePassword 'engage'
+            keyAlias 'engage'
+            keyPassword 'engage'
+        }
+    }
+
+    namespace 'com.appoxee.testapp'
+    compileSdkVersion 33
+    buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.appoxee.example"
         minSdkVersion 19
-        targetSdkVersion 31
-        versionCode 4
-        versionName "1.0.26"
+        targetSdkVersion 33
+        versionCode 8
+        versionName "1.0.35 - Android 13 Test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
     }
+
     buildTypes {
-
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -51,12 +57,12 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
+            //signingConfig signingConfigs.debug
+            buildConfigField "String", "SDK_KEY", "\"17f9da298e2623.30946563\""
+            buildConfigField "String", "APP_ID", "\"206773 \""
+            buildConfigField "String", "TENANT_ID", "\"20053\""
+            buildConfigField "String", "SERVER_INDEX", "\"EMC\""
 
-            buildConfigField "String", "SDK_KEY", "\"1838dc64c46633.13504801\""
-            buildConfigField "String", "APP_ID", "\"300896\""
-            buildConfigField "String", "TENANT_ID", "\"33\""
-            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -181,26 +187,31 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation('androidx.recyclerview:recyclerview:1.2.1')
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.18')
+    //implementation('com.mapp.sdk:mapp-android:6.0.19-rc02')
 
+    // required firebase dependencies for push messaging
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation('com.google.firebase:firebase-messaging')
+    // optional dependencies
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
+    implementation("com.google.firebase:firebase-iid:21.1.0")
 
-    implementation ('com.google.android.gms:play-services-location:20.0.0')
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation ('com.google.android.gms:play-services-location:21.0.1')
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -213,11 +224,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "com.github.bumptech.glide:glide:4.13.1"
     annotationProcessor "com.github.bumptech.glide:compiler:4.13.1"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.6.1'
     implementation('com.pixplicity.easyprefs:EasyPrefs:1.10.0')
 }
-apply plugin: 'com.google.gms.google-services'
+
 
 task publishToTesters {
     dependsOn 'assembleStaging11'
