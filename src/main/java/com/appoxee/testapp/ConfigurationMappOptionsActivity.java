@@ -65,7 +65,6 @@ public class ConfigurationMappOptionsActivity extends AppCompatActivity {
 
 
     public void setNewConfiguration() {
-
         Appoxee.instance().resetRegistration();
 
         // save new settings

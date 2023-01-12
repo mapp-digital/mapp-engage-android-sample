@@ -37,11 +37,10 @@ android {
         applicationId "com.appoxee.example"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 8
-        versionName "1.0.35 - Android 13 Test"
+        versionCode 11
+        versionName "1.0.39"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-
     }
 
     buildTypes {
@@ -53,15 +52,14 @@ android {
             buildConfigField "String", "APP_ID", "\"264115\""
             buildConfigField "String", "TENANT_ID", "\"33\""
             buildConfigField "String", "SERVER_INDEX", "\"TEST\""
-
         }
 
         debug {
             //signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"17f9da298e2623.30946563\""
-            buildConfigField "String", "APP_ID", "\"206773 \""
-            buildConfigField "String", "TENANT_ID", "\"20053\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC\""
+            buildConfigField "String", "SDK_KEY", "\"1859bbc11b463b.10660563\""
+            buildConfigField "String", "APP_ID", "\"300938\""
+            buildConfigField "String", "TENANT_ID", "\"33\""
+            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
