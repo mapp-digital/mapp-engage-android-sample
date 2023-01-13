@@ -56,10 +56,10 @@ android {
 
         debug {
             //signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"1859bbc11b463b.10660563\""
-            buildConfigField "String", "APP_ID", "\"300938\""
-            buildConfigField "String", "TENANT_ID", "\"33\""
-            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
+            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
+            buildConfigField "String", "APP_ID", "\"206974\""
+            buildConfigField "String", "TENANT_ID", "\"5963\""
+            buildConfigField "String", "SERVER_INDEX", "\"L3\""
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -197,8 +197,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation('androidx.recyclerview:recyclerview:1.2.1')
     implementation 'com.google.code.gson:gson:2.9.0'
-    implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.19-rc02')
+    //implementation project(':sdk')
+    implementation('com.mapp.sdk:mapp-android:6.0.19-rc04')
 
     // required firebase dependencies for push messaging
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
