@@ -114,6 +114,14 @@
         <activity
             android:name=".ConfigurationMappOptionsActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+
+        <meta-data
+            android:name="com.mapp.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data android:name="com.mapp.default_notification_color"
+            android:resource="@color/color_red" />
+
     </application>
 
 </manifest>

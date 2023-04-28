@@ -13,6 +13,7 @@ import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
 import static com.appoxee.testapp.Util.capitalize;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -284,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         });
 
         findViewById(R.id.get_device_dmc).setOnClickListener(v -> {
+            @SuppressLint("RestrictedApi")
             Map<String, String> map = Appoxee.instance().getDmcDeviceInfo();
             if (map != null) {
                 StringBuilder sb = new StringBuilder();
