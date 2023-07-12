@@ -18,39 +18,42 @@
 
 
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,EnclosingMethod,*Annotation*
--dontshrink
--dontoptimize
+#-dontshrink
+#-dontoptimize
 
 # public API
--keep public class com.appoxee.* { public *; }
--keep public class com.appoxee.analytics.* { public *; }
--keep public class com.appoxee.push.* { public *; }
--keepclassmembers class com.appoxee.internal.inapp.** { *; }
--keep class com.appoxee.internal.inapp.model.InAppStatistics  {*;}
-# serialized objects
--keep class * implements com.appoxee.internal.network.Networkable { *; }
--keep class * implements com.appoxee.internal.commandstore.Model { *; }
--keep class * implements com.appoxee.internal.network.request.NetworkRequestFactory { *; }
--keep class com.appoxee.internal.model.Device$* { *; }
--keep public class com.appoxee.internal.inapp.model.* { public *; }
- -keepclassmembers class com.appoxee.internal.inapp.model.APXInboxMessage** {
-    *;
- }
-
--keep class com.appoxee.internal.inapp.InAppInboxEventService { *; }
-
--keep public class com.appoxee.internal.inapp.InAppEventService { public protected private *; }
-
--keepclassmembers public class com.appoxee.internal.inapp.InAppEventService {
-     private <methods> ;
- }
-
- -keepclassmembers public class com.appoxee.internal.inapp.InAppEventService {
-      private <fields> ;
-  }
-
--keep public class com.appoxee.internal.inapp.** { public *; }
-
+-keep public class com.appoxee.** { *; }
+-keep class com.google.gson.reflect.TypeToken
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep public class * implements java.lang.reflect.Type
+#-keep public class com.appoxee.analytics.* { public *; }
+#-keep public class com.appoxee.push.* { public *; }
+#-keepclassmembers class com.appoxee.internal.inapp.** { *; }
+#-keep class com.appoxee.internal.inapp.model.InAppStatistics  {*;}
+## serialized objects
+#-keep class * implements com.appoxee.internal.network.Networkable { *; }
+#-keep class * implements com.appoxee.internal.commandstore.Model { *; }
+#-keep class * implements com.appoxee.internal.network.request.NetworkRequestFactory { *; }
+#-keep class com.appoxee.internal.model.Device$* { *; }
+#-keep public class com.appoxee.internal.inapp.model.* { public *; }
+# -keepclassmembers class com.appoxee.internal.inapp.model.APXInboxMessage** {
+#    *;
+# }
+#
+#-keep class com.appoxee.internal.inapp.InAppInboxEventService { *; }
+#
+#-keep public class com.appoxee.internal.inapp.InAppEventService { public protected private *; }
+#
+#-keepclassmembers public class com.appoxee.internal.inapp.InAppEventService {
+#     private <methods> ;
+# }
+#
+# -keepclassmembers public class com.appoxee.internal.inapp.InAppEventService {
+#      private <fields> ;
+#  }
+#
+#-keep public class com.appoxee.internal.inapp.** { public *; }
+#
 # for Gson
 -keep class sun.misc.Unsafe { *; }
 -keep class android.support.v4.** { *; }
@@ -132,3 +135,4 @@
 # Google service
 -keep public class com.google.android.gms.* { public *; }
 -dontwarn com.google.android.gms.**
+

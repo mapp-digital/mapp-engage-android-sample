@@ -19,6 +19,7 @@ import java.util.List;
  * Created by Varun on 4/7/2018.
  */
 
+@SuppressWarnings("ALL")
 public class DeepLinkActivity extends AppCompatActivity {
 
     private final String APX_LAUNCH_DEEPLINK_ACTION = "com.appoxee.VIEW_DEEPLINK";
@@ -33,25 +34,25 @@ public class DeepLinkActivity extends AppCompatActivity {
 
         tv = (TextView) findViewById(R.id.textView);
 
-        Uri uri = null;
-        String link;
+        Uri uri;
+        String link=null;
 
         if (getIntent() != null) {
             if (APX_LAUNCH_DEEPLINK_ACTION.equals(getIntent().getAction())) {
                 uri = getIntent().getData();
+                link = uri.getQueryParameter("link");
+                openDeepLink(uri);
             }
-            link = uri.getQueryParameter("link");
-            openDeepLink(uri);
-        } else{
-            link = null;
         }
 
+        String finalLink = link;
         findViewById(R.id.open_link).setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(link));
-            startActivity(intent);
+            if(finalLink !=null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(finalLink));
+                startActivity(intent);
+            }
         });
-
     }
 
     @Override
@@ -60,7 +61,6 @@ public class DeepLinkActivity extends AppCompatActivity {
     }
 
     private void openDeepLink(Uri uri) {
-
         String protocol = uri.getScheme();
         String server = uri.getAuthority();
         String path = uri.getPath();
@@ -68,11 +68,7 @@ public class DeepLinkActivity extends AppCompatActivity {
         String link = uri.getQueryParameter("link");
         String messageId = uri.getQueryParameter("message_id");
 
-        if(uri != null && uri.toString() != null) {
-            tv.setText("DEEPLINK ACTIVITY URI  = " + query );
-        } else {
-            tv.setText("DEEPLINK ACTIVITY URI is Null" );
-        }
-
+        String displayText="DEEPLINK ACTIVITY URI  = " + query;
+        tv.setText(displayText);
     }
 }
