@@ -34,6 +34,10 @@
 -keep class * implements com.appoxee.internal.network.Networkable { *; }
 -keep class * implements com.appoxee.internal.commandstore.Model { *; }
 -keep class * implements com.appoxee.internal.network.request.NetworkRequestFactory { *; }
+-keep class * implements com.appoxee.internal.badge.Badger { *; }
+-keep class com.appoxee.internal.geo.** { *; }
+-keep class * extends com.appoxee.internal.command.Command { *; }
+
 #-keep class com.appoxee.internal.model.Device$* { *; }
 #-keep public class com.appoxee.internal.inapp.model.* { public *; }
 # -keepclassmembers class com.appoxee.internal.inapp.model.APXInboxMessage** {
