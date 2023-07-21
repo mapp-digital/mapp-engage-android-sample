@@ -56,8 +56,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
-            buildConfigField "String", "APP_ID", "\"206974\""
-            buildConfigField "String", "TENANT_ID", "\"5963\""
+            buildConfigField "String", "APP_ID", "\"207067\""
+            buildConfigField "String", "TENANT_ID", "\"42024\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
             signingConfig signingConfigs.release
         }

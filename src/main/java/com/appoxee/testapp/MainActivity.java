@@ -236,12 +236,22 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
             @Override
             public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
-                Log.d("messages", "messages = " + richMessages.get(0).getContent());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
-                Intent intent = new Intent(MainActivity.this, InboxActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                Log.d("messages", "messages = " + (richMessages.isEmpty() ? 0 : richMessages.get(0).getContent()));
+                if (!richMessages.isEmpty()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
+                    Intent intent = new Intent(MainActivity.this, InboxActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    runOnUiThread(()->{
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Inbox Messages")
+                                .setMessage("InApp Inbox is empty.")
+                                .create()
+                                .show();
+                    });
+                }
             }
 
             @Override
@@ -589,7 +599,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             if (successful) {
                 Appoxee.instance().requestNotificationsPermission(MainActivity.this, results -> {
                     if (results.containsKey(Manifest.permission.POST_NOTIFICATIONS) && results.get(Manifest.permission.POST_NOTIFICATIONS) == PermissionsManager.PERMISSION_GRANTED) {
-                        Toast.makeText(MainActivity.this,"POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
                     }
                     Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
                     pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
