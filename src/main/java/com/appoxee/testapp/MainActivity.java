@@ -2,6 +2,7 @@ package com.appoxee.testapp;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
 import static com.appoxee.testapp.BuildConfig.APP_ID;
+import static com.appoxee.testapp.BuildConfig.BUILD_TYPE;
 import static com.appoxee.testapp.BuildConfig.SDK_KEY;
 import static com.appoxee.testapp.BuildConfig.SERVER_INDEX;
 import static com.appoxee.testapp.BuildConfig.TENANT_ID;
@@ -59,6 +60,7 @@ import com.appoxee.internal.permission.GeofencingPermissionsCallback;
 import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -244,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
-                    runOnUiThread(()->{
+                    runOnUiThread(() -> {
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Inbox Messages")
                                 .setMessage("InApp Inbox is empty.")
@@ -597,6 +599,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         runOnUiThread(() -> {
             Toast.makeText(this, "OnInitCompleted: " + successful, Toast.LENGTH_SHORT).show();
             if (successful) {
+                FirebaseCrashlytics.getInstance().setUserId(Appoxee.instance().getAlias());
+                FirebaseCrashlytics.getInstance().setCustomKey("SDK_KEY", SDK_KEY);
+                FirebaseCrashlytics.getInstance().setCustomKey("APP_ID", APP_ID);
+                FirebaseCrashlytics.getInstance().setCustomKey("TENANT_ID", TENANT_ID);
+                FirebaseCrashlytics.getInstance().setCustomKey("SERVER", SERVER_INDEX);
                 Appoxee.instance().requestNotificationsPermission(MainActivity.this, results -> {
                     if (results.containsKey(Manifest.permission.POST_NOTIFICATIONS) && results.get(Manifest.permission.POST_NOTIFICATIONS) == PermissionsManager.PERMISSION_GRANTED) {
                         Toast.makeText(MainActivity.this, "POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
