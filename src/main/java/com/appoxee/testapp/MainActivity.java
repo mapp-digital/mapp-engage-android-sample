@@ -556,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
             }
         });
-        Appoxee.instance().fetchInboxMessages(this);
+        Appoxee.instance().fetchInboxMessages();
     }
 
     private void backupConfiguration() {
