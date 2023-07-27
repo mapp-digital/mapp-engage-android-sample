@@ -2,7 +2,6 @@ package com.appoxee.testapp;
 
 import static com.appoxee.Appoxee.removeBadgeNumber;
 import static com.appoxee.testapp.BuildConfig.APP_ID;
-import static com.appoxee.testapp.BuildConfig.BUILD_TYPE;
 import static com.appoxee.testapp.BuildConfig.SDK_KEY;
 import static com.appoxee.testapp.BuildConfig.SERVER_INDEX;
 import static com.appoxee.testapp.BuildConfig.TENANT_ID;
@@ -234,33 +233,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
 
         //  textView.setText(FirebaseInstanceId.getInstance().getToken());
-        InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
-        inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
-            @Override
-            public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
-                Log.d("messages", "messages = " + (richMessages.isEmpty() ? 0 : richMessages.get(0).getContent()));
-                if (!richMessages.isEmpty()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
-                    Intent intent = new Intent(MainActivity.this, InboxActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
-                    runOnUiThread(() -> {
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Inbox Messages")
-                                .setMessage("InApp Inbox is empty.")
-                                .create()
-                                .show();
-                    });
-                }
-            }
 
-            @Override
-            public void onInAppInboxMessage(APXInboxMessage message) {
-
-            }
-        });
 
         InAppMessageDismissalCallback inAppMessageDismissalCallback = new InAppMessageDismissalCallback();
         inAppMessageDismissalCallback.addOnInAppMessageDismissalCallback(new InAppMessageDismissalCallback.onInAppMessageDismissalCallback() {
@@ -348,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         findViewById(R.id.inappAppPromo).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_promo"));
 
 
-        findViewById(R.id.inappInbox).setOnClickListener(v -> Appoxee.instance().fetchInboxMessages(MainActivity.this));
+        findViewById(R.id.inappInbox).setOnClickListener(v -> fetchInboxMessages());
 
         findViewById(R.id.inapp_events).setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, InAppEventsActivity.class));
@@ -565,6 +538,26 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         Appoxee.instance().addInitListener(this);
     }
 
+    private void fetchInboxMessages(){
+        InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
+        inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
+            @Override
+            public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
+                Log.d("messages", "messages = " + (richMessages.isEmpty() ? 0 : richMessages.get(0).getContent()));
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
+                Intent intent = new Intent(MainActivity.this, InboxActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onInAppInboxMessage(APXInboxMessage message) {
+
+            }
+        });
+        Appoxee.instance().fetchInboxMessages(this);
+    }
 
     private void backupConfiguration() {
         Prefs.putString(KEY_SDK_KEY, SDK_KEY);

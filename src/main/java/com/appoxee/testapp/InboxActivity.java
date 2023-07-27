@@ -86,32 +86,6 @@ public class InboxActivity extends AppCompatActivity {
                 inboxList = (List<APXInboxMessage>) bundle.getSerializable("inboxMessages");
             }
 
-            InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
-            inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
-                @Override
-                public void onInAppInboxMessages(List<APXInboxMessage> richMessages) {
-                    Log.d("messages", "messages = " + richMessages.get(0).getContent());
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("inboxMessages", (ArrayList<APXInboxMessage>) richMessages);
-                    Intent intent = new Intent(InboxActivity.this, InboxActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onInAppInboxMessage(final APXInboxMessage message) {
-                    Log.d("messages", "messages = " + message.getContent());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showDialogForInboxMessageContent(message, message.getContent());
-                        }
-                    });
-                }
-            });
-
             recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
@@ -146,20 +120,6 @@ public class InboxActivity extends AppCompatActivity {
                 }
             }
         }
-
-        InAppCallback inAppCallback = new InAppCallback();
-        inAppCallback.addInAppMessageReceivedCallback(new InAppCallback.onInAppEventReceived() {
-            @Override
-            public void onInAppEvent(String eventName, String eventValue) {
-                Log.d("Inbox eventName = ", eventName);
-                Log.d("Inbox eventValue = ", eventValue);
-                Toast.makeText(InboxActivity.this, "KEY = " + eventName + "VALUE = " + eventValue, Toast.LENGTH_LONG).show();
-
-                if (modalDialog != null && modalDialog.isShowing()) {
-                    modalDialog.dismiss();
-                }
-            }
-        });
     }
 
     private void longClickPopupMenu(APXInboxMessage message, int itemPosition) {
@@ -188,6 +148,7 @@ public class InboxActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @SuppressLint("SetTextI18n")
     private void getMessageId(Uri uri) {
         if (uri != null) {
             String protocol = uri.getScheme();
@@ -201,8 +162,10 @@ public class InboxActivity extends AppCompatActivity {
             Log.d("InboxActivity", "path = " + path);
             Log.d("InboxActivity", "query = " + query);
             Log.d("InboxActivity", "messageId = " + messageId);
-            tv.setText("\n MessageId = " + messageId);
-            Appoxee.instance().fetchInboxMessage(this, Integer.parseInt(messageId));
+            String formattedText="\n MessageId = " + messageId;
+            tv.setText(formattedText);
+            int message_id=Integer.parseInt(messageId);
+            Appoxee.instance().fetchInboxMessage(message_id);
         } else {
             tv.setText("DEEPLINK ACTIVITY URI is Null");
         }
