@@ -4,14 +4,10 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.appdistribution'
 
 buildscript {
-    dependencies {
-    }
-
     repositories {
         //mavenLocal()
         mavenCentral()
         google()
-        jcenter()
     }
 }
 
@@ -36,13 +32,13 @@ android {
     }
 
     namespace 'com.appoxee.testapp'
-    compileSdkVersion 33
-    buildToolsVersion '33.0.0'
+    compileSdkVersion = 34
+    buildToolsVersion = '34.0.0'
 
     defaultConfig {
         applicationId "com.appoxee.example"
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 12
         versionName "1.0.46"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -66,163 +62,38 @@ android {
             buildConfigField "String", "APP_ID", "\"207071\""
             buildConfigField "String", "TENANT_ID", "\"5963\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
-
-//            buildConfigField "String", "SDK_KEY", "\"18977a8011864b.65218726\""
-//            buildConfigField "String", "APP_ID", "\"207067\""
-//            buildConfigField "String", "TENANT_ID", "\"42024\""
-//            buildConfigField "String", "SERVER_INDEX", "\"L3\""
-
-            // Edenred test channel
-//            buildConfigField "String", "SDK_KEY", "\"1898800991364b.41223356\""
-//            buildConfigField "String", "APP_ID", "\"207068\""
-//            buildConfigField "String", "TENANT_ID", "\"5926\""
-//            buildConfigField "String", "SERVER_INDEX", "\"L3\""
             signingConfig signingConfigs.release
         }
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"18977a8011864b.65218726\""
-            buildConfigField "String", "APP_ID", "\"207067\""
-            buildConfigField "String", "TENANT_ID", "\"42024\""
-            buildConfigField "String", "SERVER_INDEX", "\"L3\""
-
-//            buildConfigField "String", "SDK_KEY", "\"1882f04d972646.27638188\""
-//            buildConfigField "String", "APP_ID", "\"300163\""
-//            buildConfigField "String", "TENANT_ID", "\"55\""
-//            buildConfigField "String", "SERVER_INDEX", "\"TEST_55\""
-
-//            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
-//            buildConfigField "String", "APP_ID", "\"206974\""
-//            buildConfigField "String", "TENANT_ID", "\"5963\""
-//            buildConfigField "String", "SERVER_INDEX", "\"L3\""
-
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            firebaseAppDistribution {
-                releaseNotesFile = "release_notes_appoxee.txt"
-                testersFile = "testers_appoxee.txt"
-            }
-        }
-/*
-        env33 {
-            initWith debug
-            versionNameSuffix "_33"
-
-            buildConfigField "String", "SDK_KEY", "\"1756f89036e5f9.68081048\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"785651527831\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie-test.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"300031\""
-            buildConfigField "String", "TENANT_ID", "\"33\""
-            buildConfigField "String", "SERVER_INDEX", "\"TEST\""
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            firebaseAppDistribution {
-                releaseNotesFile = "release_notes_appoxee.txt"
-                testersFile = "testers_appoxee.txt"
-            }
-        }
-
-        envtest55 {
-            initWith debug
-            versionNameSuffix "_test55"
-
-            buildConfigField "String", "SDK_KEY", "\"17bde4551bf613.11682607\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie-qa.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"300002\""
-            buildConfigField "String", "TENANT_ID", "\"55\""
-            buildConfigField "String", "SERVER_INDEX", "\"TEST_55\""
-
-            firebaseAppDistribution {
-                releaseNotesFile = "release_notes_appoxee.txt"
-                testersFile = "testers_appoxee.txt"
-            }
-        }
-
-        l3 {
-            initWith debug
-            versionNameSuffix "_l3"
-
-            buildConfigField "String", "SDK_KEY", "\"17448d4c6f75f4.75830828\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.g.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"106633\""
+            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
+            buildConfigField "String", "APP_ID", "\"206974\""
             buildConfigField "String", "TENANT_ID", "\"5963\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
 
-            firebaseAppDistribution {
-                releaseNotesFile = "release_notes_appoxee.txt"
-                testersFile = "testers_appoxee.txt"
-            }
-        }
-
-        emc {
-            initWith debug
-            versionNameSuffix "_emc"
-
-            buildConfigField "String", "SDK_KEY", "\"17448ecbd4d5f4.30607346\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.h.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"106639\""
-            buildConfigField "String", "TENANT_ID", "\"20053\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             firebaseAppDistribution {
                 releaseNotesFile = "release_notes_appoxee.txt"
                 testersFile = "testers_appoxee.txt"
             }
         }
-//
-        emcUS1 {
-            initWith debug
-            versionNameSuffix "_emcUS1"
-
-            buildConfigField "String", "SDK_KEY", "\"5e7d071d8e0e96.88418708\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.c.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"110108\""
-            buildConfigField "String", "TENANT_ID", "\"60211\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
-
-            firebaseAppDistribution {
-                releaseNotesFile = "release_notes_appoxee.txt"
-                testersFile = "testers_appoxee.txt"
-            }
-        }
-
-        emcUS2 {
-            initWith debug
-            versionNameSuffix "_emcUS2"
-
-            buildConfigField "String", "SDK_KEY", "\"174682119b35f5.31842504\""
-            buildConfigField "String", "GOOGLE_PROJECT_ID", "\"1028993954364\""
-            buildConfigField "String", "CEP_URL", "\"https://jamie.c.shortest-route.com\""
-            buildConfigField "String", "APP_ID", "\"110275\""
-            buildConfigField "String", "TENANT_ID", "\"60000\""
-            buildConfigField "String", "SERVER_INDEX", "\"EMC_US\""
-
-            firebaseAppDistribution {
-                releaseNotesFile = "release_notes_appoxee.txt"
-                testersFile = "testers_appoxee.txt"
-            }
-        }
-*/
     }
+
     packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'LICENSE.txt'
+        resources {
+            excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt', 'LICENSE.txt']
+        }
     }
 
-    lintOptions {
-        abortOnError false
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+    }
+    lint {
+        abortOnError false
     }
 }
 
@@ -230,11 +101,11 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation('androidx.recyclerview:recyclerview:1.3.1')
     implementation 'com.google.code.gson:gson:2.9.0'
     //implementation project(':sdk')
-    implementation('com.mapp.sdk:mapp-android:6.0.20')
+    implementation('com.mapp.sdk:mapp-android:6.0.20.1')
     //implementation('com.mapp.sdk:mapp-android:6.0.19')
 
     // required firebase dependencies for push messaging
@@ -265,17 +136,5 @@ dependencies {
 
 task publishToTesters {
     dependsOn 'assembleStaging11'
-//    dependsOn 'assembleEnvtest55'
-//    dependsOn 'assembleL3demo'
-//    dependsOn 'assembleP10tech'
-//    dependsOn 'assembleEmcTech'
-//    dependsOn 'assembleL3tech'
-//    dependsOn 'assembleMetrics2'
     dependsOn 'appDistributionUploadStaging11'
-//    dependsOn 'appDistributionUploadEnvtest55'
-//    dependsOn 'appDistributionUploadL3demo'
-//    dependsOn 'appDistributionUploadP10tech'
-//    dependsOn 'appDistributionUploadEmcTech'
-//    dependsOn 'appDistributionUploadL3tech'
-//    dependsOn 'appDistributionUploadMetrics2'
 }

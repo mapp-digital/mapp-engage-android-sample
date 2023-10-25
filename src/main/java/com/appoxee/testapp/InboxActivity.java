@@ -247,18 +247,18 @@ public class InboxActivity extends AppCompatActivity {
                 .into(inAppImage);
 
         btnWebPage.setOnClickListener(v -> {
-            richMessageObject.handleAction("apxAction://landingPage?openInApp=0&link=https://www.google.com", InboxActivity.this, null);
+            richMessageObject.handleAction("apxAction://landingPage?openInApp=0&link=https://www.google.com", InboxActivity.this);
             modalDialog.dismiss();
         });
 
         btnPlayStore.setOnClickListener(v -> {
-            richMessageObject.handleAction("apxAction://appStore?openInApp=0&link=com.kiloo.subwaysurf&hl=en&gl=US", InboxActivity.this, null);
+            richMessageObject.handleAction("apxAction://appStore?openInApp=0&link=com.kiloo.subwaysurf&hl=en&gl=US", InboxActivity.this);
             modalDialog.dismiss();
         });
 
         btnDeepLink.setOnClickListener(v -> {
             modalDialog.dismiss();
-            richMessageObject.handleAction("apxAction://deeplink?link=https://www.test.com?a=b", InboxActivity.this, null);
+            richMessageObject.handleAction("apxAction://deeplink?link=https://www.test.com?a=b", InboxActivity.this);
         });
 
         dismissDialogImageIcon.setOnClickListener(new View.OnClickListener() {
