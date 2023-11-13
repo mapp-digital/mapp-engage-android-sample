@@ -375,11 +375,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         });
 
         findViewById(R.id.btn_set_tag).setOnClickListener(v -> {
-
-            if (set_tag.getText().length() == 0) {
+            String tag=set_tag.getText().toString();
+            if (tag.isEmpty() ) {
                 Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
             } else {
-                appoxee.addTag(set_tag.getText().toString());
+                appoxee.addTag(tag);
                 createBuilder("Set tag", "Setted tag: " + set_tag.getText());
                 set_tag.setText("");
             }
