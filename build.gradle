@@ -39,8 +39,8 @@ android {
         applicationId "com.appoxee.example"
         minSdkVersion 19
         targetSdkVersion 34
-        versionCode 12
-        versionName "1.0.46"
+        versionCode 13
+        versionName "1.0.47"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
