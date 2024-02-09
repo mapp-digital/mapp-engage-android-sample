@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -56,9 +58,11 @@ import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
 import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
+import com.appoxee.internal.permission.PermissionHelper;
 import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -94,9 +98,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     private boolean isInitSpinner = false;
 
     private Logger devLogger;
-
-    private GeofencePermissions geofencePermissions;
-    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,40 +179,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
     private void init() {
         devLogger.d("init()");
-
-        geofencePermissions = new GeofencePermissions(this, new GeofencingPermissionsCallback() {
-            @Override
-            public void onGranted() {
-                devLogger.d("OnGranted", "startGeoFencing()");
-                Appoxee.instance().startGeoFencing(geofenceCallback);
-            }
-
-            @Override
-            public void onPermissionsNotGranted(List<String> permissions) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Permissions not granted");
-                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray()) +
-                        "\nDo you want to allow requested permissions?");
-                builder.setPositiveButton("OK", (dialog, position) -> {
-                    geofencePermissions.requestPermissions();
-                });
-                builder.setNegativeButton("Cancel", null);
-                builder.create().show();
-            }
-
-            @Override
-            public void onPermanentlyDeniedPermissions(List<String> permissions) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Permissions permanently denied");
-                builder.setMessage("Following permissions are required: \n" + TextUtils.join(", ", permissions.toArray()) +
-                        "\nDo you want to open system settings and manually grant required permissions?");
-                builder.setPositiveButton("OK", (dialog, position) -> {
-                    geofencePermissions.openPermissionSettings();
-                });
-                builder.setNegativeButton("Cancel", null);
-                builder.create().show();
-            }
-        });
 
         options = ((AppoxeeTestApp) getApplication()).getAppoxeeOptions();
 
@@ -375,8 +342,8 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         });
 
         findViewById(R.id.btn_set_tag).setOnClickListener(v -> {
-            String tag=set_tag.getText().toString();
-            if (tag.isEmpty() ) {
+            String tag = set_tag.getText().toString();
+            if (tag.isEmpty()) {
                 Toast.makeText(MainActivity.this, "Please, filled field above", Toast.LENGTH_SHORT).show();
             } else {
                 appoxee.addTag(tag);
@@ -538,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         Appoxee.instance().addInitListener(this);
     }
 
-    private void fetchInboxMessages(){
+    private void fetchInboxMessages() {
         InAppInboxCallback inAppInboxCallback = new InAppInboxCallback();
         inAppInboxCallback.addInAppInboxMessagesReceivedCallback(new InAppInboxCallback.onInAppInboxMessagesReceived() {
             @Override
@@ -597,22 +564,15 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                 FirebaseCrashlytics.getInstance().setCustomKey("APP_ID", APP_ID);
                 FirebaseCrashlytics.getInstance().setCustomKey("TENANT_ID", TENANT_ID);
                 FirebaseCrashlytics.getInstance().setCustomKey("SERVER", SERVER_INDEX);
-                Appoxee.instance().requestNotificationsPermission(MainActivity.this, results -> {
+                Appoxee.instance().requestNotificationsPermission(this, results -> {
                     if (results.containsKey(Manifest.permission.POST_NOTIFICATIONS) && results.get(Manifest.permission.POST_NOTIFICATIONS) == PermissionsManager.PERMISSION_GRANTED) {
                         Toast.makeText(MainActivity.this, "POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
                     }
                     Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
                     pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
                 });
-
             }
         });
-    }
-
-    private void restartGeofencing() {
-        if (Appoxee.instance().isGeofencingActive()) {
-            //startGeo();
-        }
     }
 
     void dialogScreenOrientation() {
@@ -656,11 +616,22 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     }
 
     private void startGeo() {
-        if (geofencePermissions == null) {
-            Toast.makeText(this, "Appoxee not initialized!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        geofencePermissions.requestPermissions();
+        List<String> permissions = new ArrayList<>();
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        Appoxee.instance().requestPermissions(this, permissions, results -> {
+            if (!results.containsKey(Manifest.permission.ACCESS_FINE_LOCATION)) return;
+
+            boolean backgroundPermissionGranted = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                backgroundPermissionGranted = this.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            }
+            if (results.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && backgroundPermissionGranted) {
+                Appoxee.instance().startGeoFencing(geofenceCallback);
+            } else {
+                PermissionHelper.getInstance().openAppSystemSettings(this);
+            }
+        });
     }
 
     private void stopGeoFencing() {
