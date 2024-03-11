@@ -50,7 +50,6 @@ public class DeepLinkActivity extends AppCompatActivity {
         findViewById(R.id.open_link).setOnClickListener(v -> {
             if (finalLink != null) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setPackage(this.getPackageName());
                 intent.setData(Uri.parse(finalLink));
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
