@@ -1,12 +1,11 @@
-The latest Mapp Engage SDK version
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapp.sdk/mapp-android/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.mapp.sdk/mapp-android)
-
 This document explains how to add the Android Mapp SDK code to your application code.
 
-Source code integration
+**The latest Mapp Engage SDK version** [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapp.sdk/mapp-android/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.mapp.sdk/mapp-android)
 
-Make sure your app/build.gradle file include the applicationId attribute in defaultConfig block. Include the following dependencies to your app's gradle.build dependencies section :
+<h2>Source code integration</h2>
+
+Make sure your `app/build.gradle` file include the `applicationId` attribute in `defaultConfig` block. 
+Include the following dependencies to your app's `gradle.build` dependencies section :
 
 ```
 apply plugin: 'com.android.application'
@@ -52,7 +51,7 @@ dependencies {
 }
 ```
 
-Create class which extends android.app.Application. And add the following code snippet:
+Create class which extends `android.app.Application`. And add the following code snippet:
 
 ```
 public class MappApp extends Application {
@@ -87,20 +86,21 @@ public class MappApp extends Application {
 }
 ```
 
-SDK_KEY, APP_ID are present in your CEP dashboard. 
+`SDK_KEY`, `APP_ID` are present in your CEP dashboard. 
 
-NotificationMode is an enum and you can choose one of three options:
+`NotificationMode` is an enum and you can choose one of three options:
 
-BACKGROUND_ONLY - notification will show only when the app is closed or in idle mode.
+`BACKGROUND_ONLY` - notification will show only when the app is closed or in idle mode.
 
-BACKGROUND_AND_FOREGROUND - notification will show every time when a push notification comes.
+`BACKGROUND_AND_FOREGROUND` - notification will show every time when a push notification comes.
 
-SILENT_ONLY - notification never shows on the device.
+`SILENT_ONLY` - notification never shows on the device.
 
-If you don't choose one of these options, by default is BACKGROUND_ONLY.  
+If you don't choose one of these options, by default is `BACKGROUND_ONLY`.  
 
-AppoxeeOptions.Server is enum and you can choose one of four options:
+`AppoxeeOptions.Server` is enum and you can choose one of four options:
 
+```
 L3
 
 L3_US
@@ -112,12 +112,15 @@ EMC_US
 CROC
 
 TEST
+```
 
-Account manager will provide you info which one you should use in your application (L3, EMC or CROC). If you don't choose one of these options, by default is a TEST. 
+Account manager will provide you info which one you should use in your application (L3, EMC or CROC). 
+
+If you don't choose one of these options, by default is a TEST. 
 Our developers use TEST for development purpose and you shouldn't use this one.
 
 
-Add application in Android manifest file
+Add application in `AndroidManifest.xml` file
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -145,7 +148,7 @@ Add application in Android manifest file
 </manifest>
 ```
 
-For receiving push events like push received, push opened, push dismissed you need to create on the receiver, which extends PushDataReceiver.
+For receiving push events like push received, push opened, push dismissed you need to create on the receiver, which extends `PushDataReceiver`.
 
 ```
 public class MyPushBroadcastReceiver extends PushDataReceiver {
@@ -171,7 +174,7 @@ public class MyPushBroadcastReceiver extends PushDataReceiver {
 }
 ```
 
-In AplicationManifest within application tag you should add:
+In `AplicationManifest` within application tag you should add:
 
 ```
 <receiver
@@ -188,7 +191,7 @@ In AplicationManifest within application tag you should add:
 </receiver>
 ```
 
-For custom layout notifications, add this code in Application class, before calling Appoxee.engage method
+For custom layout notifications, add this code in Application class, before calling `Appoxee.engage` method
 
 ```
 CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotificationCreator.Builder(this);
@@ -204,10 +207,9 @@ CustomXmlLayoutNotificationCreator.Builder builder = new CustomXmlLayoutNotifica
 
 <h2>POST NOTIFICATIONS Runtime permission (Android 13+)</h2>
 
-``
-From Android 13 (Tiramisu, SDK 33), for displaying notifications, application should request  POST_NOTIFICATIONS permission. More on this can be found on the official Google's documentation.
-``
-First, add in ApplicationManifest.xml required permission:
+>From Android 13 (Tiramisu, SDK 33), for displaying notifications, application should request  POST_NOTIFICATIONS permission. More on this can be found on the official Google's documentation.
+
+First, add in `ApplicationManifest.xml` required permission:
 
 ```
 <manifest ...>
@@ -218,7 +220,11 @@ First, add in ApplicationManifest.xml required permission:
 </manifest>
 ```
 
-Mapp Engage SDK provides proper method for requesting permission in runtime. Explain to a user why permission is needed and request permission during some logical use case. Permission can be requested from Activity or Fragment with the following method:
+Mapp Engage SDK provides proper method for requesting permission in runtime. 
+
+Explain to a user why permission is needed and request permission during some logical use case. 
+
+Permission can be requested from Activity or Fragment with the following method:
 
 ```
 Appoxee.instance().requestNotificationsPermission(this, results -> {
@@ -289,7 +295,7 @@ public class MyMessageService extends MappMessagingService {
 }
 ```
 
-Add following into AndroidManifest.xml inside of the <application></application> tags.
+Add following into `AndroidManifest.xml` inside of the `<application></application>` tags.
 
 ```
 <service android:name="com.appoxee.push.fcm.MappMessagingService"
@@ -308,7 +314,7 @@ Add following into AndroidManifest.xml inside of the <application></application>
         </service>
 ```
 
-Then, in your extended class MyMessagingService override methods onMessageReceived and onNewToken, and add required calls like this:
+Then, in your extended class `MyMessagingService` override methods `onMessageReceived` and `onNewToken`, and add required calls like this:
 
 ```
 public class MyMessageService extends MappMessagingService {
@@ -331,9 +337,9 @@ public class MyMessageService extends MappMessagingService {
 }
 ```
 
-<h3>Proguard rules</h3>
+<h2>Proguard rules</h2>
 
-When application applies minifyEnabled true to a build.gradle, then the following proguard-rules must be applied so that SDK functions properly.
+When application applies `minifyEnabled` **true** to a `build.gradle`, then the following `proguard-rules` must be applied so that SDK functions properly.
 
 ```
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,EnclosingMethod,*Annotation*
