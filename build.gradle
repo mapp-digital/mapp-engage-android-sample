@@ -1,0 +1,135 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.appdistribution'
+
+buildscript {
+    repositories {
+        //mavenLocal()
+        mavenCentral()
+        google()
+    }
+}
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file('engage-debug-key')
+            storePassword 'engage'
+            keyAlias 'engage'
+            keyPassword 'engage'
+        }
+        release {
+            storePassword 'mappsdk'
+            keyAlias 'mappsdk'
+            keyPassword 'mappsdk'
+            storeFile file('engage-release-key')
+        }
+    }
+
+    namespace 'com.appoxee.testapp'
+    compileSdkVersion = 34
+    buildToolsVersion = '34.0.0'
+
+    defaultConfig {
+        applicationId "com.appoxee.example"
+        minSdkVersion 19
+        targetSdkVersion 34
+        versionCode 17
+        versionName "1.0.52"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Semsudin test channel on L3
+//            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
+//            buildConfigField "String", "APP_ID", "\"206974\""
+//            buildConfigField "String", "TENANT_ID", "\"5963\""
+//            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+
+            // Anka test channel on L3
+            buildConfigField "String", "SDK_KEY", "\"189ac017f0b64c.80186950\""
+            buildConfigField "String", "APP_ID", "\"207071\""
+            buildConfigField "String", "TENANT_ID", "\"5963\""
+            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
+            buildConfigField "String", "APP_ID", "\"206974\""
+            buildConfigField "String", "TENANT_ID", "\"5963\""
+            buildConfigField "String", "SERVER_INDEX", "\"L3\""
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            firebaseAppDistribution {
+                releaseNotesFile = "release_notes_appoxee.txt"
+                testersFile = "testers_appoxee.txt"
+            }
+        }
+    }
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt', 'LICENSE.txt']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    lint {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation('androidx.recyclerview:recyclerview:1.3.2')
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation project(':sdk')
+    //implementation('com.mapp.sdk:mapp-android:6.0.21')
+
+    // required firebase dependencies for push messaging
+    implementation platform('com.google.firebase:firebase-bom:32.8.1')
+    implementation('com.google.firebase:firebase-messaging')
+    // optional dependencies
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation("com.google.firebase:firebase-iid:21.1.0")
+
+    implementation('com.google.android.gms:play-services-location:21.2.0')
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //implementation "androidx.work:work-runtime:2.7.1"
+
+
+    androidTestImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "com.github.bumptech.glide:glide:4.16.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.16.0"
+    implementation('com.pixplicity.easyprefs:EasyPrefs:1.10.0')
+}
+
+
+tasks.register('publishToTesters') {
+    dependsOn 'assembleStaging11'
+    dependsOn 'appDistributionUploadStaging11'
+}
