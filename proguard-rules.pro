@@ -137,6 +137,6 @@
 #}
 #
 ## Google service
-#-keep public class com.google.android.gms.* { public *; }
-#-dontwarn com.google.android.gms.**
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**
 

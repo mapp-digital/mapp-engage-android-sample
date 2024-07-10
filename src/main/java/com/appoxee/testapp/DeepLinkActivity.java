@@ -26,6 +26,7 @@ public class DeepLinkActivity extends AppCompatActivity {
     private final String APX_LAUNCH_DEEPLINK_ACTION = "com.appoxee.VIEW_DEEPLINK";
 
     TextView tv;
+    private String finalLink = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +36,10 @@ public class DeepLinkActivity extends AppCompatActivity {
 
         tv = (TextView) findViewById(R.id.textView);
 
-        Uri uri;
-        String link = null;
-
         if (getIntent() != null) {
-            if (APX_LAUNCH_DEEPLINK_ACTION.equals(getIntent().getAction())) {
-                uri = getIntent().getData();
-                link = uri.getQueryParameter("link");
-                openDeepLink(uri);
-            }
+            handleIntent(getIntent());
         }
 
-        String finalLink = link;
         findViewById(R.id.open_link).setOnClickListener(v -> {
             if (finalLink != null) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -63,20 +56,31 @@ public class DeepLinkActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (APX_LAUNCH_DEEPLINK_ACTION.equals(intent.getAction())) {
+            Uri uri = intent.getData();
+            finalLink = uri.getQueryParameter("link");
+            String protocol = uri.getScheme();
+            String server = uri.getAuthority();
+            String path = uri.getPath();
+            String query = uri.getQuery();
+            String link = uri.getQueryParameter("link");
+            String messageId = uri.getQueryParameter("message_id");
+
+            String displayText = "DEEPLINK ACTIVITY URI  = " + query;
+            tv.setText(displayText);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    private void openDeepLink(Uri uri) {
-        String protocol = uri.getScheme();
-        String server = uri.getAuthority();
-        String path = uri.getPath();
-        String query = uri.getQuery();
-        String link = uri.getQueryParameter("link");
-        String messageId = uri.getQueryParameter("message_id");
-
-        String displayText = "DEEPLINK ACTIVITY URI  = " + query;
-        tv.setText(displayText);
     }
 }
