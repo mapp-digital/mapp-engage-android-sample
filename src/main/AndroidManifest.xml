@@ -54,6 +54,7 @@
         </activity> <!-- Deeplinking Start -->
         <activity
             android:name=".DeepLinkActivity"
+            android:launchMode="standard"
             android:exported="true">
             <intent-filter>
                 <data android:scheme="apx" />
