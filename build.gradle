@@ -35,8 +35,8 @@ android {
         applicationId "com.appoxee.example"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 19
-        versionName "1.0.54"
+        versionCode 20
+        versionName "1.0.55"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -63,8 +63,8 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
-            buildConfigField "String", "APP_ID", "\"206974\""
+            buildConfigField "String", "SDK_KEY", "\"191b7e671d766d.11625463\""
+            buildConfigField "String", "APP_ID", "\"207169\""
             buildConfigField "String", "TENANT_ID", "\"5963\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
 
@@ -105,11 +105,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation('androidx.recyclerview:recyclerview:1.3.2')
     implementation 'com.google.code.gson:gson:2.10.1'
-    implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.23.1')
+    //implementation project(':sdk')
+    implementation('com.mapp.sdk:mapp-android:6.0.23')
 
     // required firebase dependencies for push messaging
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation platform('com.google.firebase:firebase-bom:33.2.0')
     implementation('com.google.firebase:firebase-messaging')
     // optional dependencies
     implementation 'com.google.firebase:firebase-analytics'
