@@ -35,8 +35,8 @@ android {
         applicationId "com.appoxee.example"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 20
-        versionName "1.0.55"
+        versionCode 21
+        versionName "1.0.56"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -63,8 +63,8 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
-            buildConfigField "String", "APP_ID", "\"206974\""
+            buildConfigField "String", "SDK_KEY", "\"19136bcdc9766b.70541886\""
+            buildConfigField "String", "APP_ID", "\"207166\""
             buildConfigField "String", "TENANT_ID", "\"5963\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
 
