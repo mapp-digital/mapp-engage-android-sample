@@ -25,8 +25,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,13 +54,10 @@ import com.appoxee.internal.inapp.model.InAppMessage;
 import com.appoxee.internal.inapp.model.InAppMessageDismissalCallback;
 import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
-import com.appoxee.internal.permission.GeofencePermissions;
-import com.appoxee.internal.permission.GeofencingPermissionsCallback;
 import com.appoxee.internal.permission.PermissionHelper;
 import com.appoxee.internal.permission.PermissionsManager;
 import com.appoxee.internal.util.ResultCallback;
 import com.appoxee.push.NotificationMode;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -564,15 +559,35 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                 FirebaseCrashlytics.getInstance().setCustomKey("APP_ID", APP_ID);
                 FirebaseCrashlytics.getInstance().setCustomKey("TENANT_ID", TENANT_ID);
                 FirebaseCrashlytics.getInstance().setCustomKey("SERVER", SERVER_INDEX);
+                requestGDPRConsent();
+
                 Appoxee.instance().requestNotificationsPermission(this, results -> {
                     if (results.containsKey(Manifest.permission.POST_NOTIFICATIONS) && results.get(Manifest.permission.POST_NOTIFICATIONS) == PermissionsManager.PERMISSION_GRANTED) {
                         Toast.makeText(MainActivity.this, "POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
                     }
-                    Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
-                    pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
                 });
             }
         });
+    }
+
+    private void requestGDPRConsent() {
+        GdprAgreement agreement = Util.getGdprAgreement(this);
+        if (agreement == null || !agreement.isShown()) {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("GDPR Agreement")
+                    .setMessage("Do you accept to receive push messages and collect tracking data in order to provide better user experience and reliable offers to You?")
+                    .setPositiveButton("Yes", (dialog, position) -> {
+                        Util.setGdprAgreement(this, new GdprAgreement(true, true));
+                        pushEnabledSwitch.setChecked(true);
+                        Appoxee.instance().setPushEnabled(true);
+                        Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
+                    })
+                    .setNegativeButton("No", (dialog, position) -> {
+                        Util.setGdprAgreement(this, new GdprAgreement(true, false));
+                        Appoxee.instance().setPushEnabled(false);
+                    })
+                    .show();
+        }
     }
 
     void dialogScreenOrientation() {
