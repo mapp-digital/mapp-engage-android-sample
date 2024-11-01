@@ -172,12 +172,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/get_tags" />
-
+                <Button
+                    android:id="@+id/delete_fcm_token"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Reset Firebase Device Token" />
                 <Button
                     android:id="@+id/fcm_token"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Get FCM Token" />
+                    android:text="Get Firebase Device Token" />
 
                 <TextView
                     android:id="@+id/textView2"

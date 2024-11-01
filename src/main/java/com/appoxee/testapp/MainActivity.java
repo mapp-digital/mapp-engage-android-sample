@@ -72,6 +72,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCompletedListener {
     //This is a test commit
@@ -93,6 +94,17 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     private boolean isInitSpinner = false;
 
     private Logger devLogger;
+
+    private final CompoundButton.OnCheckedChangeListener pushEnabledChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (buttonView.getId() == R.id.push_enabled) {
+                if (isChecked != Appoxee.instance().isPushEnabled()) {
+                    Appoxee.instance().setPushEnabled(isChecked);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,18 +130,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         get_custom_attributes = findViewById(R.id.etxt_get_custom_attributes);
         spinner_events = findViewById(R.id.spinner_events);
         init();
-
-        pushEnabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.getId() == R.id.push_enabled) {
-                    if (isChecked != Appoxee.instance().isPushEnabled()) {
-                        Appoxee.instance().setPushEnabled(isChecked);
-                    }
-                }
-            }
-        });
-
         Appoxee.handleRichPush(this, getIntent());
     }
 
@@ -290,6 +290,18 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         });
 
         findViewById(R.id.multipleMessages).setOnClickListener(v -> Appoxee.instance().triggerInApp(MainActivity.this, "app_welcome"));
+
+        findViewById(R.id.delete_fcm_token).setOnClickListener(v -> {
+            FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Reset token")
+                            .setMessage("Firebase Token reset successfully!")
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
+            });
+        });
 
         findViewById(R.id.fcm_token).setOnClickListener(v -> FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -566,6 +578,8 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
                         Toast.makeText(MainActivity.this, "POST NOTIFICATIONS GRANTED!", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                //Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
             }
         });
     }
@@ -573,20 +587,25 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     private void requestGDPRConsent() {
         GdprAgreement agreement = Util.getGdprAgreement(this);
         if (agreement == null || !agreement.isShown()) {
+            AtomicBoolean accepted = new AtomicBoolean(false);
             new androidx.appcompat.app.AlertDialog.Builder(this)
                     .setTitle("GDPR Agreement")
                     .setMessage("Do you accept to receive push messages and collect tracking data in order to provide better user experience and reliable offers to You?")
                     .setPositiveButton("Yes", (dialog, position) -> {
-                        Util.setGdprAgreement(this, new GdprAgreement(true, true));
-                        pushEnabledSwitch.setChecked(true);
-                        Appoxee.instance().setPushEnabled(true);
-                        Appoxee.instance().triggerInApp(MainActivity.this, "app_open");
+                        accepted.set(true);
                     })
                     .setNegativeButton("No", (dialog, position) -> {
-                        Util.setGdprAgreement(this, new GdprAgreement(true, false));
-                        Appoxee.instance().setPushEnabled(false);
+                        accepted.set(false);
+                    }).setOnDismissListener(dialog -> {
+                        Util.setGdprAgreement(this, new GdprAgreement(true, accepted.get()));
+                        Appoxee.instance().setPushEnabled(accepted.get());
+                        pushEnabledSwitch.setChecked(accepted.get());
+                        pushEnabledSwitch.setOnCheckedChangeListener(pushEnabledChangeListener);
                     })
                     .show();
+        } else {
+            pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+            pushEnabledSwitch.setOnCheckedChangeListener(pushEnabledChangeListener);
         }
     }
 
