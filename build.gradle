@@ -5,7 +5,6 @@ apply plugin: 'com.google.firebase.appdistribution'
 
 buildscript {
     repositories {
-        //mavenLocal()
         mavenCentral()
         google()
     }
@@ -63,8 +62,8 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "SDK_KEY", "\"19136bcdc9766b.70541886\""
-            buildConfigField "String", "APP_ID", "\"207166\""
+            buildConfigField "String", "SDK_KEY", "\"183408d0cd3632.83592719\""
+            buildConfigField "String", "APP_ID", "\"206974\""
             buildConfigField "String", "TENANT_ID", "\"5963\""
             buildConfigField "String", "SERVER_INDEX", "\"L3\""
 
@@ -106,10 +105,10 @@ dependencies {
     implementation('androidx.recyclerview:recyclerview:1.3.2')
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation project(':sdk')
-    //implementation('com.mapp.sdk:mapp-android:6.0.24')
+    //implementation('com.mapp.sdk:mapp-android:6.0.25')
 
     // required firebase dependencies for push messaging
-    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+    implementation platform('com.google.firebase:firebase-bom:33.6.0')
     implementation('com.google.firebase:firebase-messaging')
     // optional dependencies
     implementation 'com.google.firebase:firebase-analytics'
@@ -122,7 +121,6 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //implementation "androidx.work:work-runtime:2.7.1"
-
 
     androidTestImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:rules:1.6.1'
