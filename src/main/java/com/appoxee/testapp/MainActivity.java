@@ -509,6 +509,11 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
 
         findViewById(R.id.btn_logout).setOnClickListener(view -> Appoxee.instance().logOut(true));
 
+        findViewById(R.id.btnOpenHighLoadTest).setOnClickListener(v -> {
+            Intent intent = new Intent(this, HighLoadActivity.class);
+            startActivity(intent);
+        });
+
         Appoxee.instance().addInitListener(this);
     }
 

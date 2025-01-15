@@ -204,6 +204,11 @@
                     android:layout_height="wrap_content"
                     android:text="Register token" />
 
+                <Button
+                    android:id="@+id/btnOpenHighLoadTest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Test High Load" />
             </LinearLayout>
 
             <LinearLayout

@@ -58,6 +58,8 @@
     <string name="subject">Subject</string>
     <string name="time">Time</string>
     <string name="get_device_dmc">Get user id</string>
+    <string name="run_test">Run test</string>
+    <string name="stop_test">Stop test</string>
 
 
     <string-array name="screen_orientation">

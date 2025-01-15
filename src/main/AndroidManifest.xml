@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".AppoxeeTestApp"
@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+        <activity
+            android:name=".HighLoadActivity"
+            android:exported="false" />
         <activity
             android:name=".InAppEventsActivity"
             android:exported="false" />
@@ -54,8 +57,8 @@
         </activity> <!-- Deeplinking Start -->
         <activity
             android:name=".DeepLinkActivity"
-            android:launchMode="standard"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="standard">
             <intent-filter>
                 <data android:scheme="apx" />
                 <data android:host="deeplink" />
@@ -116,13 +119,12 @@
             android:name=".ConfigurationMappOptionsActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
-
         <meta-data
             android:name="com.mapp.default_notification_icon"
             android:resource="@drawable/ic_notification" />
-        <meta-data android:name="com.mapp.default_notification_color"
+        <meta-data
+            android:name="com.mapp.default_notification_color"
             android:resource="@color/color_red" />
-
     </application>
 
 </manifest>
