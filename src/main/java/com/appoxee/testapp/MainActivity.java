@@ -143,7 +143,9 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
     protected void onResume() {
         super.onResume();
         if (Appoxee.instance().isReady()) {
+            pushEnabledSwitch.setOnCheckedChangeListener(null);
             pushEnabledSwitch.setChecked(Appoxee.instance().isPushEnabled());
+            pushEnabledSwitch.setOnCheckedChangeListener(pushEnabledChangeListener);
         }
     }
 
