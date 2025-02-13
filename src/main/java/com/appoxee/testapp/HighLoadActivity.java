@@ -46,7 +46,7 @@ public class HighLoadActivity extends AppCompatActivity {
      */
     private void runTest() {
         int max = 20;
-        int delay = 0;
+        int delay = 1000;
         AtomicInteger current = new AtomicInteger(0);
         progressBar.setMax(max);
         toggleTestState();
