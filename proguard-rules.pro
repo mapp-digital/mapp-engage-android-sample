@@ -2,7 +2,7 @@
 # By default, the flags in this file are appended to flags specified
 # in /Users/yonigross/Library/Android/sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+# directive in build.gradle.kts.
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
@@ -139,4 +139,38 @@
 ## Google service
 -keep public class com.google.android.gms.* { public *; }
 -dontwarn com.google.android.gms.**
+# Keep all public classes in the com.appoxee package
+-keep public class com.appoxee.** { *; }
 
+# Keep all public methods in the com.appoxee package
+-keep public class com.appoxee.** {
+    public *;
+}
+-keep class com.appoxee.push.PushData { *; }
+
+-dontwarn com.appoxee.Appoxee$OnInitCompletedListener
+-dontwarn com.appoxee.Appoxee
+-dontwarn com.appoxee.AppoxeeOptions$Server
+-dontwarn com.appoxee.AppoxeeOptions
+-dontwarn com.appoxee.DeviceInfo
+-dontwarn com.appoxee.GetAliasCallback
+-dontwarn com.appoxee.GetCustomAttributesCallback
+-dontwarn com.appoxee.RequestStatus
+-dontwarn com.appoxee.internal.inapp.InAppTracker
+-dontwarn com.appoxee.internal.inapp.model.APXInboxMessage
+-dontwarn com.appoxee.internal.inapp.model.InAppCallback$onInAppEventReceived
+-dontwarn com.appoxee.internal.inapp.model.InAppCallback
+-dontwarn com.appoxee.internal.inapp.model.InAppInboxCallback$onInAppInboxMessagesReceived
+-dontwarn com.appoxee.internal.inapp.model.InAppInboxCallback
+-dontwarn com.appoxee.internal.inapp.model.InAppMessage
+-dontwarn com.appoxee.internal.inapp.model.InAppMessageDismissalCallback$onInAppMessageDismissalCallback
+-dontwarn com.appoxee.internal.inapp.model.InAppMessageDismissalCallback
+-dontwarn com.appoxee.internal.inapp.model.InAppStatistics
+-dontwarn com.appoxee.internal.inapp.nativemodel.Message
+-dontwarn com.appoxee.internal.logger.Logger
+-dontwarn com.appoxee.internal.logger.LoggerFactory
+-dontwarn com.appoxee.internal.permission.PermissionsCallback
+-dontwarn com.appoxee.internal.ui.UiUtils
+-dontwarn com.appoxee.internal.util.ResultCallback
+-dontwarn com.appoxee.push.NotificationMode
+-dontwarn com.appoxee.push.PushData

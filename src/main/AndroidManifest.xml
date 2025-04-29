@@ -21,6 +21,9 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
         <activity
+            android:name=".CustomAttributesActivity"
+            android:exported="false" />
+        <activity
             android:name=".HighLoadActivity"
             android:exported="false" />
         <activity

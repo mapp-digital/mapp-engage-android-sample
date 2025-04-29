@@ -1,7 +1,6 @@
 package com.appoxee.testapp;
 
 import static com.appoxee.testapp.Constants.KEY_APP_ID;
-import static com.appoxee.testapp.Constants.KEY_GOOGLE_PROJECT_ID;
 import static com.appoxee.testapp.Constants.KEY_SDK_KEY;
 import static com.appoxee.testapp.Constants.KEY_SERVER_INDEX;
 import static com.appoxee.testapp.Constants.KEY_TENANT_ID;
@@ -14,19 +13,16 @@ import androidx.multidex.MultiDexApplication;
 
 import com.appoxee.Appoxee;
 import com.appoxee.AppoxeeOptions;
-import com.appoxee.DeviceInfo;
 import com.appoxee.push.NotificationMode;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import java.util.concurrent.ScheduledExecutorService;
+
 public class AppoxeeTestApp extends MultiDexApplication {
 
-    private AppoxeeOptions opt;
-
-    private final Appoxee.OnInitCompletedListener initFinishedListener = new Appoxee.OnInitCompletedListener() {
-        @Override
-        public void onInitCompleted(boolean successful, Exception failReason) {
-            Log.i("APX", "init completed listener - Application class");
-        }
+    private AppoxeeOptions options;
+    private final Appoxee.OnInitCompletedListener initFinishedListener = (successful, failReason) -> {
+        Log.i("APX", "init completed listener - Application class");
     };
 
     @Override
@@ -42,14 +38,14 @@ public class AppoxeeTestApp extends MultiDexApplication {
 
         long start = System.currentTimeMillis();
 
-        opt = new AppoxeeOptions();
-        opt.sdkKey = Prefs.getString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
-        opt.appID = Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
-        opt.tenantID = Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
-        opt.notificationMode = NotificationMode.BACKGROUND_AND_FOREGROUND;
-        opt.server = AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SERVER_INDEX, BuildConfig.SERVER_INDEX));
+        options=new AppoxeeOptions();
+        options.sdkKey=Prefs.getString(KEY_SDK_KEY, BuildConfig.SDK_KEY);
+        options.appID=Prefs.getString(KEY_APP_ID, BuildConfig.APP_ID);
+        options.tenantID=Prefs.getString(KEY_TENANT_ID, BuildConfig.TENANT_ID);
+        options.notificationMode=NotificationMode.BACKGROUND_AND_FOREGROUND;
+        options.server=AppoxeeOptions.Server.valueOf(Prefs.getString(KEY_SDK_KEY,BuildConfig.SERVER_INDEX));
+        Appoxee.engage(this, options);
 
-        Appoxee.engage(this, opt);
         Appoxee.instance().addInitListener(initFinishedListener);
         long end = System.currentTimeMillis();
         Log.i("APX", "Start Service took " + (end - start) + " ms on main thread");
@@ -57,8 +53,7 @@ public class AppoxeeTestApp extends MultiDexApplication {
         Appoxee.instance().setReceiver(MyPushBroadcastReceiver.class);
     }
 
-
     public AppoxeeOptions getAppoxeeOptions() {
-        return opt;
+        return options;
     }
 }

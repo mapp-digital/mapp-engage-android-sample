@@ -8,7 +8,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appoxee.internal.logger.DevLogger;
 import com.appoxee.internal.logger.LoggerFactory;
 
 public class SecondActivity extends AppCompatActivity {

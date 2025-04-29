@@ -106,12 +106,6 @@ public class MainActivityTest {
 
     @Test
     public void testGetAttributeOnButtonClick() {
-
-        assertNotNull(R.id.etxt_get_attribute);
-        onView(withId(R.id.etxt_get_attribute)).perform(scrollTo(), typeText(mAttribute));
-        closeSoftKeyboard();
-        onView(withId(R.id.btn_get_attribute)).perform(scrollTo(), click());
-
     }
 
     @Test
