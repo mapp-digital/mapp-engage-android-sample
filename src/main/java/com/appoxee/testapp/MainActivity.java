@@ -558,7 +558,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 backgroundPermissionGranted = this.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
             }
-            if (results.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && backgroundPermissionGranted) {
+            if ((results.containsKey(Manifest.permission.ACCESS_FINE_LOCATION) && results.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) && backgroundPermissionGranted) {
                 Appoxee.instance().startGeoFencing(geofenceCallback);
             } else {
                 PermissionHelper.getInstance().openAppSystemSettings(this);
