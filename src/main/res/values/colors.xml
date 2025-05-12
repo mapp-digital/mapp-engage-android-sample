@@ -3,4 +3,7 @@
     <color name="material_cyan_700">#3000aaa7</color>
     <color name="material_teal_200">#7bbcb4</color>
     <color name="color_red">#FF0000</color>
+    <color name="white_color">#FFFaaa</color>
+    <color name="black_color">#000000</color>
+    <color name="gray_color">#E7E2E2</color>
 </resources>

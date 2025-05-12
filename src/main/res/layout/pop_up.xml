@@ -4,7 +4,7 @@
     android:id="@+id/inAppBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grayColor">
+    android:background="@color/gray_color">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/standardInAppNestedContainer"
@@ -31,7 +31,7 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@null"
                     android:scaleType="centerInside"
-                    android:src="@drawable/nat"
+                    android:src="@drawable/nature"
                     android:visibility="visible" />
 
 
@@ -52,7 +52,7 @@
                     android:paddingEnd="@dimen/padding_16"
                     android:paddingBottom="@dimen/padding_16"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/blackColor" />
+                    android:textColor="@color/black_color" />
 
                 <TextView
                     android:id="@+id/inAppTitle"
@@ -64,7 +64,7 @@
                     android:paddingEnd="@dimen/padding_16"
                     android:paddingBottom="@dimen/padding_16"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/blackColor" />
+                    android:textColor="@color/black_color" />
 
             </RelativeLayout>
         </RelativeLayout>

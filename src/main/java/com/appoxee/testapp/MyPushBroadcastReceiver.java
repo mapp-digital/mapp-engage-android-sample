@@ -1,26 +1,16 @@
 package com.appoxee.testapp;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
-
+import com.appoxee.internal.push.PushLocalBroadcast;
 import com.appoxee.push.PushData;
-import com.appoxee.push.PushDataReceiver;
-
-import java.util.Objects;
 
 /**
  * Created by alexeykrichun on 11/07/16.
  */
-public  class MyPushBroadcastReceiver extends PushDataReceiver {
+public class MyPushBroadcastReceiver extends PushLocalBroadcast {
     @Override
     public void onPushReceived(PushData pushData) {
         Log.d("Engage", "Push received " + pushData);
@@ -30,27 +20,27 @@ public  class MyPushBroadcastReceiver extends PushDataReceiver {
     @Override
     public void onPushOpened(PushData pushData) {
         Log.d("APX", "Push opened " + pushData);
-      //  super.onPushReceived(pushData);
+        //  super.onPushReceived(pushData);
     }
 
     @Override
     public void onPushDismissed(PushData pushData) {
         Log.d("APX", "Push dismissed " + pushData);
-     //   super.onPushReceived(pushData);
+        //   super.onPushReceived(pushData);
     }
 
 
     @Override
     public void onSilentPush(PushData pushData) {
         Log.d("APX", "Push Silent" + pushData);
-        if("youtube_music".equals(pushData.silentType)){
+        if ("youtube_music".equals(pushData.silentType)) {
 //            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P)
 //            {
 //                startActivityNotification(pushData,context,23332,"Open It","YouTube");
 //            }else {
-                Intent i=new Intent(Intent.ACTION_VIEW, Uri.parse(pushData.silentData));
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                this.context.startActivity(i);
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(pushData.silentData));
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.context.startActivity(i);
 //            }
 
         }
@@ -102,7 +92,6 @@ public  class MyPushBroadcastReceiver extends PushDataReceiver {
 //        Objects.requireNonNull(mNotificationManager).notify("NOTIFICATION_MESSAGE",notificationID,
 //                mBuilder.build());
 //    }
-
 
 
     @Override
