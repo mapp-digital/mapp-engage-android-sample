@@ -99,17 +99,17 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.appcompat:appcompat-resources:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.appcompat:appcompat-resources:1.7.1")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("com.google.code.gson:gson:2.13.0")
-    //implementation(project(":sdk"))
-    implementation("com.mapp.sdk:mapp-android:6.0.28-beta01")
+    implementation(project(":sdk"))
+    //implementation("com.mapp.sdk:mapp-android:6.0.28")
     //implementation("com.mapp.sdk:engage-android:7.0.0-beta02")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
     implementation("com.google.firebase:firebase-messaging")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
