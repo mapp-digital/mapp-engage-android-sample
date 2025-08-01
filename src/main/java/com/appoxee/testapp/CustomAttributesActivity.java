@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appoxee.Appoxee;
+import com.appoxee.GetCustomAttributesCallback;
 import com.appoxee.testapp.databinding.ActivityCustomAttributesBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -82,19 +83,50 @@ public class CustomAttributesActivity extends AppCompatActivity {
         });
 
         binding.btnGet.setOnClickListener(v -> {
-            String key = binding.tvKeyGet.getText() != null ? binding.tvKeyGet.getText().toString() : null;
-            if (!TextUtils.isEmpty(key)) {
-                String attribute = Appoxee.instance().getAttributeStringValue(key);
-                show(key, attribute);
-            }
+//            String key = binding.tvKeyGet.getText() != null ? binding.tvKeyGet.getText().toString() : null;
+//            if (!TextUtils.isEmpty(key)) {
+//                String attribute = Appoxee.instance().getAttributeStringValue(key);
+//                show(key, attribute);
+//            }
+
+            Appoxee.instance().getCustomAttributes(
+                    List.of("multi_attr_param1",
+                            "multi_attr_param2",
+                            "multi_attr_param3"),
+                    new GetCustomAttributesCallback() {
+                        @Override
+                        public void onSuccess(Map<String, String> customAttributes) {
+                            StringBuilder sb = new StringBuilder();
+                            customAttributes.forEach((key, value) -> {
+                                sb.append(key).append(" : ").append(value).append("\n");
+                            });
+                            show("Custom attributes", sb.toString());
+                        }
+
+                        @Override
+                        public void onError(String errorMessage) {
+                            show("Error getting custom attributes", errorMessage);
+                        }
+                    });
         });
 
         binding.btnDelete.setOnClickListener(v -> {
             String key = binding.tvKeyGet.getText() != null ? binding.tvKeyGet.getText().toString() : null;
             if (!TextUtils.isEmpty(key)) {
                 Appoxee.instance().removeAttribute(key);
-                show("Deleted","Attribute '"+key+"' was deleted!");
+                show("Deleted", "Attribute '" + key + "' was deleted!");
             }
+        });
+
+        binding.btnSetMultipleParameters.setOnClickListener(v -> {
+//            Appoxee.instance().setAttribute("firstName", "Mark");
+//            Appoxee.instance().setAttribute("lastName", "Twain");
+//            Appoxee.instance().setAttribute("currency","EUR");
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("multi_attr_param1", "Lorem ipsum dolor sit amet");
+            attributes.put("multi_attr_param2", 176);
+            attributes.put("multi_attr_param3", false);
+            Appoxee.instance().setAttributes(attributes);
         });
 
     }

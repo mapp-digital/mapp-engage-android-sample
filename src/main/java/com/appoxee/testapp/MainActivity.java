@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         });
 
         binding.btnSetAlias.setOnClickListener(v -> {
-            appoxee.setAlias(binding.etxtSetAlias.getText().toString());
+            appoxee.setAlias(binding.etxtSetAlias.getText().toString(), true);
             createBuilder("New alias", "Added alias: " + binding.etxtSetAlias.getText());
             binding.etxtSetAlias.setText("");
         });
@@ -234,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements Appoxee.OnInitCom
         binding.secondActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
                 Toast.makeText(MainActivity.this, "New activity opened", Toast.LENGTH_SHORT).show();
