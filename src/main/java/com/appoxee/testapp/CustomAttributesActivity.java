@@ -123,9 +123,9 @@ public class CustomAttributesActivity extends AppCompatActivity {
 //            Appoxee.instance().setAttribute("lastName", "Twain");
 //            Appoxee.instance().setAttribute("currency","EUR");
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("multi_attr_param1", "Lorem ipsum dolor sit amet");
-            attributes.put("multi_attr_param2", 176);
-            attributes.put("multi_attr_param3", false);
+            attributes.put("multi_attr_param1", "Lorem ipsum dolor sit");
+            attributes.put("multi_attr_param2", 24.0);
+            attributes.put("multi_attr_param3", true);
             Appoxee.instance().setAttributes(attributes);
         });
 
