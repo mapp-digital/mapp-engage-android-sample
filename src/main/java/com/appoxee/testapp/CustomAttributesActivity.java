@@ -92,7 +92,8 @@ public class CustomAttributesActivity extends AppCompatActivity {
             Appoxee.instance().getCustomAttributes(
                     List.of("multi_attr_param1",
                             "multi_attr_param2",
-                            "multi_attr_param3"),
+                            "multi_attr_param3",
+                            "multi_attr_param4"),
                     new GetCustomAttributesCallback() {
                         @Override
                         public void onSuccess(Map<String, String> customAttributes) {
@@ -123,9 +124,12 @@ public class CustomAttributesActivity extends AppCompatActivity {
 //            Appoxee.instance().setAttribute("lastName", "Twain");
 //            Appoxee.instance().setAttribute("currency","EUR");
             Map<String, Object> attributes = new HashMap<>();
+            Calendar calendar=Calendar.getInstance();
+            calendar.set(2026, 1, 1, 12, 0, 0);
             attributes.put("multi_attr_param1", "Lorem ipsum dolor sit");
             attributes.put("multi_attr_param2", 24.0);
             attributes.put("multi_attr_param3", true);
+            attributes.put("multi_attr_param4", calendar.getTime());
             Appoxee.instance().setAttributes(attributes);
         });
 
