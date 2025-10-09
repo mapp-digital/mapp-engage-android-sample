@@ -1,6 +1,6 @@
 This document explains how to add the Android Mapp SDK code to your application code.
 
-**The latest Mapp Engage SDK version** [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapp.sdk/mapp-android/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.mapp.sdk/mapp-android)
+**The latest Mapp Engage SDK version** ![Maven Central Version](https://img.shields.io/maven-central/v/com.mapp.sdk/mapp-android?label=Mapp%20Engage)
 
 <h2>Source code integration</h2>
 
